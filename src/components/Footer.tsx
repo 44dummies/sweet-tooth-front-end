@@ -1,4 +1,5 @@
-import { Mail, Phone, MapPin, Instagram, Facebook, Twitter } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -45,77 +46,58 @@ const Footer = () => {
             <h3 className="text-2xl font-bold mb-6">Help</h3>
             <ul className="space-y-3 mb-6">
               <li>
-                <a
-                  href="#faq"
+                <Link
+                  to="/faq"
                   className="text-accent-foreground/80 hover:text-primary transition-colors"
                 >
                   FAQ
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#delivery"
-                  className="text-accent-foreground/80 hover:text-primary transition-colors"
-                >
-                  Delivery Info
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#returns"
-                  className="text-accent-foreground/80 hover:text-primary transition-colors"
-                >
-                  Returns & Refunds
-                </a>
+                </Link>
               </li>
             </ul>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https:
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-accent-foreground hover:text-primary transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram size={24} />
               </a>
               <a
-                href="#"
+                href="https:
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-accent-foreground hover:text-primary transition-colors"
-                aria-label="Facebook"
+                aria-label="WhatsApp"
               >
-                <Facebook size={24} />
-              </a>
-              <a
-                href="#"
-                className="text-accent-foreground hover:text-primary transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter size={24} />
+                <MessageCircle size={24} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-accent-foreground/20 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-accent-foreground/60 text-sm">
-              © 2025 Sweet Tooth. All rights reserved.
-            </p>
-            <div className="flex space-x-6 text-sm">
-              <a
-                href="#privacy"
-                className="text-accent-foreground/60 hover:text-primary transition-colors"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="#terms"
-                className="text-accent-foreground/60 hover:text-primary transition-colors"
-              >
-                Terms of Service
-              </a>
+          <div className="border-t border-accent-foreground/20 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <p className="text-accent-foreground/60 text-sm">
+                © 2025 Sweet Tooth. All rights reserved.
+              </p>
+              <div className="flex space-x-6 text-sm">
+                <Link
+                  to="/privacy"
+                  className="text-accent-foreground/60 hover:text-primary transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/terms"
+                  className="text-accent-foreground/60 hover:text-primary transition-colors"
+                >
+                  Terms of Service
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
       </div>
     </footer>
   );

@@ -13,20 +13,24 @@ import {
 
 const PreOrderForm = () => {
   const { toast } = useToast();
+
   const [formData, setFormData] = useState({
     name: "",
     cakeType: "",
     phone: "",
     notes: "",
   });
+
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [isSending, setIsSending] = useState<"idle" | "sending" | "sent">("idle");
 
   const cakeTypes = ["Muffins", "Loafs", "Fruit Cakes", "Birthday Cakes"];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validation
+
+    setIsSending("sending");
+
     const newErrors: Record<string, boolean> = {};
     if (!formData.name.trim()) newErrors.name = true;
     if (!formData.cakeType) newErrors.cakeType = true;
@@ -38,21 +42,30 @@ const PreOrderForm = () => {
         title: "Please fill in all required fields",
         variant: "destructive",
       });
+      setIsSending("idle");
       return;
     }
 
-    // Create WhatsApp message
-    const message = `Hello Sweet Tooth Bakery! I'd like to pre-order:\n\nName: ${formData.name}\nCake Type: ${formData.cakeType}\nPhone: ${formData.phone}\nNotes: ${formData.notes || "None"}`;
-    const whatsappUrl = `https://wa.me/254795436192?text=${encodeURIComponent(message)}`;
-    
-    window.open(whatsappUrl, "_blank");
-    
-    toast({
-      title: "Redirecting to WhatsApp",
-      description: "Complete your order via WhatsApp",
-    });
+    const message = `Hello Sweet Tooth Bakery! I'd like to place an order:\n\nName: ${formData.name}\nCake Type: ${formData.cakeType}\nPhone: ${formData.phone}\nNotes: ${formData.notes || "None"}`;
+    const whatsappUrl = `https:
+      message
+    )}`;
 
-    // Reset form
+    setTimeout(() => {
+      window.open(whatsappUrl, "_blank");
+
+      toast({
+        title: "Redirecting to WhatsApp",
+        description: "Complete your order via WhatsApp",
+      });
+
+      setIsSending("sent");
+
+      setTimeout(() => {
+        setIsSending("idle");
+      }, 1500);
+    }, 1200);
+
     setFormData({ name: "", cakeType: "", phone: "", notes: "" });
     setErrors({});
   };
@@ -149,9 +162,16 @@ const PreOrderForm = () => {
             <Button
               type="submit"
               size="lg"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-6 text-lg font-semibold shadow-lg hover:shadow-luxury transition-all hover:scale-[1.02]"
+              disabled={isSending === "sending"}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-6 text-lg font-semibold shadow-lg hover:shadow-luxury transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
             >
-              Send Order via WhatsApp
+              {isSending === "sending" && (
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
+              )}
+
+              {isSending === "idle" && "ORDER NOW"}
+              {isSending === "sending" && "Sending..."}
+              {isSending === "sent" && "Sent ✓"}
             </Button>
           </form>
         </div>

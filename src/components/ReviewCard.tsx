@@ -2,6 +2,7 @@ import { Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface ReviewCardProps {
+  id?: string;
   name: string;
   rating: number;
   comment: string;
@@ -9,31 +10,44 @@ interface ReviewCardProps {
 }
 
 const ReviewCard = ({ name, rating, comment, date }: ReviewCardProps) => {
+  const initials = name
+    .split(" ")
+    .map((n) => n.charAt(0))
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
   return (
-    <Card className="p-6 rounded-2xl border-2 border-border hover:border-primary transition-all duration-300 hover:shadow-lg">
-      <div className="flex items-center mb-4">
-        <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">
-          {name.charAt(0)}
-        </div>
-        <div className="ml-4 flex-1">
-          <h4 className="font-semibold text-foreground">{name}</h4>
-          <div className="flex items-center space-x-1 mt-1">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={16}
-                className={`${
-                  i < rating
-                    ? "fill-primary text-primary"
-                    : "text-muted-foreground"
-                }`}
-              />
-            ))}
+    <Card className="backdrop-blur-sm bg-gradient-to-br from-card/40 to-card/20 border border-border/20 rounded-2xl p-6 hover:border-primary/30 transition-all duration-300 hover:shadow-lg h-full flex flex-col">
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-semibold text-sm">
+            {initials}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold text-foreground truncate">{name}</h4>
+            <p className="text-xs text-muted-foreground">{date}</p>
           </div>
         </div>
       </div>
-      <p className="text-muted-foreground leading-relaxed mb-3">{comment}</p>
-      <p className="text-sm text-muted-foreground">{date}</p>
+
+      {/* Stars */}
+      <div className="flex gap-1 mb-4">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            size={16}
+            className={`${
+              i < rating
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-muted-foreground/30"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Comment */}
+      <p className="text-sm text-muted-foreground leading-relaxed flex-grow">{comment}</p>
     </Card>
   );
 };

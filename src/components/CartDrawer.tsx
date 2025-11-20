@@ -1,19 +1,33 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, Lock } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const CartDrawer = () => {
   const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const handleCheckout = () => {
+    if (!user) {
+      toast.error("Please sign in to checkout");
+      setOpen(false);
+      setTimeout(() => {
+        navigate("/login", { state: { from: { pathname: "/checkout" } } });
+      }, 150);
+      return;
+    }
+    
     setOpen(false);
-    navigate("/checkout");
+    setTimeout(() => {
+      navigate("/checkout");
+    }, 150);
   };
 
   return (
@@ -54,21 +68,28 @@ const CartDrawer = () => {
         ) : (
           <>
             <div className="flex-1 overflow-y-auto py-4 space-y-4">
-              {items.map((item) => (
-                <div key={item.id} className="flex gap-4 p-4 rounded-2xl border-2 border-border bg-card">
+              {items.map((item, index) => (
+                <div 
+                  key={item.id} 
+                  className="flex gap-4 p-4 rounded-2xl border-2 border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-lg animate-fade-in"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-20 h-20 rounded-xl object-cover"
+                    className="w-20 h-20 rounded-xl object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-foreground truncate">{item.title}</h4>
-                    <p className="text-primary font-bold">${item.price.toFixed(2)}</p>
+                    <div className="flex items-baseline gap-3">
+                      <p className="text-sm text-muted-foreground">Ksh{item.price.toFixed(2)} each</p>
+                      <p className="text-primary font-bold">Ksh{(item.price * item.quantity).toFixed(2)} total</p>
+                    </div>
                     <div className="flex items-center gap-2 mt-2">
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full hover:scale-110 active:scale-95 transition-transform"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       >
                         <Minus className="w-3 h-3" />
@@ -77,7 +98,7 @@ const CartDrawer = () => {
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full hover:scale-110 active:scale-95 transition-transform"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       >
                         <Plus className="w-3 h-3" />
@@ -85,7 +106,7 @@ const CartDrawer = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 ml-auto text-destructive hover:text-destructive"
+                        className="h-8 w-8 ml-auto text-destructive hover:text-destructive hover:scale-110 active:scale-95 transition-transform"
                         onClick={() => removeItem(item.id)}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -97,18 +118,26 @@ const CartDrawer = () => {
             </div>
             
             <div className="border-t-2 pt-4 space-y-4">
-              <div className="flex items-center justify-between text-lg">
+              <div className="flex items-center justify-between text-lg animate-fade-in">
                 <span className="font-semibold">Total:</span>
-                <span className="text-2xl font-bold text-primary">
-                  ${totalPrice.toFixed(2)}
+                <span className="text-2xl font-bold text-primary animate-pulse">
+                  Ksh{totalPrice.toFixed(2)}
                 </span>
               </div>
+              {!user && (
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-start gap-2">
+                  <Lock className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-blue-700 dark:text-blue-300">
+                    You need to sign in to place an order. Click checkout to continue.
+                  </p>
+                </div>
+              )}
               <Button 
-                className="w-full h-12 text-lg rounded-full" 
+                className="w-full h-12 text-lg rounded-full hover:scale-105 active:scale-95 transition-transform duration-300 shadow-lg hover:shadow-xl" 
                 size="lg"
-                onClick={() => window.location.href = "/checkout"}
+                onClick={handleCheckout}
               >
-                Proceed to Checkout
+                {user ? "Proceed to Checkout" : "Sign In to Checkout"}
               </Button>
             </div>
           </>
