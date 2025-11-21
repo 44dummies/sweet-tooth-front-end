@@ -334,84 +334,147 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-card p-6 rounded-lg border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Orders</p>
-                <p className="text-3xl font-bold mt-2">{stats.totalOrders}</p>
-              </div>
-              <Package className="w-10 h-10 text-primary/20" />
-            </div>
-          </div>
-
-          <div className="bg-card p-6 rounded-lg border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Pending Orders</p>
-                <p className="text-3xl font-bold mt-2">{stats.pendingOrders}</p>
-              </div>
-              <TrendingUp className="w-10 h-10 text-orange-500/20" />
-            </div>
-          </div>
-
-          <div className="bg-card p-6 rounded-lg border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Revenue</p>
-                <p className="text-3xl font-bold mt-2">Ksh {stats.totalRevenue.toLocaleString()}</p>
-              </div>
-              <DollarSign className="w-10 h-10 text-green-500/20" />
-            </div>
-          </div>
-
-          <div className="bg-card p-6 rounded-lg border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Custom Requests</p>
-                <p className="text-3xl font-bold mt-2">{stats.customRequests}</p>
-              </div>
-              <Users className="w-10 h-10 text-blue-500/20" />
-            </div>
-          </div>
-        </div>
-
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6">
         {/* Tabs for different sections */}
-        <Tabs defaultValue="orders" className="w-full pb-20 md:pb-0">
-          <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 lg:w-auto lg:inline-grid">
-            <TabsTrigger value="orders" className="flex items-center gap-2">
-              <Package className="w-4 h-4" />
-              <span className="hidden md:inline">Orders</span>
-            </TabsTrigger>
-            <TabsTrigger value="messages" className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4" />
-              <span className="hidden md:inline">Messages</span>
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
+        <Tabs defaultValue="summary" className="w-full pb-20 md:pb-0">
+          <TabsList className="w-full grid grid-cols-5 md:inline-flex md:w-auto gap-1">
+            <TabsTrigger value="summary" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <BarChart3 className="w-4 h-4" />
-              <span className="hidden md:inline">Analytics</span>
+              <span className="hidden sm:inline">Summary</span>
             </TabsTrigger>
-            <TabsTrigger value="inventory" className="flex items-center gap-2">
+            <TabsTrigger value="orders" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Package className="w-4 h-4" />
+              <span className="hidden sm:inline">Orders</span>
+            </TabsTrigger>
+            <TabsTrigger value="messages" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">Messages</span>
+            </TabsTrigger>
+            <TabsTrigger value="inventory" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <PackageSearch className="w-4 h-4" />
-              <span className="hidden md:inline">Inventory</span>
+              <span className="hidden sm:inline">Inventory</span>
             </TabsTrigger>
-            <TabsTrigger value="reviews" className="flex items-center gap-2">
+            <TabsTrigger value="reviews" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Star className="w-4 h-4" />
-              <span className="hidden md:inline">Reviews</span>
-            </TabsTrigger>
-            <TabsTrigger value="custom" className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              <span className="hidden md:inline">Custom</span>
+              <span className="hidden sm:inline">Reviews</span>
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="summary" className="mt-6 space-y-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-card p-4 rounded-lg border hover:shadow-lg transition-shadow">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs md:text-sm text-muted-foreground">Total Orders</p>
+                    <Package className="w-8 h-8 text-primary/20" />
+                  </div>
+                  <p className="text-2xl md:text-3xl font-bold">{stats.totalOrders}</p>
+                </div>
+              </div>
+
+              <div className="bg-card p-4 rounded-lg border hover:shadow-lg transition-shadow">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs md:text-sm text-muted-foreground">Pending</p>
+                    <TrendingUp className="w-8 h-8 text-orange-500/20" />
+                  </div>
+                  <p className="text-2xl md:text-3xl font-bold text-orange-500">{stats.pendingOrders}</p>
+                </div>
+              </div>
+
+              <div className="bg-card p-4 rounded-lg border hover:shadow-lg transition-shadow">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs md:text-sm text-muted-foreground">Revenue</p>
+                    <DollarSign className="w-8 h-8 text-green-500/20" />
+                  </div>
+                  <p className="text-xl md:text-2xl font-bold text-green-600">Ksh {stats.totalRevenue.toLocaleString()}</p>
+                </div>
+              </div>
+
+              <div className="bg-card p-4 rounded-lg border hover:shadow-lg transition-shadow">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs md:text-sm text-muted-foreground">Custom</p>
+                    <Users className="w-8 h-8 text-blue-500/20" />
+                  </div>
+                  <p className="text-2xl md:text-3xl font-bold text-blue-600">{stats.customRequests}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-card rounded-lg border">
+                <div className="p-4 border-b">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Package className="w-4 h-4" />
+                    Recent Orders
+                  </h3>
+                </div>
+                <div className="p-4 space-y-3 max-h-[300px] overflow-y-auto">
+                  {orders.slice(0, 5).map((order) => (
+                    <div key={order.id} className="flex items-center justify-between p-3 bg-secondary/20 rounded-lg">
+                      <div>
+                        <p className="font-medium text-sm">{order.customer_name}</p>
+                        <p className="text-xs text-muted-foreground">Ksh {order.total_amount.toLocaleString()}</p>
+                      </div>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        order.status === 'PENDING' ? 'bg-orange-500/20 text-orange-700 dark:text-orange-400' :
+                        order.status === 'DELIVERED' ? 'bg-green-500/20 text-green-700 dark:text-green-400' :
+                        'bg-blue-500/20 text-blue-700 dark:text-blue-400'
+                      }`}>
+                        {order.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-card rounded-lg border">
+                <div className="p-4 border-b">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    Recent Messages
+                  </h3>
+                </div>
+                <div className="p-4 space-y-3 max-h-[300px] overflow-y-auto">
+                  {messages.slice(0, 5).map((msg) => (
+                    <div key={msg.id} className="flex items-start justify-between p-3 bg-secondary/20 rounded-lg">
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{msg.customer_name}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2">{msg.message}</p>
+                      </div>
+                      {msg.status === 'unread' && (
+                        <span className="px-2 py-1 bg-primary text-primary-foreground text-xs rounded-full">New</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Analytics Preview */}
+            <div className="bg-card rounded-lg border">
+              <div className="p-4 border-b">
+                <h3 className="font-semibold">Quick Stats</h3>
+              </div>
+              <div className="p-6">
+                <SalesAnalytics />
+              </div>
+            </div>
+          </TabsContent>
+
           <TabsContent value="orders" className="mt-6">
-            {/* Orders Table */}
-            <div className="bg-card rounded-lg border mb-8">
-          <div className="p-6 border-b">
-            <h2 className="text-xl font-semibold">Recent Orders</h2>
+            {/* Regular Orders Table */}
+            <div className="bg-card rounded-lg border mb-6">
+          <div className="p-4 border-b">
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <Package className="w-5 h-5" />
+              Menu Orders
+            </h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -480,6 +543,66 @@ const AdminDashboard = () => {
             </table>
           </div>
         </div>
+
+            {/* Custom Orders Section */}
+            <div className="bg-card rounded-lg border">
+              <div className="p-4 border-b">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  Custom Order Requests
+                </h2>
+              </div>
+              <div className="p-4 space-y-3">
+                {customOrders.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Users className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                    <p>No custom orders yet</p>
+                  </div>
+                ) : (
+                  customOrders.map((req) => (
+                    <div key={req.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-3">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-base">{req.customer_name}</h3>
+                          <div className="flex flex-col gap-1 mt-1">
+                            <p className="text-sm text-muted-foreground">{req.customer_phone}</p>
+                            {req.customer_email && <p className="text-sm text-muted-foreground">{req.customer_email}</p>}
+                          </div>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                          req.status === 'pending' ? 'bg-orange-500/20 text-orange-700 dark:text-orange-400' :
+                          req.status === 'confirmed' ? 'bg-blue-500/20 text-blue-700 dark:text-blue-400' :
+                          req.status === 'completed' ? 'bg-green-500/20 text-green-700 dark:text-green-400' :
+                          'bg-gray-500/20 text-gray-700 dark:text-gray-400'
+                        }`}>
+                          {req.status}
+                        </span>
+                      </div>
+                      <div className="space-y-2 mb-3 text-sm">
+                        <p><span className="font-medium">Size:</span> {req.cake_size}</p>
+                        <p><span className="font-medium">Flavor:</span> {req.cake_flavor}</p>
+                        <p><span className="font-medium">Type:</span> {req.cake_type}</p>
+                        <p><span className="font-medium">Delivery:</span> {new Date(req.delivery_date).toLocaleDateString()}</p>
+                        {req.special_requests && (
+                          <p className="p-2 bg-secondary/50 rounded text-xs">
+                            <span className="font-medium">Special Requests:</span> {req.special_requests}
+                          </p>
+                        )}
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          const whatsappMsg = `Hello ${req.customer_name}, regarding your custom order:\n\nSize: ${req.cake_size}\nFlavor: ${req.cake_flavor}\nType: ${req.cake_type}\nDelivery: ${new Date(req.delivery_date).toLocaleDateString()}${req.special_requests ? `\nSpecial Requests: ${req.special_requests}` : ''}`;
+                          window.open(`https://wa.me/${req.customer_phone}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+                        }}
+                      >
+                        Contact via WhatsApp
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-6">
@@ -677,39 +800,6 @@ const AdminDashboard = () => {
                 </table>
               </div>
             </div>
-          </TabsContent>
-
-          <TabsContent value="custom" className="mt-6">
-            {/* Custom Orders */}
-            <div className="bg-card rounded-lg border">
-          <div className="p-6 border-b">
-            <h2 className="text-xl font-semibold">Custom Order Requests</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            {customOrders.map((req) => (
-              <div key={req.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <h3 className="font-semibold">{req.customer_name}</h3>
-                    <p className="text-sm text-muted-foreground">{req.customer_phone}</p>
-                    {req.customer_email && <p className="text-sm text-muted-foreground">{req.customer_email}</p>}
-                  </div>
-                  <span className="px-3 py-1 bg-secondary rounded-full text-sm">{req.status}</span>
-                </div>
-                <p className="text-sm mb-3">{req.order_details}</p>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    const whatsappMsg = `Hello ${req.customer_name}, regarding your custom order request: "${req.order_details}"`;
-                    window.open(`https://wa.me/${req.customer_phone}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-                  }}
-                >
-                  Contact Customer
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
           </TabsContent>
         </Tabs>
       </div>
