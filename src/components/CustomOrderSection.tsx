@@ -84,7 +84,7 @@ const CustomOrderSection = () => {
 
       const message = `🎂 *Custom Cake Order Request*\n\n👤 Name: ${formData.name}\n📞 Phone: ${formData.phone}\n📧 Email: ${formData.email || 'Not provided'}\n\n🎨 Cake Type: ${formData.cakeType}\n👥 Servings: ${formData.servings}\n🍰 Flavor: ${formData.flavor}\n📅 Delivery: ${formData.deliveryDate}\n💰 Budget: ${formData.budget}\n\n✨ Special Requests:\n${formData.specialRequests || 'None'}`;
       
-      const whatsappUrl = `https:
+      const whatsappUrl = `https://wa.me/254795436192?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
 
       toast.success("Order request sent! We'll contact you soon.");

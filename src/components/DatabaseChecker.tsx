@@ -88,7 +88,7 @@ export const DatabaseChecker = () => {
             </Button>
             <Button
               size="sm"
-              onClick={() => window.open('https:
+              onClick={() => window.open('https://supabase.com/dashboard/project/mokugiiuazqbdvxlbbun/sql/new', '_blank')}
               className="text-xs"
             >
               Open SQL Editor

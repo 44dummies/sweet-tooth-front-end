@@ -47,7 +47,7 @@ const PreOrderForm = () => {
     }
 
     const message = `Hello Sweet Tooth Bakery! I'd like to place an order:\n\nName: ${formData.name}\nCake Type: ${formData.cakeType}\nPhone: ${formData.phone}\nNotes: ${formData.notes || "None"}`;
-    const whatsappUrl = `https:
+    const whatsappUrl = `https://wa.me/254795436192?text=${encodeURIComponent(
       message
     )}`;
 

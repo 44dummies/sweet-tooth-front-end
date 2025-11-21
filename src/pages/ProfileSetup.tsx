@@ -15,7 +15,7 @@ const generateAvatars = () => {
   
   return seeds.map((seed, index) => ({
     id: `${styles[index % styles.length]}-${seed}`,
-    url: `https:
+    url: `https://api.dicebear.com/7.x/${styles[index % styles.length]}/svg?seed=${seed}`,
     style: styles[index % styles.length]
   }));
 };

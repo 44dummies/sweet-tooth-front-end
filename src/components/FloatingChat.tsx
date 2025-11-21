@@ -7,7 +7,7 @@ const FloatingChat = () => {
 
   const handleWhatsApp = () => {
     window.open(
-      "https:
+      "https://wa.me/254795436192",
       "_blank"
     );
   };

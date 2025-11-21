@@ -56,7 +56,7 @@ const Footer = () => {
             </ul>
             <div className="flex space-x-4">
               <a
-                href="https:
+                href="https://instagram.com/sweettooth"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent-foreground hover:text-primary transition-colors"
@@ -65,7 +65,7 @@ const Footer = () => {
                 <Instagram size={24} />
               </a>
               <a
-                href="https:
+                href="https://wa.me/254795436192"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent-foreground hover:text-primary transition-colors"

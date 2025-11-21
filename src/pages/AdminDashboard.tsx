@@ -430,7 +430,7 @@ const AdminDashboard = () => {
                         variant="outline"
                         onClick={() => {
                           const whatsappMsg = `Hello ${order.customer_name}, regarding your order #${order.id.substring(0, 8)}...`;
-                          window.open(`https:
+                          window.open(`https://wa.me/254795436192?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
                         }}
                       >
                         WhatsApp
@@ -565,7 +565,7 @@ const AdminDashboard = () => {
                   size="sm"
                   onClick={() => {
                     const whatsappMsg = `Hello ${req.customer_name}, regarding your custom order request: "${req.order_details}"`;
-                    window.open(`https:
+                    window.open(`https://wa.me/${req.customer_phone}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
                   }}
                 >
                   Contact Customer
