@@ -369,23 +369,42 @@ const Navbar = () => {
             </div>
 
             <div className="p-6">
-              {/* Auth Buttons (Mobile - Not logged in) - MOVED TO TOP */}
+              {/* Auth Dropdown Menu (Mobile - Not logged in) */}
               {!isAdminRoute && !user && !authLoading && (
-                <div className="mb-6 flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
-                    className="flex-1 gap-2 h-12 text-base font-medium border-2 hover:bg-muted"
-                  >
-                    <User size={18} />
-                    Sign In
-                  </Button>
-                  <Button
-                    onClick={() => { navigate('/register'); setIsMobileMenuOpen(false); }}
-                    className="flex-1 gap-2 h-12 text-base font-medium bg-primary hover:bg-primary/90 shadow-md"
-                  >
-                    Sign Up
-                  </Button>
+                <div className="mb-6">
+                  <div className="w-full rounded-xl bg-card/80 backdrop-blur-sm overflow-hidden border border-border">
+                    <button
+                      onClick={() => setOpenDropdown(openDropdown === "auth-mobile" ? null : "auth-mobile")}
+                      className="w-full text-left py-4 px-4 hover:bg-card/95 text-foreground font-medium text-base transition-all flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <User size={18} />
+                        <span>Account</span>
+                      </div>
+                      <ChevronDown
+                        size={20}
+                        className={`transition-transform duration-300 ${openDropdown === "auth-mobile" ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                    {openDropdown === "auth-mobile" && (
+                      <div className="bg-secondary/30 border-t border-border/50">
+                        <button
+                          onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); setOpenDropdown(null); }}
+                          className="w-full text-left py-3 px-6 hover:bg-card/50 text-foreground transition-all flex items-center gap-2"
+                        >
+                          <User size={16} />
+                          Sign In
+                        </button>
+                        <button
+                          onClick={() => { navigate('/register'); setIsMobileMenuOpen(false); setOpenDropdown(null); }}
+                          className="w-full text-left py-3 px-6 hover:bg-card/50 text-foreground transition-all flex items-center gap-2"
+                        >
+                          <User size={16} />
+                          Sign Up
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -399,58 +418,70 @@ const Navbar = () => {
                 </Button>
               </div>
 
-              {/* User Profile Section (Mobile) */}
+              {/* User Profile Dropdown (Mobile - Logged in) */}
               {!isAdminRoute && user && profile && (
-                <div className="mb-4 p-4 rounded-xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20">
-                  <div className="flex items-center gap-3 mb-3">
-                    {profile.avatar ? (
-                      <img 
-                        src={profile.avatar}
-                        alt={`${profile.username}'s avatar`}
-                        className="h-12 w-12 rounded-full border-2 border-primary/30"
+                <div className="mb-6">
+                  <div className="w-full rounded-xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 overflow-hidden">
+                    <button
+                      onClick={() => setOpenDropdown(openDropdown === "profile-mobile" ? null : "profile-mobile")}
+                      className="w-full text-left py-4 px-4 hover:bg-card/50 transition-all flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-3">
+                        {profile.avatar ? (
+                          <img 
+                            src={profile.avatar}
+                            alt={`${profile.username}'s avatar`}
+                            className="h-10 w-10 rounded-full border-2 border-primary/30"
+                          />
+                        ) : (
+                          <Avatar className="h-10 w-10 border-2 border-primary/30">
+                            <AvatarFallback className="bg-primary/20 text-primary font-semibold text-sm">
+                              {profile.first_name?.[0]}{profile.last_name?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-sm truncate">
+                            {profile.first_name} {profile.last_name}
+                          </p>
+                          {profile.username && (
+                            <p className="text-xs text-muted-foreground truncate">
+                              @{profile.username}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <ChevronDown
+                        size={20}
+                        className={`transition-transform duration-300 ${openDropdown === "profile-mobile" ? "rotate-180" : ""}`}
                       />
-                    ) : (
-                      <Avatar className="h-12 w-12 border-2 border-primary/30">
-                        <AvatarFallback className="bg-primary/20 text-primary font-semibold">
-                          {profile.first_name?.[0]}{profile.last_name?.[0]}
-                        </AvatarFallback>
-                      </Avatar>
+                    </button>
+                    {openDropdown === "profile-mobile" && (
+                      <div className="bg-secondary/30 border-t border-border/50">
+                        <div className="px-4 py-2 border-b border-border/50">
+                          <p className="text-xs text-muted-foreground truncate">{profile.email}</p>
+                        </div>
+                        <button
+                          onClick={() => { navigate('/profile'); setIsMobileMenuOpen(false); setOpenDropdown(null); }}
+                          className="w-full text-left py-3 px-6 hover:bg-card/50 text-foreground transition-all flex items-center gap-2"
+                        >
+                          <User size={16} />
+                          My Profile
+                        </button>
+                        <button
+                          onClick={async () => {
+                            await signOut();
+                            toast.success('Signed out successfully');
+                            setIsMobileMenuOpen(false);
+                            setOpenDropdown(null);
+                          }}
+                          className="w-full text-left py-3 px-6 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-600 transition-all flex items-center gap-2"
+                        >
+                          <LogOut size={16} />
+                          Sign Out
+                        </button>
+                      </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm truncate">
-                        {profile.first_name} {profile.last_name}
-                      </p>
-                      {profile.username && (
-                        <p className="text-xs text-muted-foreground truncate">
-                          @{profile.username}
-                        </p>
-                      )}
-                      <p className="text-xs text-muted-foreground truncate">{profile.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => { navigate('/profile'); setIsMobileMenuOpen(false); }}
-                      className="flex-1 gap-1.5 h-8 text-xs"
-                    >
-                      <User size={14} />
-                      My Profile
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={async () => {
-                        await signOut();
-                        toast.success('Signed out successfully');
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="flex-1 gap-1.5 h-8 text-xs text-red-600 hover:text-red-700 border-red-200 hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950"
-                    >
-                      <LogOut size={14} />
-                      Sign Out
-                    </Button>
                   </div>
                 </div>
               )}
