@@ -6,16 +6,16 @@ import GiftCardBalance from "@/components/GiftCardBalance";
 
 const GiftCardsPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 md:py-12 px-3 md:px-4 pb-24 md:pb-12 overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full mb-4">
-            <Gift className="w-8 h-8 text-white" />
+        <div className="text-center mb-6 md:mb-8">
+          <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full mb-3 md:mb-4 animate-pulse">
+            <Gift className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
             Gift Cards
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto px-2">
             Share the sweetness! Purchase digital gift cards for your loved ones or check your gift card balance.
           </p>
         </div>
@@ -29,25 +29,25 @@ const GiftCardsPage = () => {
           <TabsContent value="purchase" className="space-y-6">
             <GiftCardPurchase />
             
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
-              <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border">
-                <div className="text-3xl mb-3">🎁</div>
-                <h3 className="font-semibold mb-2">Perfect Gift</h3>
-                <p className="text-sm text-muted-foreground">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-6 md:mt-8">
+              <div className="p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-105">
+                <div className="text-2xl md:text-3xl mb-2 md:mb-3">🎁</div>
+                <h3 className="font-semibold mb-1 md:mb-2 text-sm md:text-base">Perfect Gift</h3>
+                <p className="text-xs md:text-sm text-muted-foreground">
                   Let them choose their favorite treats from our menu
                 </p>
               </div>
-              <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border">
-                <div className="text-3xl mb-3">⚡</div>
-                <h3 className="font-semibold mb-2">Instant Delivery</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-105">
+                <div className="text-2xl md:text-3xl mb-2 md:mb-3">⚡</div>
+                <h3 className="font-semibold mb-1 md:mb-2 text-sm md:text-base">Instant Delivery</h3>
+                <p className="text-xs md:text-sm text-muted-foreground">
                   Gift cards are delivered instantly via email
                 </p>
               </div>
-              <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border">
-                <div className="text-3xl mb-3">📅</div>
-                <h3 className="font-semibold mb-2">Valid 1 Year</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-105">
+                <div className="text-2xl md:text-3xl mb-2 md:mb-3">📅</div>
+                <h3 className="font-semibold mb-1 md:mb-2 text-sm md:text-base">Valid 1 Year</h3>
+                <p className="text-xs md:text-sm text-muted-foreground">
                   Plenty of time to enjoy sweet treats
                 </p>
               </div>

@@ -10,25 +10,25 @@ const ServiceCards = () => {
       title: "Wedding Cakes",
       description: "Elegant multi-tier wedding cakes designed to match your special day.",
       image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80",
-      link: "#wedding",
+      cakeType: "Wedding Cake",
     },
     {
       title: "Birthday Cakes",
       description: "Custom birthday cakes that bring joy to your celebration.",
       image: "https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=600&q=80",
-      link: "#birthday",
+      cakeType: "Birthday Cake",
     },
     {
       title: "Corporate Events",
       description: "Professional cakes for corporate gatherings and special occasions.",
       image: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600&q=80",
-      link: "#corporate",
+      cakeType: "Corporate Event Cake",
     },
     {
       title: "Custom Designs",
       description: "Unique cake designs crafted to your exact specifications.",
       image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80",
-      link: "#custom",
+      cakeType: "Custom Design",
     },
   ];
 
@@ -80,7 +80,7 @@ const ServiceCards = () => {
 
                   {/* Custom Order button */}
                   <motion.button
-                    onClick={() => navigate('/custom-order')}
+                    onClick={() => navigate('/custom-order', { state: { cakeType: service.cakeType } })}
                     className="flex items-center gap-2 text-white font-semibold group/btn cursor-pointer"
                     whileHover={{ x: 5 }}
                     whileTap={{ scale: 0.95 }}

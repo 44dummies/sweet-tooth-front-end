@@ -121,20 +121,20 @@ const AvailabilityCalendar = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <Card className="p-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-            <CalendarDays className="w-6 h-6" />
+      <Card className="p-4 md:p-6 transition-all duration-300 hover:shadow-lg">
+        <div className="mb-4 md:mb-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 flex items-center gap-2">
+            <CalendarDays className="w-5 h-5 md:w-6 md:h-6" />
             Order Availability Calendar
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm md:text-base">
             Check available dates for custom orders. Book early to secure your preferred date!
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Calendar */}
-          <div>
+          <div className="flex justify-center">
             <Calendar
               mode="single"
               selected={selectedDate}
@@ -142,7 +142,7 @@ const AvailabilityCalendar = () => {
               disabled={(date) => date < new Date()}
               modifiers={modifiers}
               modifiersClassNames={modifiersClassNames}
-              className="rounded-md border"
+              className="rounded-md border w-full"
             />
           </div>
 

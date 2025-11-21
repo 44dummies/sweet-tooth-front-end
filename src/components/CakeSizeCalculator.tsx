@@ -94,14 +94,14 @@ const CakeSizeCalculator = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <Card className="p-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-            <Calculator className="w-6 h-6" />
+    <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
+      <Card className="p-4 md:p-6 transition-all duration-300 hover:shadow-lg">
+        <div className="mb-4 md:mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 flex items-center gap-2">
+            <Calculator className="w-5 h-5 md:w-6 md:h-6" />
             Cake Size Calculator
           </h2>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm md:text-base">
             Find the perfect cake size for your event
           </p>
         </div>
@@ -137,9 +137,9 @@ const CakeSizeCalculator = () => {
                 Recommended Sizes for {guests} Guests:
               </h3>
               
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-3 md:gap-4 sm:grid-cols-2">
                 {recommendations.map((size) => (
-                  <Card key={size.id} className="p-4 bg-white/50 dark:bg-black/20">
+                  <Card key={size.id} className="p-3 md:p-4 bg-white/50 dark:bg-black/20 transition-all duration-300 hover:shadow-md hover:scale-105">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{getSizeIcon(size.size_name)}</span>

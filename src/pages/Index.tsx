@@ -6,13 +6,14 @@ import StatsSection from "@/components/StatsSection";
 import MenuSection from "@/components/MenuSection";
 import CustomOrderSection from "@/components/CustomOrderSection";
 import ReviewsSection from "@/components/ReviewSection";
+import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
 import MobileBottomNav from "@/components/MobileBottomNav";
 
 const Index = () => {
   return (
-    <div className="min-h-screen pb-20 md:pb-0" style={{ scrollBehavior: 'smooth' }}>
+    <div className="min-h-screen pb-24 md:pb-0" style={{ scrollBehavior: 'smooth' }}>
       <Navbar />
       
       {/* Hero Slider for all devices */}
@@ -29,6 +30,7 @@ const Index = () => {
       
       <CustomOrderSection />
       <ReviewsSection />
+      <ContactSection />
       <Footer />
       <FloatingChat />
       <MobileBottomNav />

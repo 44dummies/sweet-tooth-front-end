@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 import { Cake, Calendar, Users, MessageSquare, Phone, Mail, User, Sparkles } from "lucide-react";
 
 const CustomOrderSection = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -21,6 +23,14 @@ const CustomOrderSection = () => {
     budget: "",
     specialRequests: "",
   });
+
+  // Auto-fill cake type if passed from navigation
+  useEffect(() => {
+    if (location.state?.cakeType) {
+      setFormData(prev => ({ ...prev, cakeType: location.state.cakeType }));
+      toast.success(`${location.state.cakeType} selected!`);
+    }
+  }, [location.state]);
 
   const [loading, setLoading] = useState(false);
 

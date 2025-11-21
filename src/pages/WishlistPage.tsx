@@ -121,14 +121,14 @@ const WishlistPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 py-8 md:py-12 px-3 md:px-4 pb-24 md:pb-12 overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-            <Heart className="w-8 h-8 text-red-500 fill-current" />
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 flex items-center gap-2 md:gap-3">
+            <Heart className="w-6 h-6 md:w-8 md:h-8 text-red-500 fill-current animate-pulse" />
             My Wishlist
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm md:text-base text-muted-foreground">
             {favorites.length} {favorites.length === 1 ? 'item' : 'items'} saved
           </p>
         </div>
@@ -156,16 +156,16 @@ const WishlistPage = () => {
           </Card>
         ) : (
           <AnimatePresence mode="popLayout">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {favorites.map((favorite, index) => (
                 <motion.div
                   key={favorite.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
                 >
-                  <Card className="overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+                  <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 hover:scale-105">
                     <div className="relative">
                       <img
                         src={favorite.products.image_url}
