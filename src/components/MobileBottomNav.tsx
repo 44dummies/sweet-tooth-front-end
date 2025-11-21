@@ -62,6 +62,11 @@ const MobileBottomNav = () => {
     },
   ];
 
+  const handleNavigation = (path: string) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate(path);
+  };
+
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-lg border-t border-border shadow-lg z-50">
       <div className="flex items-center justify-around h-16 px-2">
@@ -70,7 +75,7 @@ const MobileBottomNav = () => {
           return (
             <button
               key={path}
-              onClick={() => navigate(path)}
+              onClick={() => handleNavigation(path)}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 rounded-xl ${
                 active 
                   ? "text-primary scale-110" 
