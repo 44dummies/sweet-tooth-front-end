@@ -35,7 +35,7 @@ const Explore = () => {
       );
       
       if (!response.ok) {
-        const fallbackImages = generateFallbackImages(pageNum);
+        const fallbackImages = generateFallbackImages(pageNum, query);
         setImages(prev => pageNum === 1 ? fallbackImages : [...prev, ...fallbackImages]);
         setHasMore(pageNum < 10);
         return;
@@ -55,7 +55,7 @@ const Explore = () => {
       setHasMore(data.results.length > 0 && pageNum < data.total_pages);
     } catch (error) {
       console.error('Error fetching images:', error);
-      const fallbackImages = generateFallbackImages(pageNum);
+      const fallbackImages = generateFallbackImages(pageNum, query);
       setImages(prev => pageNum === 1 ? fallbackImages : [...prev, ...fallbackImages]);
       setHasMore(pageNum < 10);
     } finally {
@@ -63,50 +63,63 @@ const Explore = () => {
     }
   }, []);
 
-  const generateFallbackImages = (pageNum: number): CakeImage[] => {
-    const categories = ["Wedding", "Birthday", "Custom", "Chocolate", "Modern", "Rustic", "Elegant", "Kids", "Vintage", "Luxury"];
-    const imageQueries = [
-      "photo-1519225421980-715cb0215aed",
-      "photo-1558636508-e0db3814bd1d",
-      "photo-1578985545062-69928b1d9587",
-      "photo-1464349095431-e9a21285b5f3",
-      "photo-1535254973040-607b474cb50d",
-      "photo-1562440499-64c9a3f4efae",
-      "photo-1606313564200-e75d5e30476c",
-      "photo-1557925923-cd4648e211a0",
-      "photo-1602351447937-745cb720612f",
-      "photo-1488477181946-6428a0291777",
-      "photo-1586985289688-ca3cf47d3e6e",
-      "photo-1542826438-bd32f43d626f",
-      "photo-1621303837174-89787a7d4729",
-      "photo-1595295333158-4742f28fbd85",
-      "photo-1563729784474-d77dbb933a9e",
-      "photo-1565958011703-44f9829ba187",
-      "photo-1571115177098-24ec42ed204d",
-      "photo-1606890737304-57a1ca8a5b62",
-      "photo-1614707267537-b85aaf00c4b7",
-      "photo-1587241321921-91a834d6d191",
-      "photo-1576717585940-08317b57e8a7",
-      "photo-1584182812719-fa23bcc09e0a",
-      "photo-1612182062366-8e0b3151d1a8",
-      "photo-1486427944299-d1955d23e34d",
-      "photo-1600002415506-dd06090d3480",
-      "photo-1603532648955-039310d9ed75",
-      "photo-1612201142855-7873f715d8c5",
-      "photo-1614707267537-b85aaf00c4b7",
-      "photo-1578985545062-69928b1d9587",
-      "photo-1571115177098-24ec42ed204d"
-    ];
+  const generateFallbackImages = (pageNum: number, category: string): CakeImage[] => {
+    const categoryMap: { [key: string]: string[] } = {
+      "Wedding": [
+        "photo-1519225421980-715cb0215aed",
+        "photo-1464349095431-e9a21285b5f3",
+        "photo-1535254973040-607b474cb50d",
+        "photo-1621303837174-89787a7d4729",
+        "photo-1606890737304-57a1ca8a5b62",
+        "photo-1600002415506-dd06090d3480"
+      ],
+      "Birthday": [
+        "photo-1558636508-e0db3814bd1d",
+        "photo-1578985545062-69928b1d9587",
+        "photo-1557925923-cd4648e211a0",
+        "photo-1595295333158-4742f28fbd85",
+        "photo-1612182062366-8e0b3151d1a8"
+      ],
+      "Baby Shower": [
+        "photo-1542826438-bd32f43d626f",
+        "photo-1563729784474-d77dbb933a9e",
+        "photo-1587241321921-91a834d6d191",
+        "photo-1603532648955-039310d9ed75"
+      ],
+      "Anniversary": [
+        "photo-1586985289688-ca3cf47d3e6e",
+        "photo-1488477181946-6428a0291777",
+        "photo-1614707267537-b85aaf00c4b7",
+        "photo-1576717585940-08317b57e8a7"
+      ],
+      "Graduation": [
+        "photo-1602351447937-745cb720612f",
+        "photo-1571115177098-24ec42ed204d",
+        "photo-1486427944299-d1955d23e34d",
+        "photo-1612201142855-7873f715d8c5"
+      ],
+      "cakes": [
+        "photo-1562440499-64c9a3f4efae",
+        "photo-1606313564200-e75d5e30476c",
+        "photo-1584182812719-fa23bcc09e0a",
+        "photo-1565958011703-44f9829ba187"
+      ]
+    };
+
+    const imagesToUse = categoryMap[category] || categoryMap["cakes"];
+    const randomSeed = pageNum * Date.now();
     
     return Array.from({ length: 30 }, (_, i) => {
-      const index = (pageNum - 1) * 30 + i;
-      const imageId = imageQueries[i % imageQueries.length];
+      const randomIndex = (randomSeed + i) % imagesToUse.length;
+      const imageId = imagesToUse[randomIndex];
+      const cacheBuster = `${Date.now()}-${pageNum}-${i}`;
+      
       return {
-        id: `${pageNum}-${i}`,
-        title: `Delicious ${categories[i % categories.length]} Cake Design`,
-        url: `https://www.pinterest.com/pin/cake-${index}/`,
-        image: `https://images.unsplash.com/${imageId}?w=500&q=80`,
-        category: categories[i % categories.length]
+        id: `${pageNum}-${i}-${cacheBuster}`,
+        title: `Beautiful ${category} Cake Design ${i + 1}`,
+        url: `https://www.pinterest.com/pin/cake-${randomIndex}/`,
+        image: `https://images.unsplash.com/${imageId}?w=500&q=80&t=${cacheBuster}`,
+        category: category
       };
     });
   };
@@ -139,12 +152,12 @@ const Explore = () => {
   }, [page, searchQuery, fetchImages]);
 
   const cakeCategories = [
-    { name: "All Designs", query: "cakes desserts", emoji: "🎂" },
-    { name: "Wedding", query: "wedding cakes", emoji: "💍" },
-    { name: "Birthday", query: "birthday cakes", emoji: "🎈" },
-    { name: "Baby Shower", query: "baby shower cakes", emoji: "👶" },
-    { name: "Anniversary", query: "anniversary cakes", emoji: "💝" },
-    { name: "Graduation", query: "graduation cakes", emoji: "🎓" },
+    { name: "All Designs", query: "cakes", emoji: "🎂" },
+    { name: "Wedding", query: "Wedding", emoji: "💍" },
+    { name: "Birthday", query: "Birthday", emoji: "🎈" },
+    { name: "Baby Shower", query: "Baby Shower", emoji: "👶" },
+    { name: "Anniversary", query: "Anniversary", emoji: "💝" },
+    { name: "Graduation", query: "Graduation", emoji: "🎓" },
   ];
 
   const handleCategoryClick = (query: string) => {

@@ -3,17 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { supabase, Order, OrderItem } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { LogOut, Package, DollarSign, Users, TrendingUp, BarChart3, PackageSearch, Star, Eye } from "lucide-react";
+import { LogOut, Package, DollarSign, Users, TrendingUp, BarChart3, PackageSearch, Star, Eye, MessageSquare, Send } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SalesAnalytics from "@/components/SalesAnalytics";
 import InventoryManagement from "@/components/InventoryManagement";
-import VisitorAnalytics from "@/components/VisitorAnalytics";
+import AdminBottomNav from "@/components/AdminBottomNav";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import logo from "@/assets/logo.png";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState<(Order & { order_items?: OrderItem[] })[]>([]);
   const [customOrders, setCustomOrders] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const idleTimerRef = useRef<number | null>(null);
@@ -32,6 +36,7 @@ const AdminDashboard = () => {
     fetchOrders();
     fetchCustomOrders();
     fetchReviews();
+    fetchMessages();
 
     const ordersChannel = supabase
       .channel('admin-orders')
@@ -90,6 +95,25 @@ const AdminDashboard = () => {
             });
           }
           fetchReviews();
+        }
+      )
+      .subscribe();
+
+    const messagesChannel = supabase
+      .channel('admin-messages')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'customer_messages'
+        },
+        (payload) => {
+          toast.success('New message received!', {
+            description: `From ${payload.new.customer_name}`,
+            duration: 5000,
+          });
+          fetchMessages();
         }
       )
       .subscribe();
@@ -189,6 +213,20 @@ const AdminDashboard = () => {
       setReviews(data || []);
     } catch (err) {
       console.error('Error fetching reviews:', err);
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('customer_messages')
+        .select('*')
+        .order('created_at', { ascending: false});
+
+      if (error) throw error;
+      setMessages(data || []);
+    } catch (err) {
+      console.error('Error fetching messages:', err);
     }
   };
 
@@ -341,31 +379,31 @@ const AdminDashboard = () => {
         </div>
 
         {/* Tabs for different sections */}
-        <Tabs defaultValue="orders" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
+        <Tabs defaultValue="orders" className="w-full pb-20 md:pb-0">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 lg:w-auto lg:inline-grid">
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <Package className="w-4 h-4" />
-              Orders
+              <span className="hidden md:inline">Orders</span>
+            </TabsTrigger>
+            <TabsTrigger value="messages" className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden md:inline">Messages</span>
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
-              Analytics
+              <span className="hidden md:inline">Analytics</span>
             </TabsTrigger>
             <TabsTrigger value="inventory" className="flex items-center gap-2">
               <PackageSearch className="w-4 h-4" />
-              Inventory
-            </TabsTrigger>
-            <TabsTrigger value="visitors" className="flex items-center gap-2">
-              <Eye className="w-4 h-4" />
-              Visitors
+              <span className="hidden md:inline">Inventory</span>
             </TabsTrigger>
             <TabsTrigger value="reviews" className="flex items-center gap-2">
               <Star className="w-4 h-4" />
-              Reviews
+              <span className="hidden md:inline">Reviews</span>
             </TabsTrigger>
             <TabsTrigger value="custom" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              Custom Orders
+              <span className="hidden md:inline">Custom</span>
             </TabsTrigger>
           </TabsList>
 
@@ -452,8 +490,106 @@ const AdminDashboard = () => {
             <InventoryManagement />
           </TabsContent>
 
-          <TabsContent value="visitors" className="mt-6">
-            <VisitorAnalytics />
+          <TabsContent value="messages" className="mt-6">
+            <div className="bg-card rounded-lg border">
+              <div className="p-6 border-b">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5" />
+                  Customer Messages
+                </h2>
+              </div>
+              <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto">
+                {messages.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                    <p>No messages yet</p>
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <Card key={msg.id} className={`p-4 ${msg.status === 'unread' ? 'border-primary/50 bg-primary/5' : ''}`}>
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-semibold flex items-center gap-2">
+                            {msg.customer_name}
+                            {msg.status === 'unread' && (
+                              <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">New</span>
+                            )}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">{msg.customer_email}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(msg.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-sm mb-3 p-3 bg-secondary/50 rounded-lg">{msg.message}</p>
+                      {msg.admin_reply && (
+                        <div className="mt-3 p-3 bg-primary/10 rounded-lg border-l-4 border-primary">
+                          <p className="text-xs font-semibold text-primary mb-1">Your Reply:</p>
+                          <p className="text-sm">{msg.admin_reply}</p>
+                        </div>
+                      )}
+                      <div className="flex gap-2 mt-3">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={async () => {
+                            const reply = prompt('Enter your reply:');
+                            if (!reply) return;
+                            try {
+                              const { error } = await supabase
+                                .from('customer_messages')
+                                .update({ 
+                                  admin_reply: reply, 
+                                  status: 'replied',
+                                  updated_at: new Date().toISOString()
+                                })
+                                .eq('id', msg.id);
+                              if (error) throw error;
+                              toast.success('Reply sent!');
+                              fetchMessages();
+                            } catch (err) {
+                              toast.error('Failed to send reply');
+                            }
+                          }}
+                        >
+                          <Send className="w-4 h-4 mr-2" />
+                          Reply via Email
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            window.open(`mailto:${msg.customer_email}?subject=Re: Your Message to Sweet Tooth&body=Hi ${msg.customer_name},%0D%0A%0D%0AThank you for contacting us!%0D%0A%0D%0A`, '_blank');
+                          }}
+                        >
+                          Open Email Client
+                        </Button>
+                        {msg.status === 'unread' && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={async () => {
+                              try {
+                                const { error } = await supabase
+                                  .from('customer_messages')
+                                  .update({ status: 'read' })
+                                  .eq('id', msg.id);
+                                if (error) throw error;
+                                toast.success('Marked as read');
+                                fetchMessages();
+                              } catch (err) {
+                                toast.error('Failed to update');
+                              }
+                            }}
+                          >
+                            Mark as Read
+                          </Button>
+                        )}
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">
@@ -577,6 +713,8 @@ const AdminDashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      <AdminBottomNav />
     </div>
   );
 };

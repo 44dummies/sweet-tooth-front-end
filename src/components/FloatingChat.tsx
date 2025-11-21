@@ -5,12 +5,16 @@ import { Input } from "@/components/ui/input";
 import { useFloatingChat } from "@/contexts/FloatingChatContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 
 interface Message {
   id: string;
   text: string;
   sender: 'user' | 'support';
   timestamp: Date;
+  userName?: string;
+  userEmail?: string;
 }
 
 const FloatingChat = () => {
@@ -26,7 +30,14 @@ const FloatingChat = () => {
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (user && profile) {
+      setIsAdmin(profile.email === 'muindidamian@gmail.com');
+    }
+  }, [user, profile]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,28 +47,56 @@ const FloatingChat = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
+
+    const userName = profile ? `${profile.first_name} ${profile.last_name}` : 'Guest';
+    const userEmail = user?.email || 'guest@example.com';
 
     const newMessage: Message = {
       id: Date.now().toString(),
       text: inputMessage,
       sender: 'user',
-      timestamp: new Date()
+      timestamp: new Date(),
+      userName,
+      userEmail
     };
 
     setMessages(prev => [...prev, newMessage]);
+    const messageToSend = inputMessage;
     setInputMessage("");
 
-    setTimeout(() => {
-      const autoReply: Message = {
-        id: (Date.now() + 1).toString(),
-        text: "Thank you for your message! Our team will respond shortly. For immediate assistance, you can also reach us on WhatsApp: +254 795 436 192",
-        sender: 'support',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, autoReply]);
-    }, 1000);
+    try {
+      const { error } = await supabase
+        .from('customer_messages')
+        .insert({
+          customer_name: userName,
+          customer_email: userEmail,
+          message: messageToSend,
+          status: 'unread'
+        });
+
+      if (error) {
+        console.error('Error saving message:', error);
+        toast.error('Failed to send message');
+        return;
+      }
+
+      toast.success('Message sent!');
+      
+      setTimeout(() => {
+        const autoReply: Message = {
+          id: (Date.now() + 1).toString(),
+          text: "Thank you for your message! Our team will respond shortly. For immediate assistance, you can also reach us on WhatsApp: +254 795 436 192",
+          sender: 'support',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, autoReply]);
+      }, 1000);
+    } catch (err) {
+      console.error('Error:', err);
+      toast.error('Failed to send message');
+    }
   };
 
   const handleWhatsApp = () => {
@@ -80,11 +119,13 @@ const FloatingChat = () => {
                     ST
                   </AvatarFallback>
                 </Avatar>
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+                {isAdmin && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+                )}
               </div>
               <div>
                 <h3 className="font-semibold text-base">Sweet Tooth Support</h3>
-                <p className="text-xs text-white/80">Online</p>
+                {isAdmin && <p className="text-xs text-white/80">Online</p>}
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -187,7 +228,9 @@ const FloatingChat = () => {
           aria-label="Open chat"
         >
           <MessageCircle size={24} className="md:w-7 md:h-7" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 border-2 border-background rounded-full animate-pulse"></span>
+          {isAdmin && (
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 border-2 border-background rounded-full animate-pulse"></span>
+          )}
         </button>
       )}
     </>

@@ -8,7 +8,6 @@ import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FloatingChatProvider } from "@/contexts/FloatingChatContext";
-import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { DatabaseChecker } from "@/components/DatabaseChecker";
 import Index from "./pages/Index";
 import Gallery from "./pages/Gallery";
@@ -38,11 +37,6 @@ const ScrollToTop = () => {
 
 const queryClient = new QueryClient();
 
-const AppContent = () => {
-  useVisitorTracking(); 
-  return null;
-};
-
 const App = () => {
   const [showLoading, setShowLoading] = useState(true);
 
@@ -60,7 +54,6 @@ const App = () => {
               <FloatingChatProvider>
                 <CartProvider>
                   <ScrollToTop />
-                  <AppContent />
                   <Toaster />
                   <Sonner />
                   <DatabaseChecker />
