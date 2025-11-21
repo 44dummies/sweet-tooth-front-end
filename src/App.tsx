@@ -23,6 +23,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import FAQ from "./pages/FAQ";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import Explore from "./pages/Explore";
+import CustomOrderPage from "./pages/CustomOrderPage";
+import MobileProfile from "./pages/MobileProfile";
 import NotFound from "./pages/NotFound";
 import LoadingOverlay from "@/components/LoadingOverlay";
 
@@ -65,6 +68,9 @@ const App = () => {
                   <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/explore" element={<Explore />} />
+                  <Route path="/custom-order" element={<CustomOrderPage />} />
+                  <Route path="/mobile-profile" element={<MobileProfile />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
@@ -77,7 +83,6 @@ const App = () => {
                   <Route path="/admin" element={<AdminLogin />} />
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                   </Routes>
                 </CartProvider>

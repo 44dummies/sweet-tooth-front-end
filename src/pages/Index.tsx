@@ -5,10 +5,11 @@ import CustomOrderSection from "@/components/CustomOrderSection";
 import ReviewsSection from "@/components/ReviewSection";
 import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20 md:pb-0">
       <Navbar />
       <HeroSlider />
       <MenuSection />
@@ -16,6 +17,7 @@ const Index = () => {
       <ReviewsSection />
       <Footer />
       <FloatingChat />
+      <MobileBottomNav />
     </div>
   );
 };
