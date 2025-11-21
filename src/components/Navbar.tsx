@@ -106,9 +106,11 @@ const Navbar = () => {
   const navLinks = [
     { name: "Menu", id: "menu", isRoute: true },
     { name: "Gallery", id: "gallery", isRoute: true },
+    { name: "Gift Cards", id: "gift-cards", isRoute: true },
   ];
 
   const moreLinks = [
+    { name: "Wishlist", id: "wishlist", isRoute: true },
     { name: "Contact", id: "contact" },
     { name: "FAQs", id: "faq" },
   ];
@@ -177,8 +179,8 @@ const Navbar = () => {
                       onClick={() => {
                         if (link.id === "contact") {
                           openChat();
-                        } else if (link.id === "faq") {
-                          navigate('/faq');
+                        } else if (link.isRoute) {
+                          navigate(`/${link.id}`);
                         } else {
                           handleNavClick(link.id, false);
                         }

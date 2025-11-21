@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import FavoriteButton from "./FavoriteButton";
+import NutritionalInfo from "./NutritionalInfo";
 
 interface MenuCardProps {
   id: string;
@@ -11,9 +13,34 @@ interface MenuCardProps {
   price: number;
   available: boolean;
   stockQuantity: number;
+  calories?: number;
+  allergens?: string[];
+  ingredients?: string[];
+  dietary_tags?: string[];
+  nutritional_info?: {
+    protein?: number;
+    fat?: number;
+    carbs?: number;
+    sugar?: number;
+    fiber?: number;
+    sodium?: number;
+  };
 }
 
-const MenuCard = ({ id, image, title, description, price, available, stockQuantity }: MenuCardProps) => {
+const MenuCard = ({ 
+  id, 
+  image, 
+  title, 
+  description, 
+  price, 
+  available, 
+  stockQuantity,
+  calories,
+  allergens,
+  ingredients,
+  dietary_tags,
+  nutritional_info
+}: MenuCardProps) => {
   const { addItem } = useCart();
 
   const handleAddToCart = () => {
@@ -53,6 +80,9 @@ const MenuCard = ({ id, image, title, description, price, available, stockQuanti
             </span>
           </div>
         )}
+        <div className="absolute top-2 right-2 z-20">
+          <FavoriteButton productId={id} productName={title} size="sm" />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
         <img
           src={image}
@@ -64,7 +94,15 @@ const MenuCard = ({ id, image, title, description, price, available, stockQuanti
       <CardContent className="p-4 sm:p-5 flex flex-col flex-1">
         <CardTitle className="text-lg sm:text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">{title}</CardTitle>
 
-        <p className="text-muted-foreground text-xs sm:text-sm flex-grow line-clamp-2">{description}</p>
+        <p className="text-muted-foreground text-xs sm:text-sm flex-grow line-clamp-2 mb-3">{description}</p>
+
+        <NutritionalInfo
+          calories={calories}
+          allergens={allergens}
+          ingredients={ingredients}
+          dietary_tags={dietary_tags}
+          nutritional_info={nutritional_info}
+        />
 
         {stockQuantity > 0 && stockQuantity <= 5 && available && (
           <p className="text-xs text-orange-500 font-semibold mt-2">Only {stockQuantity} left!</p>

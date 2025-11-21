@@ -28,6 +28,8 @@ import CustomOrderPage from "./pages/CustomOrderPage";
 import MobileProfile from "./pages/MobileProfile";
 import NotFound from "./pages/NotFound";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import GiftCardsPage from "./pages/GiftCardsPage";
+import WishlistPage from "./pages/WishlistPage";
 
 const ScrollToTop = () => {
   useEffect(() => {
@@ -75,6 +77,8 @@ const App = () => {
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/faq" element={<FAQ />} />
+                  <Route path="/gift-cards" element={<GiftCardsPage />} />
+                  <Route path="/wishlist" element={<WishlistPage />} />
                   <Route path="/admin" element={<AdminLogin />} />
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
