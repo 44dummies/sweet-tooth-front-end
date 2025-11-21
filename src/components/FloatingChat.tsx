@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Minimize2 } from "lucide-react";
+import { MessageCircle, X, Send, Minimize2, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFloatingChat } from "@/contexts/FloatingChatContext";
@@ -7,95 +7,213 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 interface Message {
   id: string;
-  text: string;
-  sender: 'user' | 'support';
-  timestamp: Date;
-  userName?: string;
-  userEmail?: string;
+  conversation_id: string;
+  sender_type: 'customer' | 'admin';
+  message: string;
+  read: boolean;
+  created_at: string;
 }
 
 const FloatingChat = () => {
   const { isOpen, openChat, closeChat } = useFloatingChat();
   const { user, profile } = useAuth();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Hi! Welcome to Sweet Tooth Pastries. How can we help you today?",
-      sender: 'support',
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (user && profile) {
-      setIsAdmin(profile.email === 'muindidamian@gmail.com');
+    if (user && isOpen) {
+      initializeConversation();
     }
-  }, [user, profile]);
+  }, [user, isOpen]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  useEffect(() => {
+    if (conversationId) {
+      subscribeToMessages();
+    }
+  }, [conversationId]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-    const userName = profile ? `${profile.first_name} ${profile.last_name}` : 'Guest';
-    const userEmail = user?.email || 'guest@example.com';
+  const initializeConversation = async () => {
+    if (!user?.email || !profile) return;
 
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: inputMessage,
-      sender: 'user',
-      timestamp: new Date(),
-      userName,
-      userEmail
+    setLoading(true);
+    try {
+      // Check if conversation exists
+      const { data: existingConv, error: convError } = await supabase
+        .from('conversations')
+        .select('*')
+        .eq('customer_email', user.email)
+        .single();
+
+      if (convError && convError.code !== 'PGRST116') {
+        throw convError;
+      }
+
+      let convId: string;
+
+      if (existingConv) {
+        convId = existingConv.id;
+        setConversationId(convId);
+      } else {
+        // Create new conversation
+        const { data: newConv, error: createError } = await supabase
+          .from('conversations')
+          .insert({
+            customer_name: `${profile.first_name} ${profile.last_name}`,
+            customer_email: user.email,
+            last_message: 'New conversation started',
+            status: 'active'
+          })
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        
+        convId = newConv.id;
+        setConversationId(convId);
+
+        // Send welcome message
+        await supabase
+          .from('conversation_messages')
+          .insert({
+            conversation_id: convId,
+            customer_email: user.email,
+            sender_type: 'admin',
+            message: "Hi! Welcome to Sweet Tooth Pastries. How can we help you today?",
+            read: false
+          });
+      }
+
+      // Load existing messages
+      const { data: msgs, error: msgsError } = await supabase
+        .from('conversation_messages')
+        .select('*')
+        .eq('conversation_id', convId)
+        .order('created_at', { ascending: true });
+
+      if (msgsError) throw msgsError;
+
+      setMessages(msgs || []);
+
+      // Mark admin messages as read
+      await supabase
+        .from('conversation_messages')
+        .update({ read: true })
+        .eq('conversation_id', convId)
+        .eq('sender_type', 'admin')
+        .eq('read', false);
+
+      // Update unread count for customer
+      await supabase
+        .from('conversations')
+        .update({ unread_customer_count: 0 })
+        .eq('id', convId);
+
+    } catch (err) {
+      console.error('Error initializing conversation:', err);
+      toast.error('Failed to load conversation');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const subscribeToMessages = () => {
+    if (!conversationId) return;
+
+    const channel = supabase
+      .channel(`customer-chat-${conversationId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'conversation_messages',
+          filter: `conversation_id=eq.${conversationId}`
+        },
+        (payload) => {
+          const newMsg = payload.new as Message;
+          
+          // Only add if not already in list
+          setMessages(prev => {
+            if (prev.find(m => m.id === newMsg.id)) return prev;
+            return [...prev, newMsg];
+          });
+
+          // If it's an admin message and chat is minimized, show notification
+          if (newMsg.sender_type === 'admin') {
+            if (isMinimized || !isOpen) {
+              setUnreadCount(prev => prev + 1);
+              toast.success('New message from Sweet Tooth Support!');
+            }
+            
+            // Mark as read if chat is open
+            if (isOpen && !isMinimized) {
+              supabase
+                .from('conversation_messages')
+                .update({ read: true })
+                .eq('id', newMsg.id);
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
     };
+  };
 
-    setMessages(prev => [...prev, newMessage]);
-    const messageToSend = inputMessage;
+  const sendMessage = async () => {
+    if (!inputMessage.trim() || !conversationId || !user?.email) return;
+
+    const messageText = inputMessage;
     setInputMessage("");
 
     try {
       const { error } = await supabase
-        .from('customer_messages')
+        .from('conversation_messages')
         .insert({
-          customer_name: userName,
-          customer_email: userEmail,
-          message: messageToSend,
-          status: 'unread'
+          conversation_id: conversationId,
+          customer_email: user.email,
+          sender_type: 'customer',
+          message: messageText,
+          read: false
         });
 
-      if (error) {
-        console.error('Error saving message:', error);
-        toast.error('Failed to send message');
-        return;
-      }
+      if (error) throw error;
+
+      // Update conversation
+      await supabase
+        .from('conversations')
+        .update({
+          last_message: messageText,
+          last_message_at: new Date().toISOString(),
+          unread_admin_count: messages.filter(m => m.sender_type === 'customer' && !m.read).length + 1,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', conversationId);
 
       toast.success('Message sent!');
-      
-      setTimeout(() => {
-        const autoReply: Message = {
-          id: (Date.now() + 1).toString(),
-          text: "Thank you for your message! Our team will respond shortly. For immediate assistance, you can also reach us on WhatsApp: +254 795 436 192",
-          sender: 'support',
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, autoReply]);
-      }, 1000);
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Error sending message:', err);
       toast.error('Failed to send message');
+      setInputMessage(messageText);
     }
   };
 
@@ -105,6 +223,25 @@ const FloatingChat = () => {
       `https://wa.me/254795436192?text=${encodeURIComponent(message)}`,
       "_blank"
     );
+  };
+
+  const handleMinimize = () => {
+    setIsMinimized(true);
+  };
+
+  const handleRestore = () => {
+    setIsMinimized(false);
+    setUnreadCount(0);
+    
+    // Mark unread admin messages as read
+    if (conversationId) {
+      supabase
+        .from('conversation_messages')
+        .update({ read: true })
+        .eq('conversation_id', conversationId)
+        .eq('sender_type', 'admin')
+        .eq('read', false);
+    }
   };
 
   return (
@@ -119,18 +256,16 @@ const FloatingChat = () => {
                     ST
                   </AvatarFallback>
                 </Avatar>
-                {isAdmin && (
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
-                )}
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
               </div>
               <div>
                 <h3 className="font-semibold text-base">Sweet Tooth Support</h3>
-                {isAdmin && <p className="text-xs text-white/80">Online</p>}
+                <p className="text-xs text-white/80">Online</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
               <button
-                onClick={() => setIsMinimized(true)}
+                onClick={handleMinimize}
                 className="p-2 hover:bg-white/20 rounded-lg transition-colors"
               >
                 <Minimize2 size={18} />
@@ -145,24 +280,46 @@ const FloatingChat = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-secondary/5">
+            {loading && (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            )}
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.sender_type === 'customer' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
               >
-                <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
-                    message.sender === 'user'
-                      ? 'bg-primary text-primary-foreground rounded-br-sm'
-                      : 'bg-muted text-foreground rounded-bl-sm'
-                  }`}
-                >
-                  <p className="text-sm leading-relaxed">{message.text}</p>
-                  <p className={`text-[10px] mt-1 ${
-                    message.sender === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground'
-                  }`}>
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                <div className="flex flex-col gap-1 max-w-[80%]">
+                  {message.sender_type === 'admin' && (
+                    <div className="flex items-center gap-2 px-2">
+                      <Avatar className="h-5 w-5 border border-primary/30">
+                        <AvatarFallback className="bg-primary/10 text-primary text-[10px]">
+                          ST
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-[10px] text-muted-foreground font-medium">Sweet Tooth Team</span>
+                    </div>
+                  )}
+                  <div
+                    className={`rounded-2xl px-4 py-2.5 ${
+                      message.sender_type === 'customer'
+                        ? 'bg-primary text-primary-foreground rounded-br-sm'
+                        : 'bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 text-foreground rounded-bl-sm border border-green-200 dark:border-green-800'
+                    }`}
+                  >
+                    <p className="text-sm leading-relaxed">{message.message}</p>
+                    <div className={`flex items-center gap-1 mt-1 ${
+                      message.sender_type === 'customer' ? 'text-primary-foreground/70' : 'text-muted-foreground'
+                    }`}>
+                      <p className="text-[10px]">
+                        {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                      {message.sender_type === 'customer' && message.read && (
+                        <CheckCheck size={12} className="text-green-400" />
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -182,12 +339,12 @@ const FloatingChat = () => {
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="Type your message..."
                 className="flex-1 rounded-xl border-2 focus:border-primary"
               />
               <Button
-                onClick={handleSendMessage}
+                onClick={sendMessage}
                 size="icon"
                 className="rounded-xl h-10 w-10 bg-primary hover:bg-primary/90"
               >
@@ -206,8 +363,8 @@ const FloatingChat = () => {
 
       {isOpen && isMinimized && (
         <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 bg-background border-2 border-border rounded-xl shadow-xl p-3 cursor-pointer hover:shadow-2xl transition-all"
-             onClick={() => setIsMinimized(false)}>
-          <div className="flex items-center gap-3">
+             onClick={handleRestore}>
+          <div className="flex items-center gap-3 relative">
             <Avatar className="h-8 w-8 border-2 border-primary/30">
               <AvatarFallback className="bg-primary/20 text-primary font-semibold text-xs">
                 ST
@@ -217,19 +374,26 @@ const FloatingChat = () => {
               <p className="text-sm font-semibold">Sweet Tooth Support</p>
               <p className="text-xs text-muted-foreground">{messages.length} messages</p>
             </div>
+            {unreadCount > 0 && (
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500 text-white text-[10px]">
+                {unreadCount}
+              </Badge>
+            )}
           </div>
         </div>
       )}
 
       {!isOpen && (
         <button
-          onClick={openChat}
+          onClick={() => { openChat(); setUnreadCount(0); }}
           className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-40 bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground rounded-full p-3 md:p-4 shadow-2xl hover:shadow-primary/50 transition-all hover:scale-110 animate-float"
           aria-label="Open chat"
         >
           <MessageCircle size={24} className="md:w-7 md:h-7" />
-          {isAdmin && (
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 border-2 border-background rounded-full animate-pulse"></span>
+          {unreadCount > 0 && (
+            <Badge className="absolute -top-2 -right-2 h-6 w-6 flex items-center justify-center p-0 bg-red-500 text-white text-xs animate-bounce">
+              {unreadCount}
+            </Badge>
           )}
         </button>
       )}

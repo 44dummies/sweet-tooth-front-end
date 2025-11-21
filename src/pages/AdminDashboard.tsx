@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SalesAnalytics from "@/components/SalesAnalytics";
 import InventoryManagement from "@/components/InventoryManagement";
 import AdminBottomNav from "@/components/AdminBottomNav";
+import AdminMessaging from "@/components/AdminMessaging";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -319,16 +320,16 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-secondary/30">
       {/* Header */}
       <div className="bg-card border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={logo} alt="Sweet Tooth" className="w-10 h-10" />
-            <h1 className="text-xl font-bold">Sweet Tooth Admin</h1>
+        <div className="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3">
+            <img src={logo} alt="Sweet Tooth" className="w-8 h-8 md:w-10 md:h-10" />
+            <h1 className="text-base md:text-xl font-bold truncate">Sweet Tooth Admin</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
+          <div className="flex items-center gap-2 md:gap-4">
+            <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline truncate max-w-[120px] md:max-w-none">{user?.email}</span>
+            <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs md:text-sm">
+              <LogOut className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
+              <span className="hidden md:inline">Logout</span>
             </Button>
           </div>
         </div>
@@ -477,31 +478,31 @@ const AdminDashboard = () => {
             </h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[800px]">
               <thead className="bg-secondary/50">
                 <tr>
-                  <th className="text-left p-4 font-medium">Order ID</th>
-                  <th className="text-left p-4 font-medium">Customer</th>
-                  <th className="text-left p-4 font-medium">Phone</th>
-                  <th className="text-left p-4 font-medium">Amount</th>
-                  <th className="text-left p-4 font-medium">Status</th>
-                  <th className="text-left p-4 font-medium">Payment</th>
-                  <th className="text-left p-4 font-medium">Date</th>
-                  <th className="text-left p-4 font-medium">Actions</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Order ID</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Customer</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Phone</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Amount</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Status</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Payment</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Date</th>
+                  <th className="text-left p-2 md:p-4 font-medium text-xs md:text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id} className="border-b hover:bg-secondary/20">
-                    <td className="p-4 font-mono text-sm">{order.id.substring(0, 8)}</td>
-                    <td className="p-4">{order.customer_name}</td>
-                    <td className="p-4">{order.customer_phone}</td>
-                    <td className="p-4 font-semibold">Ksh {order.total_amount.toLocaleString()}</td>
-                    <td className="p-4">
+                    <td className="p-2 md:p-4 font-mono text-xs md:text-sm">{order.id.substring(0, 8)}</td>
+                    <td className="p-2 md:p-4 text-xs md:text-sm">{order.customer_name}</td>
+                    <td className="p-2 md:p-4 text-xs md:text-sm">{order.customer_phone}</td>
+                    <td className="p-2 md:p-4 font-semibold text-xs md:text-sm">Ksh {order.total_amount.toLocaleString()}</td>
+                    <td className="p-2 md:p-4">
                       <select
                         value={order.status}
                         onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                        className="px-3 py-1 rounded border text-sm"
+                        className="px-2 md:px-3 py-1 rounded border text-xs md:text-sm w-full"
                       >
                         <option value="PENDING">Pending</option>
                         <option value="CONFIRMED">Confirmed</option>
@@ -512,11 +513,11 @@ const AdminDashboard = () => {
                         <option value="CANCELLED">Cancelled</option>
                       </select>
                     </td>
-                    <td className="p-4">
+                    <td className="p-2 md:p-4">
                       <select
                         value={order.payment_status}
                         onChange={(e) => updatePaymentStatus(order.id, e.target.value)}
-                        className="px-3 py-1 rounded border text-sm"
+                        className="px-2 md:px-3 py-1 rounded border text-xs md:text-sm w-full"
                       >
                         <option value="PENDING">Pending</option>
                         <option value="PAID">Paid</option>
@@ -524,11 +525,12 @@ const AdminDashboard = () => {
                         <option value="REFUNDED">Refunded</option>
                       </select>
                     </td>
-                    <td className="p-4 text-sm">{new Date(order.created_at).toLocaleDateString()}</td>
-                    <td className="p-4">
+                    <td className="p-2 md:p-4 text-xs md:text-sm">{new Date(order.created_at).toLocaleDateString()}</td>
+                    <td className="p-2 md:p-4">
                       <Button
                         size="sm"
                         variant="outline"
+                        className="text-xs"
                         onClick={() => {
                           const whatsappMsg = `Hello ${order.customer_name}, regarding your order #${order.id.substring(0, 8)}...`;
                           window.open(`https://wa.me/254795436192?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
@@ -614,105 +616,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="messages" className="mt-6">
-            <div className="bg-card rounded-lg border">
-              <div className="p-6 border-b">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  Customer Messages
-                </h2>
-              </div>
-              <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto">
-                {messages.length === 0 ? (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                    <p>No messages yet</p>
-                  </div>
-                ) : (
-                  messages.map((msg) => (
-                    <Card key={msg.id} className={`p-4 ${msg.status === 'unread' ? 'border-primary/50 bg-primary/5' : ''}`}>
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h3 className="font-semibold flex items-center gap-2">
-                            {msg.customer_name}
-                            {msg.status === 'unread' && (
-                              <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">New</span>
-                            )}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">{msg.customer_email}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(msg.created_at).toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-sm mb-3 p-3 bg-secondary/50 rounded-lg">{msg.message}</p>
-                      {msg.admin_reply && (
-                        <div className="mt-3 p-3 bg-primary/10 rounded-lg border-l-4 border-primary">
-                          <p className="text-xs font-semibold text-primary mb-1">Your Reply:</p>
-                          <p className="text-sm">{msg.admin_reply}</p>
-                        </div>
-                      )}
-                      <div className="flex gap-2 mt-3">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={async () => {
-                            const reply = prompt('Enter your reply:');
-                            if (!reply) return;
-                            try {
-                              const { error } = await supabase
-                                .from('customer_messages')
-                                .update({ 
-                                  admin_reply: reply, 
-                                  status: 'replied',
-                                  updated_at: new Date().toISOString()
-                                })
-                                .eq('id', msg.id);
-                              if (error) throw error;
-                              toast.success('Reply sent!');
-                              fetchMessages();
-                            } catch (err) {
-                              toast.error('Failed to send reply');
-                            }
-                          }}
-                        >
-                          <Send className="w-4 h-4 mr-2" />
-                          Reply via Email
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            window.open(`mailto:${msg.customer_email}?subject=Re: Your Message to Sweet Tooth&body=Hi ${msg.customer_name},%0D%0A%0D%0AThank you for contacting us!%0D%0A%0D%0A`, '_blank');
-                          }}
-                        >
-                          Open Email Client
-                        </Button>
-                        {msg.status === 'unread' && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={async () => {
-                              try {
-                                const { error } = await supabase
-                                  .from('customer_messages')
-                                  .update({ status: 'read' })
-                                  .eq('id', msg.id);
-                                if (error) throw error;
-                                toast.success('Marked as read');
-                                fetchMessages();
-                              } catch (err) {
-                                toast.error('Failed to update');
-                              }
-                            }}
-                          >
-                            Mark as Read
-                          </Button>
-                        )}
-                      </div>
-                    </Card>
-                  ))
-                )}
-              </div>
-            </div>
+            <AdminMessaging />
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">

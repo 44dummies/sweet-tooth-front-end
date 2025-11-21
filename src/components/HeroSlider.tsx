@@ -1,27 +1,34 @@
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useScrollFade } from "@/hooks/useScrollFade";
+import { useNavigate } from "react-router-dom";
 import heroCake1 from "@/assets/hero-cake-1.jpg";
 import heroCake2 from "@/assets/hero-cake-2.jpg";
 import heroCake3 from "@/assets/hero-cake-3.jpg";
 
 const slides = [
-  { image: heroCake1, alt: "Elegant pink birthday cake" },
-  { image: heroCake2, alt: "Delicious chocolate layer cake" },
-  { image: heroCake3, alt: "Beautiful pastel cupcakes" },
+  {
+    image: heroCake1,
+    story: "Born from a passion for creating sweet memories, Sweet Tooth Pastries began as a small family kitchen experiment that blossomed into a beloved local bakery.",
+  },
+  {
+    image: heroCake2,
+    story: "Using premium ingredients and time-honored techniques, we craft each cake with the same love and attention we'd give to our own family celebrations.",
+  },
+  {
+    image: heroCake3,
+    story: "From birthdays to weddings, we've been privileged to add sweetness to life's most precious moments for over 2 years and counting.",
+  },
 ];
 
 const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { ref, scrollProgress } = useScrollFade();
-  const startX = useRef<number | null>(null);
-  const isPointerDown = useRef(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
@@ -33,117 +40,177 @@ const HeroSlider = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    isPointerDown.current = true;
-    startX.current = e.clientX;
-    (e.target as Element).setPointerCapture(e.pointerId);
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    if (!isPointerDown.current || startX.current === null) return;
-    isPointerDown.current = false;
-    const endX = e.clientX;
-    const diff = startX.current - endX;
-    startX.current = null;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
-    }
-    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch {}
-  };
-
-  const onPointerCancel = (e: React.PointerEvent) => {
-    isPointerDown.current = false;
-    startX.current = null;
-    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch {}
-  };
-
-  const scrollToMenu = () => {
-    const element = document.getElementById("menu");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <section
-      id="hero"
-      className="relative h-screen w-full overflow-hidden"
-      ref={ref as any}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}
-      onPointerLeave={onPointerCancel}
-    >
-      {/* Background Slides */}
-      {slides.map((slide, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-            index === currentSlide
-              ? "opacity-100"
-              : "opacity-0"
-          }`}
-          style={{
-            transform: index === currentSlide ? 'scale(1)' : 'scale(1.1)',
-          }}
-        >
-          <img
-            src={slide.image}
-            alt={slide.alt}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
-        </div>
-      ))}
-
-      {/* Content Overlay */}
-      <div className="relative h-full flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
-        <h1 
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-4 animate-fade-in"
-          style={{
-            opacity: 1 - scrollProgress * 0.5,
-            transform: `translateY(${scrollProgress * 20}px)`,
-          }}
-        >
-          Welcome to Sweet Tooth
-        </h1>
-        <p 
-          className="text-xl sm:text-2xl md:text-3xl text-white/90 mb-8 max-w-2xl animate-fade-in font-light"
-          style={{
-            opacity: 1 - scrollProgress * 0.5,
-            transform: `translateY(${scrollProgress * 20}px)`,
-          }}
-        >
-          Indulge in premium home-baked delights, crafted with love and delivered fresh to your door
-        </p>
-        <div className="hidden sm:flex flex-col sm:flex-row gap-4 animate-scale-in">
-          <Button
-            onClick={scrollToMenu}
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-10 py-6 text-lg shadow-luxury hover:scale-105 transition-transform"
+    <section className="relative h-[85vh] md:h-screen w-full overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 dark:from-gray-900 dark:via-purple-950 dark:to-pink-950">
+      {/* Background with parallax effect */}
+      <div className="absolute inset-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ scale: 1.1, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.3 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+            className="absolute inset-0"
           >
-            Menu
-          </Button>
+            <img
+              src={slides[currentSlide].image}
+              alt={`Slide ${currentSlide + 1}`}
+              className="w-full h-full object-cover blur-sm"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16">
+        <div className="w-full max-w-7xl mx-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="relative"
+            >
+              {/* Glass Card */}
+              <div className="relative overflow-hidden rounded-3xl backdrop-blur-2xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 shadow-2xl">
+                <div className="grid md:grid-cols-2 gap-0">
+                  {/* Image Side */}
+                  <div className="relative h-64 md:h-auto">
+                    <motion.img
+                      src={slides[currentSlide].image}
+                      alt={`Slide ${currentSlide + 1}`}
+                      className="w-full h-full object-cover"
+                      initial={{ scale: 1.2 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 1.5, ease: "easeOut" }}
+                    />
+                    {/* Gradient overlay on image */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 dark:to-black/40" />
+                  </div>
+
+                  {/* Story Side */}
+                  <div className="relative p-6 md:p-12 lg:p-16 flex flex-col justify-center">
+                    {/* Brand Badge */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="inline-flex items-center gap-2 mb-4 md:mb-6"
+                    >
+                      <div className="h-px w-8 md:w-12 bg-gradient-to-r from-pink-500 to-purple-500" />
+                      <span className="text-xs md:text-sm font-semibold tracking-widest text-gray-700 dark:text-gray-300">
+                        SWEET TOOTH PASTRIES
+                      </span>
+                    </motion.div>
+
+                    {/* Title */}
+                    <motion.h1
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight"
+                    >
+                      Our Story
+                    </motion.h1>
+
+                    {/* Story Text */}
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-sm md:text-lg lg:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-6 md:mb-8"
+                    >
+                      {slides[currentSlide].story}
+                    </motion.p>
+
+                    {/* CTA Button */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
+                    >
+                      <motion.button
+                        onClick={() => navigate('/menu')}
+                        className="group inline-flex items-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white rounded-full font-semibold text-base md:text-lg shadow-xl hover:shadow-2xl transition-all"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span>Explore Menu</span>
+                        <svg
+                          className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          />
+                        </svg>
+                      </motion.button>
+                    </motion.div>
+
+                    {/* Slide Counter */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.7 }}
+                      className="mt-8 text-sm text-gray-600 dark:text-gray-400"
+                    >
+                      {currentSlide + 1} / {slides.length}
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
-      
+      {/* Navigation Arrows - Hidden on mobile */}
+      <button
+        onClick={prevSlide}
+        className="hidden md:block absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full backdrop-blur-xl bg-white/20 dark:bg-black/20 border border-white/30 hover:bg-white/30 dark:hover:bg-black/30 transition-all hover:scale-110 active:scale-95"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white" />
+      </button>
+
+      <button
+        onClick={nextSlide}
+        className="hidden md:block absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full backdrop-blur-xl bg-white/20 dark:bg-black/20 border border-white/30 hover:bg-white/30 dark:hover:bg-black/30 transition-all hover:scale-110 active:scale-95"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white" />
+      </button>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
+            className={`transition-all duration-300 rounded-full ${
               index === currentSlide
-                ? "bg-white w-8"
-                : "bg-white/50 hover:bg-white/70"
+                ? "w-8 h-2 bg-white"
+                : "w-2 h-2 bg-white/40 hover:bg-white/60"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
+      </div>
+
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-20 w-2 h-2 bg-pink-400/30 rounded-full blur-sm" />
+        <div className="absolute top-40 right-32 w-3 h-3 bg-purple-400/30 rounded-full blur-sm" />
+        <div className="absolute bottom-32 left-40 w-2 h-2 bg-blue-400/30 rounded-full blur-sm" />
+        <div className="absolute bottom-20 right-20 w-3 h-3 bg-pink-400/30 rounded-full blur-sm" />
       </div>
     </section>
   );

@@ -104,7 +104,7 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: "Menu", id: "menu", isRoute: false },
+    { name: "Menu", id: "menu", isRoute: true },
     { name: "Gallery", id: "gallery", isRoute: true },
   ];
 

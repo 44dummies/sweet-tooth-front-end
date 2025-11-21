@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FloatingChatProvider } from "@/contexts/FloatingChatContext";
 import { DatabaseChecker } from "@/components/DatabaseChecker";
 import Index from "./pages/Index";
+import Menu from "./pages/Menu";
 import Gallery from "./pages/Gallery";
 import Checkout from "./pages/Checkout";
 import Register from "./pages/Register";
@@ -60,6 +61,7 @@ const App = () => {
                   {showLoading && <LoadingOverlay />}
                   <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/menu" element={<Menu />} />
                   <Route path="/gallery" element={<Gallery />} />
                   <Route path="/explore" element={<Explore />} />
                   <Route path="/custom-order" element={<CustomOrderPage />} />

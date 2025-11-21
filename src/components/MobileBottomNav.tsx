@@ -25,6 +25,18 @@ const MobileBottomNav = () => {
       )
     },
     { 
+      path: "/menu", 
+      label: "Menu",
+      CakeIcon: () => (
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+          <rect x="4" y="6" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="currentColor" opacity="0.2"/>
+          <rect x="13" y="6" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2"/>
+          <rect x="4" y="15" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2"/>
+          <rect x="13" y="15" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" fill="currentColor" opacity="0.2"/>
+        </svg>
+      )
+    },
+    { 
       path: "/explore", 
       label: "Explore",
       CakeIcon: () => (

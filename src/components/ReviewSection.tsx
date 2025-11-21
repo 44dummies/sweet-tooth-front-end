@@ -135,7 +135,7 @@ const ReviewsSection = () => {
         if (!isPaused && !isPointerDown.current) {
           setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
         }
-      }, 3000); 
+      }, 4000); 
     };
 
     startAutoScroll();
@@ -204,7 +204,7 @@ const ReviewsSection = () => {
         >
           <div className="overflow-x-hidden overflow-y-visible cursor-grab active:cursor-grabbing touch-pan-y">
             <div
-              className="flex transition-transform duration-500 ease-out gap-6"
+              className="flex transition-transform duration-700 ease-in-out gap-0 md:gap-6"
               style={{
                 transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
               }}
@@ -215,7 +215,7 @@ const ReviewsSection = () => {
                   className="flex-shrink-0"
                   style={{ width: `${100 / itemsPerPage}%` }}
                 >
-                  <div className="px-3 h-full">
+                  <div className="md:px-3 h-full">
                     <ReviewCard {...review} />
                   </div>
                 </div>
