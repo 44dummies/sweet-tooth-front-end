@@ -204,7 +204,7 @@ const CustomOrderSection = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="cakeType">
+                      <Label>
                         Cake Type <span className="text-destructive">*</span>
                       </Label>
                       <Select value={formData.cakeType} onValueChange={(value) => setFormData({ ...formData, cakeType: value })}>
@@ -220,7 +220,7 @@ const CustomOrderSection = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="servings" className="flex items-center gap-2">
+                      <Label className="flex items-center gap-2">
                         <Users className="w-4 h-4" />
                         Number of Servings
                       </Label>
@@ -237,7 +237,7 @@ const CustomOrderSection = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="flavor">Cake Flavor</Label>
+                      <Label>Cake Flavor</Label>
                       <Select value={formData.flavor} onValueChange={(value) => setFormData({ ...formData, flavor: value })}>
                         <SelectTrigger className="h-11">
                           <SelectValue placeholder="Select flavor" />
@@ -266,7 +266,7 @@ const CustomOrderSection = () => {
                     </div>
 
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="budget">Budget Range</Label>
+                      <Label>Budget Range</Label>
                       <Select value={formData.budget} onValueChange={(value) => setFormData({ ...formData, budget: value })}>
                         <SelectTrigger className="h-11">
                           <SelectValue placeholder="Select your budget" />
