@@ -96,15 +96,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
-        if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
-          console.warn('Profile not found or table does not exist');
+        // Profile doesn't exist, try to create it
+        if (error.code === 'PGRST116') {
+          console.log('Profile not found, creating new profile...');
+          const user = await supabase.auth.getUser();
+          if (user.data.user) {
+            const { data: newProfile, error: createError } = await supabase
+              .from('profiles')
+              .insert([{
+                id: userId,
+                username: user.data.user.email?.split('@')[0],
+                first_name: user.data.user.user_metadata?.first_name || '',
+                last_name: user.data.user.user_metadata?.last_name || '',
+              }])
+              .select()
+              .single();
+
+            if (createError) {
+              console.error('Error creating profile:', createError);
+            } else {
+              setProfile(newProfile);
+            }
+          }
+        } else {
+          console.error('Error fetching profile:', error);
         }
-        throw error;
+      } else {
+        setProfile(data);
       }
-      setProfile(data);
     } catch (error: any) {
-      console.error('Error fetching profile:', error);
+      console.error('Error in fetchProfile:', error);
     } finally {
       setLoading(false);
     }

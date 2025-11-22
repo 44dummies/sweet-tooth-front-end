@@ -11,6 +11,15 @@ const OrderNotificationListener = () => {
   useEffect(() => {
     if (!user?.email) return;
 
+    // Check if Supabase is properly configured
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey || supabaseUrl === 'https://placeholder.supabase.co') {
+      console.warn('Supabase not configured, skipping realtime subscriptions');
+      return;
+    }
+
     // Subscribe to order status changes for this user
     const channel = supabase
       .channel('user-orders')
@@ -67,7 +76,9 @@ const OrderNotificationListener = () => {
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Subscription status:', status);
+      });
 
     return () => {
       supabase.removeChannel(channel);
