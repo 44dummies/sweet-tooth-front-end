@@ -4,6 +4,32 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
 -- Create index for admin lookups
 CREATE INDEX IF NOT EXISTS idx_profiles_is_admin ON profiles(is_admin) WHERE is_admin = true;
 
+-- Ensure order_items has product_name column (in case old schema exists)
+-- First check if we need to migrate from product_id to product_name
+DO $$
+BEGIN
+  -- If product_name doesn't exist but product_id does, rename it
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'order_items' AND column_name = 'product_name'
+  ) AND EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'order_items' AND column_name = 'product_id'
+  ) THEN
+    ALTER TABLE order_items RENAME COLUMN product_id TO product_name;
+    -- Change type to TEXT if it was UUID
+    ALTER TABLE order_items ALTER COLUMN product_name TYPE TEXT;
+  -- If neither exists, add product_name
+  ELSIF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'order_items' AND column_name = 'product_name'
+  ) THEN
+    ALTER TABLE order_items ADD COLUMN product_name TEXT NOT NULL DEFAULT 'Unknown Product';
+    -- Remove default after adding
+    ALTER TABLE order_items ALTER COLUMN product_name DROP DEFAULT;
+  END IF;
+END $$;
+
 -- Update RLS policies for orders to use is_admin column
 DROP POLICY IF EXISTS "Users can view their own orders" ON orders;
 CREATE POLICY "Users can view their own orders" ON orders
