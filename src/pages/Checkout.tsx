@@ -395,16 +395,16 @@ const Checkout = () => {
                         <span className="text-xs bg-green-500 text-white px-2 py-1 rounded">
                           In Cart
                         </span>
-                        <button
+                        <div
                           onClick={(e) => {
                             e.stopPropagation();
                             removeItem(item.id);
                             toast.success(`${item.title} removed from cart!`);
                           }}
-                          className="text-xs bg-destructive text-white px-2 py-1 rounded hover:bg-destructive/90 transition-colors"
+                          className="text-xs bg-destructive text-white px-2 py-1 rounded hover:bg-destructive/90 transition-colors cursor-pointer"
                         >
                           Remove
-                        </button>
+                        </div>
                       </div>
                     )}
                   </button>
