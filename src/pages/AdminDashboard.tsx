@@ -252,7 +252,7 @@ const AdminDashboard = () => {
       if (error) throw error;
       
       // Send notification to customer if order is confirmed
-      if (newStatus === 'CONFIRMED' && order?.user_email) {
+      if (newStatus === 'CONFIRMED' && order?.customer_email) {
         try {
           // Send email notification
           if (order.customer_email) {

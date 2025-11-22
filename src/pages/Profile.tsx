@@ -498,7 +498,7 @@ const Profile = () => {
                               {order.order_items.map((item: any, idx: number) => (
                                 <li key={idx} className="text-xs sm:text-sm text-muted-foreground flex justify-between gap-2">
                                   <span className="flex-1">
-                                    {item.quantity}x {item.product_title}
+                                    {item.quantity}x {item.product_name}
                                   </span>
                                   <span className="font-medium">Ksh{(item.price * item.quantity).toFixed(2)}</span>
                                 </li>
