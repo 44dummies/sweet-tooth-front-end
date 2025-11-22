@@ -80,7 +80,7 @@ const MenuSection = () => {
   };
 
   return (
-    <section id="menu" className="py-20 md:py-32 bg-secondary/30 section-merge" ref={mergeRef as any}>
+    <section id="menu" className="relative py-20 md:py-32 bg-secondary/30 section-merge" ref={mergeRef as any}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div 
           className="text-center mb-16 animate-fade-in merge-scroll"

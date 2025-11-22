@@ -184,7 +184,7 @@ const ReviewsSection = () => {
   };
 
   return (
-    <section id="reviews" className="py-20 md:py-32 bg-gradient-to-b from-background to-secondary/20" ref={ref}>
+    <section id="reviews" className="relative py-20 md:py-32 bg-gradient-to-b from-background to-secondary/20" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`text-center mb-16 transition-all duration-700 ${isRevealed ? 'animate-fade-in' : 'opacity-0'}`}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">

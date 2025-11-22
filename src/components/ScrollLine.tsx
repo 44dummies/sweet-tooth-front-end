@@ -4,7 +4,7 @@ const ScrollLine = () => {
   const { svgRef, pathRef } = useScrollLineAnimation();
 
   return (
-    <div className="scroll-line-container">
+    <div className="scroll-line-container relative">
       <svg
         ref={svgRef}
         className="scroll-line-svg"

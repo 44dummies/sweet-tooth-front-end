@@ -27,7 +27,7 @@ const FeatureSections = () => {
 
   return (
     <div ref={ref} className="relative w-full bg-background py-8 md:py-32">
-      <div className="container mx-auto px-4 md:px-8">
+      <div className="container mx-auto px-4 md:px-8 relative">
         {features.map((feature, index) => {
           const featureRef = useRef<HTMLDivElement>(null);
           const { scrollYProgress } = useScroll({
@@ -46,7 +46,7 @@ const FeatureSections = () => {
             <motion.div
               key={index}
               ref={featureRef}
-              className={`grid md:grid-cols-2 gap-6 md:gap-16 items-center mb-12 md:mb-32 last:mb-0 ${
+              className={`relative grid md:grid-cols-2 gap-6 md:gap-16 items-center mb-12 md:mb-32 last:mb-0 ${
                 feature.reverse ? "md:grid-flow-dense" : ""
               }`}
               style={{ opacity } as any}
