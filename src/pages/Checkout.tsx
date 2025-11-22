@@ -185,7 +185,7 @@ const Checkout = () => {
           customer_name: formData.name,
           customer_email: formData.email || user.email,
           customer_phone: formData.phone,
-          customer_address: formData.address,
+          delivery_address: formData.address,
           delivery_date: formData.deliveryDate,
           special_instructions: formData.cakeSpecifications || null,
           total_amount: totalPrice,
@@ -199,7 +199,7 @@ const Checkout = () => {
             customer_name: formData.name,
             customer_email: formData.email || user.email,
             customer_phone: formData.phone,
-            customer_address: formData.address,
+            delivery_address: formData.address,
             delivery_date: formData.deliveryDate,
             special_instructions: formData.cakeSpecifications || null,
             total_amount: totalPrice,
@@ -327,7 +327,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8 relative">
+    <div className="relative min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8">
       <SidePanelNav />
       {showPlacedAnimation && <LoadingOverlay />}
       <main className="container mx-auto px-4 py-6 md:py-8 flex-1">
@@ -526,7 +526,7 @@ const Checkout = () => {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Information from your profile. <button onClick={() => navigate('/profile')} className="text-primary hover:underline">Update in Profile</button>
+                    Information from your profile. <span onClick={() => navigate('/profile')} className="text-primary hover:underline cursor-pointer">Update in Profile</span>
                   </p>
                 </div>
               ) : (

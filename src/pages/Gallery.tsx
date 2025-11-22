@@ -2,7 +2,7 @@ import { useState } from "react";
 import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const Gallery = () => {
@@ -82,6 +82,7 @@ const Gallery = () => {
         if (!open) setSelectedImageId(null);
       }}>
         <DialogContent className="max-w-4xl p-0 bg-black border-0">
+          <DialogDescription className="sr-only">Image gallery viewer</DialogDescription>
           <div className="relative w-full h-[600px] flex items-center justify-center">
             {selectedImage && (
               <>
