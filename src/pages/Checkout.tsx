@@ -206,7 +206,7 @@ const Checkout = () => {
 
           const itemsPayload = items.map(item => ({
             order_id: order.id,
-            product_id: item.id,
+            product_name: item.title,
             quantity: item.quantity,
             price: item.price
           }));
