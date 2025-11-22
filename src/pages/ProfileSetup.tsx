@@ -118,7 +118,6 @@ const ProfileSetup = () => {
     }
 
     setLoading(true);
-    console.log('Updating profile with:', { username: username.toLowerCase(), avatar: selectedAvatar });
 
     const { error } = await updateProfile({
       username: username.toLowerCase(),

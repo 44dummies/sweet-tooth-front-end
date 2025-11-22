@@ -158,7 +158,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           });
         
         if (historyError) {
-          console.log('Password history tracking error:', historyError);
+          // Password history tracking failed silently
         }
       }
 

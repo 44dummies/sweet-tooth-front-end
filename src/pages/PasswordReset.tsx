@@ -98,7 +98,7 @@ const PasswordReset = () => {
           await supabase.from('customer_data').delete().eq('user_id', userId);
           
           await supabase.auth.admin.deleteUser(userId).catch(() => {
-            console.log('Auth user deletion requires admin privileges');
+            
           });
 
           sessionStorage.removeItem(`reset_attempts_${userId}`);

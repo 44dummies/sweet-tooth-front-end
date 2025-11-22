@@ -77,7 +77,6 @@ const OrderNotificationListener = () => {
         }
       )
       .subscribe((status) => {
-        console.log('Subscription status:', status);
       });
 
     return () => {

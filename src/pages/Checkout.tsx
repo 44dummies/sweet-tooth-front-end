@@ -180,19 +180,6 @@ const Checkout = () => {
       let orderId = null;
 
       try {
-        console.log('🔍 Attempting to save order to Supabase...');
-        console.log('Order data:', {
-          customer_name: formData.name,
-          customer_email: formData.email || user.email,
-          customer_phone: formData.phone,
-          delivery_address: formData.address,
-          delivery_date: formData.deliveryDate,
-          special_instructions: formData.cakeSpecifications || null,
-          total_amount: totalPrice,
-          status: 'pending',
-          payment_status: 'pending',
-        });
-
         const { data: order, error: orderError } = await supabase
           .from('orders')
           .insert([{
@@ -216,7 +203,6 @@ const Checkout = () => {
 
         if (order) {
           orderId = order.id;
-          console.log('✅ Order created successfully in Supabase! Order ID:', orderId);
 
           const itemsPayload = items.map(item => ({
             order_id: order.id,
@@ -225,16 +211,12 @@ const Checkout = () => {
             price: item.price
           }));
 
-          console.log('🔍 Inserting order items...', itemsPayload);
-
           const { error: itemsError } = await supabase
             .from('order_items')
             .insert(itemsPayload);
 
           if (itemsError) {
             console.error('❌ Failed to insert order items:', itemsError);
-          } else {
-            console.log('✅ Order items inserted successfully!');
           }
         }
       } catch (supabaseError: any) {
