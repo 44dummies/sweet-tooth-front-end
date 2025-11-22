@@ -89,7 +89,8 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Create order_history view for customers
-CREATE OR REPLACE VIEW customer_order_history AS
+CREATE OR REPLACE VIEW customer_order_history
+WITH (security_invoker = true) AS
 SELECT 
   o.id,
   o.customer_name,

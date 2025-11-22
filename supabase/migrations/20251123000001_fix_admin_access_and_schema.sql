@@ -97,9 +97,10 @@ CREATE POLICY "Admin can update orders" ON orders
     )
   );
 
--- Fix customer_order_history view to use product_name
+-- Fix customer_order_history view to use product_name and SECURITY INVOKER
 DROP VIEW IF EXISTS customer_order_history;
-CREATE OR REPLACE VIEW customer_order_history AS
+CREATE OR REPLACE VIEW customer_order_history
+WITH (security_invoker = true) AS
 SELECT 
   o.id,
   o.customer_name,

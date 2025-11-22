@@ -67,7 +67,8 @@ TO authenticated
 USING (true);
 
 -- Create visitor_stats view for analytics
-CREATE OR REPLACE VIEW visitor_stats AS
+CREATE OR REPLACE VIEW visitor_stats
+WITH (security_invoker = true) AS
 SELECT 
   DATE(created_at) as date,
   COUNT(DISTINCT visitor_id) as unique_visitors,
