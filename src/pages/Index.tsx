@@ -18,7 +18,7 @@ const Index = () => {
       {/* Mobile Interface - Simple Top Nav + Bottom Nav */}
       <div className="md:hidden min-h-screen relative">
         <SidePanelNav />
-        <div className="pt-16 pb-20">
+        <div className="relative pt-16 pb-20">
           <HeroSlider />
           <FeatureSections />
           <ServiceCards />

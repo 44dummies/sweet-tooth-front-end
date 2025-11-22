@@ -61,7 +61,7 @@ const MobileProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-16 md:pt-20 pb-20">
+    <div className="min-h-screen bg-background pt-16 md:pt-20 pb-20 relative">
       <SidePanelNav />
       
       <main className="container mx-auto px-4 pt-4 md:pt-8 pb-8">

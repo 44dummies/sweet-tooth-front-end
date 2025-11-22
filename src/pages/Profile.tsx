@@ -168,7 +168,7 @@ const Profile = () => {
   const initials = `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
 
   return (
-    <div className="min-h-screen bg-background pt-16 md:pt-20 pb-20 md:pb-8">
+    <div className="min-h-screen bg-background pt-16 md:pt-20 pb-20 md:pb-8 relative">
       <SidePanelNav />
       
       <div className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl">

@@ -121,7 +121,7 @@ const MobileMenu = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background pt-16 pb-20">
+    <div className="min-h-screen bg-background pt-16 pb-20 relative">
       {/* Search Bar */}
       <div className="sticky top-16 z-30 bg-background/95 backdrop-blur-sm px-4 py-3 border-b">
         <div className="relative">

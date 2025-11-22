@@ -66,7 +66,7 @@ const FAQ = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8">
+    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8 relative">
       <SidePanelNav />
       <main className="container mx-auto px-4 py-6 md:py-8 flex-1 max-w-4xl">
         <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>

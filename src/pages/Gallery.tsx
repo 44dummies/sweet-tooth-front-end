@@ -39,7 +39,7 @@ const Gallery = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-0">
+    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-0 relative">
       <SidePanelNav />
       <main className="flex-1 pt-4 md:pt-8 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
