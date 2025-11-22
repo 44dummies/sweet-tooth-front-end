@@ -119,17 +119,17 @@ const CustomOrderSection = () => {
   };
 
   return (
-    <section id="custom-order" className="py-16 md:py-24 bg-gradient-to-b from-secondary/30 to-background">
+    <section id="custom-order" className="py-8 md:py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 animate-fade-in">
+        <div className="text-center mb-8 md:mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-primary">Custom Creations</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
             Design Your Dream Cake
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Make your celebration extra special with a custom cake designed just for you. 
             Tell us your vision and we'll bring it to life!
           </p>
@@ -137,8 +137,8 @@ const CustomOrderSection = () => {
 
         <div className="max-w-4xl mx-auto">
           <Card className="border-2 shadow-2xl">
-            <CardContent className="p-6 md:p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <CardContent className="p-4 md:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 {/* Personal Information */}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold flex items-center gap-2">

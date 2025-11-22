@@ -34,10 +34,10 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-gradient-to-b from-background to-secondary/20">
+    <section id="contact" className="py-8 md:py-24 bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-8 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

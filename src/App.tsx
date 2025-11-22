@@ -24,7 +24,6 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import FAQ from "./pages/FAQ";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
-import Explore from "./pages/Explore";
 import CustomOrderPage from "./pages/CustomOrderPage";
 import MobileProfile from "./pages/MobileProfile";
 import NotFound from "./pages/NotFound";
@@ -67,7 +66,6 @@ const App = () => {
                   <Route path="/" element={<Index />} />
                   <Route path="/menu" element={<Menu />} />
                   <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/explore" element={<Explore />} />
                   <Route path="/custom-order" element={<CustomOrderPage />} />
                   <Route path="/mobile-profile" element={<MobileProfile />} />
                   <Route path="/checkout" element={<Checkout />} />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SidePanelNav from "@/components/SidePanelNav";
+import MobileMenu from "@/components/MobileMenu";
 import Footer from "@/components/Footer";
 import MenuCard from "@/components/MenuCard";
 import FloatingChat from "@/components/FloatingChat";
@@ -94,124 +95,133 @@ const Menu = () => {
     : menuItems.filter(item => item.category === selectedCategory);
 
   return (
-    <div className="min-h-screen pt-16 md:pt-20 pb-20 md:pb-0 bg-background">
-      <SidePanelNav />
-      
-      {/* Hero Section */}
-      <section className="pt-8 pb-12 md:pt-12 md:pb-16 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-blue-950/20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Our Menu
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              Explore our delicious selection of home-baked treats, made fresh daily with premium ingredients
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <>
+      {/* Mobile Version */}
+      <div className="md:hidden">
+        <SidePanelNav />
+        <MobileMenu />
+        <MobileBottomNav />
+      </div>
 
-      {/* Category Filter */}
-      <section className="py-8 bg-background border-b">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-3 justify-center">
-            <motion.button
-              onClick={() => setSelectedCategory("all")}
-              className={`px-6 py-2 rounded-full font-semibold transition-all ${
-                selectedCategory === "all"
-                  ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
-                  : "bg-secondary text-foreground hover:bg-secondary/80"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+      {/* Desktop Version */}
+      <div className="hidden md:block min-h-screen pt-20 pb-0 bg-background">
+        <SidePanelNav />
+        
+        {/* Hero Section */}
+        <section className="pt-12 pb-16 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-blue-950/20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              All Items
-            </motion.button>
-            {categories.map((category) => (
+              <h1 className="text-7xl font-bold mb-6">
+                <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                  Our Menu
+                </span>
+              </h1>
+              <p className="text-2xl text-muted-foreground max-w-3xl mx-auto">
+                Explore our delicious selection of home-baked treats, made fresh daily with premium ingredients
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Category Filter */}
+        <section className="py-8 bg-background border-b">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap gap-3 justify-center">
               <motion.button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full font-semibold transition-all capitalize ${
-                  selectedCategory === category
+                onClick={() => setSelectedCategory("all")}
+                className={`px-6 py-2 rounded-full font-semibold transition-all ${
+                  selectedCategory === "all"
                     ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
                     : "bg-secondary text-foreground hover:bg-secondary/80"
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {category}
+                All Items
               </motion.button>
-            ))}
+              {categories.map((category) => (
+                <motion.button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-6 py-2 rounded-full font-semibold transition-all capitalize ${
+                    selectedCategory === category
+                      ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
+                      : "bg-secondary text-foreground hover:bg-secondary/80"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {category}
+                </motion.button>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Menu Items Grid */}
-      <section className="py-12 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {loading ? (
-            <div className="text-center py-20">
-              <div className="inline-block w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-              <p className="mt-4 text-lg text-muted-foreground">Loading delicious items...</p>
-            </div>
-          ) : filteredItems.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-xl text-muted-foreground">No items found in this category.</p>
-            </div>
-          ) : (
-            <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
+        {/* Menu Items Grid */}
+        <section className="py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            {loading ? (
+              <div className="text-center py-20">
+                <div className="inline-block w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                <p className="mt-4 text-lg text-muted-foreground">Loading delicious items...</p>
+              </div>
+            ) : filteredItems.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-xl text-muted-foreground">No items found in this category.</p>
+              </div>
+            ) : (
+              <motion.div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1,
+                    },
                   },
-                },
-              }}
-            >
-              {filteredItems.map((item, index) => {
-                const image = imageMap[item.image_key || item.id] || cinnamonRollsImg;
-                return (
-                  <motion.div
-                    key={item.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0 },
-                    }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <MenuCard 
-                      id={item.id}
-                      image={image}
-                      title={item.title}
-                      description={item.description}
-                      price={item.price}
-                      available={item.available}
-                      stockQuantity={item.stock_quantity}
-                    />
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          )}
-        </div>
-      </section>
+                }}
+              >
+                {filteredItems.map((item, index) => {
+                  const image = imageMap[item.image_key || item.id] || cinnamonRollsImg;
+                  return (
+                    <motion.div
+                      key={item.id}
+                      variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        visible: { opacity: 1, y: 0 },
+                      }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <MenuCard 
+                        id={item.id}
+                        image={image}
+                        title={item.title}
+                        description={item.description}
+                        price={item.price}
+                        available={item.available}
+                        stockQuantity={item.stock_quantity}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            )}
+          </div>
+        </section>
 
-      <Footer />
-      <FloatingChat />
-      <MobileBottomNav />
-    </div>
+        <Footer />
+        <FloatingChat />
+      </div>
+    </>
   );
 };
 

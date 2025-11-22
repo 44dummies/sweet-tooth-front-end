@@ -37,18 +37,6 @@ const MobileBottomNav = () => {
       )
     },
     { 
-      path: "/explore", 
-      label: "Explore",
-      CakeIcon: () => (
-        <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-          <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2"/>
-          <path d="M18 18l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          <path d="M8 11h6M11 8v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="11" cy="11" r="3" fill="currentColor" opacity="0.1"/>
-        </svg>
-      )
-    },
-    { 
       path: "/custom-order", 
       label: "Order",
       CakeIcon: () => (
@@ -80,7 +68,7 @@ const MobileBottomNav = () => {
   };
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-lg border-t border-border/40 shadow-lg z-50 safe-bottom">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/98 backdrop-blur-lg border-t border-border shadow-2xl z-50">
       <div className="flex items-center justify-around h-16 px-2 max-w-screen-sm mx-auto">
         {navItems.map(({ path, label, CakeIcon }) => {
           const active = isActive(path);
@@ -90,7 +78,7 @@ const MobileBottomNav = () => {
               onClick={() => handleNavigation(path)}
               className={`flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 rounded-lg min-w-0 flex-1 ${
                 active 
-                  ? "text-primary" 
+                  ? "text-primary scale-105" 
                   : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
               }`}
             >
@@ -98,7 +86,7 @@ const MobileBottomNav = () => {
                 <CakeIcon />
               </div>
               <span className={`text-[10px] font-medium transition-all duration-200 whitespace-nowrap ${
-                active ? "opacity-100" : "opacity-70"
+                active ? "opacity-100 font-semibold" : "opacity-70"
               }`}>
                 {label}
               </span>

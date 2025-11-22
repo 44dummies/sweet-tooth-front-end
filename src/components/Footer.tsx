@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-accent text-accent-foreground py-16">
+    <footer className="bg-accent text-accent-foreground py-8 md:py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
           {/* Partner With Us */}
           <div className="animate-fade-in">
             <h3 className="text-2xl font-bold mb-6">Partner With Us</h3>
