@@ -183,29 +183,28 @@ const Checkout = () => {
         console.log('🔍 Attempting to save order to Supabase...');
         console.log('Order data:', {
           customer_name: formData.name,
-          customer_email: formData.email || null,
+          customer_email: formData.email || user.email,
           customer_phone: formData.phone,
-          delivery_address: formData.address,
-          preferred_delivery_date: formData.deliveryDate ? new Date(formData.deliveryDate).toISOString() : null,
-          cake_specifications: formData.cakeSpecifications || null,
+          customer_address: formData.address,
+          delivery_date: formData.deliveryDate,
+          special_instructions: formData.cakeSpecifications || null,
           total_amount: totalPrice,
-          status: 'PENDING',
-          payment_status: 'PENDING',
+          status: 'pending',
+          payment_status: 'pending',
         });
 
         const { data: order, error: orderError } = await supabase
           .from('orders')
           .insert([{
             customer_name: formData.name,
-            customer_email: formData.email || user.email || null,
+            customer_email: formData.email || user.email,
             customer_phone: formData.phone,
-            delivery_address: formData.address,
-            preferred_delivery_date: formData.deliveryDate ? new Date(formData.deliveryDate).toISOString() : null,
-            cake_specifications: formData.cakeSpecifications || null,
+            customer_address: formData.address,
+            delivery_date: formData.deliveryDate,
+            special_instructions: formData.cakeSpecifications || null,
             total_amount: totalPrice,
-            status: 'PENDING',
-            payment_status: 'PENDING',
-            user_email: user.email, // Store user email for notifications
+            status: 'pending',
+            payment_status: 'pending',
           }])
           .select()
           .single();
@@ -222,7 +221,6 @@ const Checkout = () => {
           const itemsPayload = items.map(item => ({
             order_id: order.id,
             product_id: item.id,
-            product_title: item.title,
             quantity: item.quantity,
             price: item.price
           }));
