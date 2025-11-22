@@ -41,10 +41,15 @@ const FavoriteButton = ({
         .eq('product_id', productId)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error checking favorite status:', error);
+        throw error;
+      }
       setIsFavorite(!!data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error checking favorite status:', error);
+      // Silently fail - just assume not favorited
+      setIsFavorite(false);
     }
   };
 
@@ -69,27 +74,40 @@ const FavoriteButton = ({
           .eq('user_email', user.email)
           .eq('product_id', productId);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Delete error:', error);
+          throw error;
+        }
 
         setIsFavorite(false);
         toast.success(`Removed from favorites`);
       } else {
         // Add to favorites
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('favorites')
           .insert({
             user_email: user.email,
             product_id: productId,
-          });
+          })
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Insert error:', error);
+          // If duplicate, just set as favorite
+          if (error.code === '23505') {
+            setIsFavorite(true);
+            toast.success(`Already in favorites!`);
+            return;
+          }
+          throw error;
+        }
 
         setIsFavorite(true);
         toast.success(`Added to favorites!`);
       }
     } catch (error: any) {
       console.error('Error toggling favorite:', error);
-      toast.error('Failed to update favorites');
+      toast.error(error.message || 'Failed to update favorites. Please try again.');
     } finally {
       setLoading(false);
       setTimeout(() => setIsAnimating(false), 300);

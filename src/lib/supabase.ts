@@ -32,6 +32,10 @@ export type Order = {
   total_amount: number;
   payment_status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
   created_at: string;
+  user_email?: string;
+  notification_sent?: boolean;
+  confirmed_at?: string;
+  confirmed_by?: string;
 };
 
 export type OrderItem = {

@@ -50,7 +50,7 @@ const ServiceCards = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 overflow-hidden">
           {services.map((service, index) => (
             <motion.div
               key={index}
@@ -59,6 +59,7 @@ const ServiceCards = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              onClick={() => navigate('/custom-order', { state: { cakeType: service.cakeType } })}
             >
               <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500">
                 {/* Image */}
@@ -80,8 +81,11 @@ const ServiceCards = () => {
 
                   {/* Custom Order button */}
                   <motion.button
-                    onClick={() => navigate('/custom-order', { state: { cakeType: service.cakeType } })}
-                    className="flex items-center gap-2 text-white font-semibold group/btn cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/custom-order', { state: { cakeType: service.cakeType } });
+                    }}
+                    className="flex items-center gap-2 text-white font-semibold group/btn cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50 rounded-md"
                     whileHover={{ x: 5 }}
                     whileTap={{ scale: 0.95 }}
                   >

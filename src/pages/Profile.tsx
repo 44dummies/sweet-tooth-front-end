@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { User, MapPin, Phone, Mail, Package, LogOut, Settings, Trash2, AlertTriangle } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 
 interface OrderHistory {
@@ -168,10 +168,10 @@ const Profile = () => {
   const initials = `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-background pt-16 md:pt-20 pb-20 md:pb-8">
+      <SidePanelNav />
       
-      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl mt-16 sm:mt-20">
+      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl">
         {/* Profile Header */}
         <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">

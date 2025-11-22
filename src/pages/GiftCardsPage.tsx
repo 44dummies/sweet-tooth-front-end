@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Gift } from "lucide-react";
+import SidePanelNav from "@/components/SidePanelNav";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import GiftCardPurchase from "@/components/GiftCardPurchase";
 import GiftCardBalance from "@/components/GiftCardBalance";
 
 const GiftCardsPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 md:py-12 px-3 md:px-4 pb-24 md:pb-12 overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-16 md:pt-20 pb-20 md:pb-12 px-3 md:px-4 overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
+      <SidePanelNav />
+      <div className="max-w-5xl mx-auto pt-4 md:pt-8">
         <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full mb-3 md:mb-4 animate-pulse">
             <Gift className="w-6 h-6 md:w-8 md:h-8 text-white" />
@@ -83,6 +86,7 @@ const GiftCardsPage = () => {
           </div>
         </div>
       </div>
+      <MobileBottomNav />
     </div>
   );
 };

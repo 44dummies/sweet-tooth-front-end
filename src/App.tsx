@@ -9,6 +9,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FloatingChatProvider } from "@/contexts/FloatingChatContext";
 import { DatabaseChecker } from "@/components/DatabaseChecker";
+import OrderNotificationListener from "@/components/OrderNotificationListener";
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
 import Gallery from "./pages/Gallery";
@@ -60,6 +61,7 @@ const App = () => {
                   <Toaster />
                   <Sonner />
                   <DatabaseChecker />
+                  <OrderNotificationListener />
                   {showLoading && <LoadingOverlay />}
                   <Routes>
                   <Route path="/" element={<Index />} />

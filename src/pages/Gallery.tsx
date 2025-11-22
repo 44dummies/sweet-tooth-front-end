@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -39,9 +39,9 @@ const Gallery = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 pt-24 pb-16">
+    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-0">
+      <SidePanelNav />
+      <main className="flex-1 pt-4 md:pt-8 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">

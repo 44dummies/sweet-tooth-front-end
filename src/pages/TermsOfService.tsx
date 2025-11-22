@@ -1,11 +1,11 @@
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 
 const TermsOfService = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8 pt-32 flex-1 max-w-4xl">
+    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8">
+      <SidePanelNav />
+      <main className="container mx-auto px-4 py-6 md:py-8 flex-1 max-w-4xl">
         <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
 
         <div className="space-y-8 text-gray-700 dark:text-gray-300">

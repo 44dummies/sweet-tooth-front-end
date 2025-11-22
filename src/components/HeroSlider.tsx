@@ -41,7 +41,7 @@ const HeroSlider = () => {
   };
 
   return (
-    <section className="relative h-[85vh] md:h-screen w-full overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 dark:from-gray-900 dark:via-purple-950 dark:to-pink-950">
+    <section className="relative h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] w-full overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 dark:from-gray-900 dark:via-purple-950 dark:to-pink-950">
       {/* Background with parallax effect */}
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">

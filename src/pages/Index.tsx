@@ -1,4 +1,5 @@
-import Navbar from "@/components/Navbar";
+// Desktop side panel navigation replaces standard navbar on home page
+import SidePanelNav from "@/components/SidePanelNav";
 import HeroSlider from "@/components/HeroSlider";
 import FeatureSections from "@/components/FeatureSections";
 import ServiceCards from "@/components/ServiceCards";
@@ -13,8 +14,8 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 
 const Index = () => {
   return (
-    <div className="min-h-screen pb-24 md:pb-0" style={{ scrollBehavior: 'smooth' }}>
-      <Navbar />
+    <div className="min-h-screen pt-16 md:pt-20 pb-20 md:pb-0" style={{ scrollBehavior: 'smooth' }}>
+      <SidePanelNav />
       
       {/* Hero Slider for all devices */}
       <HeroSlider />

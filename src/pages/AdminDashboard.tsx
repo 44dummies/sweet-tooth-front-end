@@ -238,15 +238,66 @@ const AdminDashboard = () => {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
+      const order = orders.find(o => o.id === orderId);
+      
       const { error } = await supabase
         .from('orders')
-        .update({ status: newStatus })
+        .update({ 
+          status: newStatus,
+          confirmed_by: user?.email || 'admin',
+          notification_sent: newStatus === 'CONFIRMED' ? false : undefined,
+        })
         .eq('id', orderId);
 
       if (error) throw error;
-      toast.success('Order status updated');
+      
+      // Send notification to customer if order is confirmed
+      if (newStatus === 'CONFIRMED' && order?.user_email) {
+        try {
+          // Send email notification
+          if (order.customer_email) {
+            await supabase.functions.invoke('send-email-notification', {
+              body: {
+                orderId: orderId,
+                customerEmail: order.customer_email,
+                customerName: order.customer_name,
+                type: 'order_confirmed',
+                totalAmount: order.total_amount,
+              }
+            });
+          }
+          
+          // Send WhatsApp notification
+          if (order.customer_phone) {
+            await supabase.functions.invoke('send-whatsapp-notification', {
+              body: {
+                orderId: orderId,
+                customerPhone: order.customer_phone,
+                customerName: order.customer_name,
+                totalAmount: order.total_amount,
+                type: 'order_confirmed',
+              }
+            });
+          }
+          
+          // Mark notification as sent
+          await supabase
+            .from('orders')
+            .update({ notification_sent: true })
+            .eq('id', orderId);
+          
+          toast.success('Order confirmed and customer notified!');
+        } catch (notifError) {
+          console.error('Notification error:', notifError);
+          toast.warning('Order confirmed but notification failed');
+        }
+      } else {
+        toast.success('Order status updated');
+      }
+      
       fetchOrders();
     } catch (err) {
+      console.error('Error updating order:', err);
       toast.error('Failed to update order');
     }
   };

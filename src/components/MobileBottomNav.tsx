@@ -80,7 +80,7 @@ const MobileBottomNav = () => {
   };
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/98 backdrop-blur-xl border-t border-border/50 shadow-2xl z-50 safe-area-inset-bottom">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-lg border-t border-border/40 shadow-lg z-50 safe-bottom">
       <div className="flex items-center justify-around h-16 px-2 max-w-screen-sm mx-auto">
         {navItems.map(({ path, label, CakeIcon }) => {
           const active = isActive(path);
@@ -88,15 +88,13 @@ const MobileBottomNav = () => {
             <button
               key={path}
               onClick={() => handleNavigation(path)}
-              className={`flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 transition-all duration-200 rounded-lg ${
+              className={`flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 rounded-lg min-w-0 flex-1 ${
                 active 
                   ? "text-primary" 
                   : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
               }`}
             >
-              <div className={`transition-transform duration-200 ${
-                active ? "scale-110" : "scale-100"
-              }`}>
+              <div className={`transition-transform duration-200 ${active ? 'scale-110' : ''}`}>
                 <CakeIcon />
               </div>
               <span className={`text-[10px] font-medium transition-all duration-200 whitespace-nowrap ${

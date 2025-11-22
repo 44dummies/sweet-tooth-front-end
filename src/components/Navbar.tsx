@@ -320,13 +320,15 @@ const Navbar = () => {
               </>
             )}
             
-            <Button
-              onClick={goToCheckout}
-              className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-full px-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden group"
-            >
-              <span className="relative z-10">Pre-Order Now</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            </Button>
+            {user && (
+              <Button
+                onClick={goToCheckout}
+                className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-full px-6 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
+              >
+                <span className="relative z-10">Pre-Order Now</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button & Cart */}

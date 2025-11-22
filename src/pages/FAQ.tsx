@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
@@ -66,9 +66,9 @@ const FAQ = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8 pt-32 flex-1 max-w-4xl">
+    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8">
+      <SidePanelNav />
+      <main className="container mx-auto px-4 py-6 md:py-8 flex-1 max-w-4xl">
         <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
         <p className="text-xl text-muted-foreground mb-12">
           Find answers to common questions about our products and services.

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 import MenuCard from "@/components/MenuCard";
 import FloatingChat from "@/components/FloatingChat";
@@ -94,11 +94,11 @@ const Menu = () => {
     : menuItems.filter(item => item.category === selectedCategory);
 
   return (
-    <div className="min-h-screen pb-20 md:pb-0 bg-background">
-      <Navbar />
+    <div className="min-h-screen pt-16 md:pt-20 pb-20 md:pb-0 bg-background">
+      <SidePanelNav />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-blue-950/20">
+      <section className="pt-8 pb-12 md:pt-12 md:pb-16 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-blue-950/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="text-center"

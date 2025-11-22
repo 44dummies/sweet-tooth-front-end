@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import Footer from "@/components/Footer";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { useCart } from "@/contexts/CartContext";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Plus, Minus, Lock } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useNotifications } from "@/hooks/useNotifications";
 import cinnamonRollsImg from "@/assets/cinnamon-rolls.jpg";
 import browniesImg from "@/assets/brownies.jpg";
 import cookiesImg from "@/assets/cookies.jpg";
@@ -81,6 +82,7 @@ const Checkout = () => {
   const { items, totalPrice, clearCart, addItem, updateQuantity, removeItem } = useCart();
   const { user, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { permission, requestPermission, sendNotification } = useNotifications();
 
   const [selectedProduct, setSelectedProduct] = useState<typeof menuItems[0] | null>(null);
   const [productQuantity, setProductQuantity] = useState(1);
@@ -94,6 +96,18 @@ const Checkout = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPlacedAnimation, setShowPlacedAnimation] = useState(false);
+  const [notificationRequested, setNotificationRequested] = useState(false);
+
+  // Request notification permission on mount
+  useEffect(() => {
+    if (user && !notificationRequested && permission !== 'granted') {
+      const timer = setTimeout(() => {
+        requestPermission();
+        setNotificationRequested(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, permission, notificationRequested, requestPermission]);
 
 
   useEffect(() => {
@@ -183,7 +197,7 @@ const Checkout = () => {
           .from('orders')
           .insert([{
             customer_name: formData.name,
-            customer_email: formData.email || null,
+            customer_email: formData.email || user.email || null,
             customer_phone: formData.phone,
             delivery_address: formData.address,
             preferred_delivery_date: formData.deliveryDate ? new Date(formData.deliveryDate).toISOString() : null,
@@ -191,6 +205,7 @@ const Checkout = () => {
             total_amount: totalPrice,
             status: 'PENDING',
             payment_status: 'PENDING',
+            user_email: user.email, // Store user email for notifications
           }])
           .select()
           .single();
@@ -292,6 +307,14 @@ const Checkout = () => {
 
       clearCart();
       setShowPlacedAnimation(true);
+      
+      // Send browser notification
+      sendNotification('Order Placed Successfully! 🎉', {
+        body: `Your order #${orderId?.toString().slice(0, 8) || 'NEW'} has been received. We'll notify you when it's confirmed.`,
+        icon: '/logo.png',
+        badge: '/logo.png',
+      });
+      
       toast.success("Order confirmed! We'll contact you soon via WhatsApp.");
       setTimeout(() => {
         setShowPlacedAnimation(false);
@@ -306,10 +329,10 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <div className="min-h-screen flex flex-col pt-16 md:pt-20 pb-20 md:pb-8">
+      <SidePanelNav />
       {showPlacedAnimation && <LoadingOverlay />}
-      <main className="container mx-auto px-4 py-8 pt-32 flex-1">
+      <main className="container mx-auto px-4 py-6 md:py-8 flex-1">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold">Complete Your Order</h1>
           {!user && !authLoading && (

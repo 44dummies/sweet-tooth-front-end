@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
+import SidePanelNav from "@/components/SidePanelNav";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -61,10 +61,10 @@ const MobileProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <Navbar />
+    <div className="min-h-screen bg-background pt-16 md:pt-20 pb-20">
+      <SidePanelNav />
       
-      <main className="container mx-auto px-4 pt-24 pb-8">
+      <main className="container mx-auto px-4 pt-4 md:pt-8 pb-8">
         <div className="max-w-2xl mx-auto">
           <Card className="p-6 mb-6">
             <div className="flex items-center gap-4 mb-6">
