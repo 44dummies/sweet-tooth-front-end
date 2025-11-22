@@ -177,6 +177,17 @@ CREATE TABLE IF NOT EXISTS conversations (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Add user_id column if it doesn't exist (for existing tables)
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'conversations' AND column_name = 'user_id'
+    ) THEN
+        ALTER TABLE conversations ADD COLUMN user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+    END IF;
+END $$;
+
 -- ============================================
 -- CONVERSATION_MESSAGES TABLE
 -- ============================================
@@ -382,6 +393,11 @@ BEGIN
     DROP POLICY IF EXISTS "Public can view cake size guide" ON cake_size_guide;
     DROP POLICY IF EXISTS "Public can view delivery zones" ON delivery_zones;
     DROP POLICY IF EXISTS "Public can view availability" ON availability_calendar;
+EXCEPTION
+    WHEN undefined_table THEN
+        NULL; -- Table doesn't exist yet, skip dropping policies
+    WHEN undefined_column THEN
+        NULL; -- Column doesn't exist yet, skip
 END $$;
 
 -- Public read policies
@@ -399,7 +415,17 @@ CREATE POLICY "Users can view own favorites" ON favorites FOR SELECT USING (auth
 CREATE POLICY "Users can insert own favorites" ON favorites FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can delete own favorites" ON favorites FOR DELETE USING (auth.uid() = user_id);
 CREATE POLICY "Users can view own notifications" ON notifications FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Users can view own conversations" ON conversations FOR SELECT USING (auth.uid() = user_id);
+
+-- Only create conversations policy if user_id column exists
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'conversations' AND column_name = 'user_id'
+    ) THEN
+        EXECUTE 'CREATE POLICY "Users can view own conversations" ON conversations FOR SELECT USING (auth.uid() = user_id)';
+    END IF;
+END $$;
 
 -- Public insert policies
 CREATE POLICY "Public can insert custom orders" ON custom_orders FOR INSERT WITH CHECK (true);
