@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FloatingChatProvider } from "@/contexts/FloatingChatContext";
 import { DatabaseChecker } from "@/components/DatabaseChecker";
 import OrderNotificationListener from "@/components/OrderNotificationListener";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
 import Gallery from "./pages/Gallery";
@@ -49,20 +50,21 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <TooltipProvider>
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <AuthProvider>
-              <FloatingChatProvider>
-                <CartProvider>
-                  <ScrollToTop />
-                  <Toaster />
-                  <Sonner />
-                  <DatabaseChecker />
-                  <OrderNotificationListener />
-                  {showLoading && <LoadingOverlay />}
-                  <Routes>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <TooltipProvider>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <AuthProvider>
+                <FloatingChatProvider>
+                  <CartProvider>
+                    <ScrollToTop />
+                    <Toaster />
+                    <Sonner />
+                    <DatabaseChecker />
+                    <OrderNotificationListener />
+                    {showLoading && <LoadingOverlay />}
+                    <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/menu" element={<Menu />} />
                   <Route path="/gallery" element={<Gallery />} />
@@ -91,6 +93,7 @@ const App = () => {
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

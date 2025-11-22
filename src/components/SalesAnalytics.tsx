@@ -58,11 +58,12 @@ const SalesAnalytics = () => {
     
     orders.forEach(order => {
       order.order_items?.forEach((item: any) => {
-        if (!products[item.product_title]) {
-          products[item.product_title] = { name: item.product_title, quantity: 0, revenue: 0 };
+        const productName = item.product_name || 'Unknown Product';
+        if (!products[productName]) {
+          products[productName] = { name: productName, quantity: 0, revenue: 0 };
         }
-        products[item.product_title].quantity += item.quantity;
-        products[item.product_title].revenue += item.price * item.quantity;
+        products[productName].quantity += item.quantity;
+        products[productName].revenue += item.price * item.quantity;
       });
     });
 
