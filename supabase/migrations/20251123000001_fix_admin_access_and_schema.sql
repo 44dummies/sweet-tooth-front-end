@@ -4,6 +4,10 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
 -- Create index for admin lookups
 CREATE INDEX IF NOT EXISTS idx_profiles_is_admin ON profiles(is_admin) WHERE is_admin = true;
 
+-- Ensure orders table has all required columns
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_date DATE;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS special_instructions TEXT;
+
 -- Ensure order_items has product_name column (in case old schema exists)
 -- First check if we need to migrate from product_id to product_name
 DO $$
