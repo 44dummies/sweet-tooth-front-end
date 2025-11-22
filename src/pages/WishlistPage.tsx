@@ -165,7 +165,7 @@ const WishlistPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 pt-16 md:pt-20 pb-20 md:pb-12 px-3 md:px-4 overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 pt-16 md:pt-20 pb-20 md:pb-12 px-3 md:px-4 overflow-x-hidden relative" style={{ scrollBehavior: 'smooth' }}>
       <SidePanelNav />
       <div className="max-w-6xl mx-auto pt-4 md:pt-8">
         <div className="mb-6 md:mb-8">

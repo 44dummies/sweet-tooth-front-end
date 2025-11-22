@@ -104,7 +104,7 @@ const Menu = () => {
       </div>
 
       {/* Desktop Version */}
-      <div className="hidden md:block min-h-screen pt-20 pb-0 bg-background">
+      <div className="hidden md:block min-h-screen pt-20 pb-0 bg-background relative">
         <SidePanelNav />
         
         {/* Hero Section */}

@@ -8,7 +8,7 @@ import GiftCardBalance from "@/components/GiftCardBalance";
 
 const GiftCardsPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-16 md:pt-20 pb-20 md:pb-12 px-3 md:px-4 overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-16 md:pt-20 pb-20 md:pb-12 px-3 md:px-4 overflow-x-hidden relative" style={{ scrollBehavior: 'smooth' }}>
       <SidePanelNav />
       <div className="max-w-5xl mx-auto pt-4 md:pt-8">
         <div className="text-center mb-6 md:mb-8">

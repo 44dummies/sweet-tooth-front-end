@@ -16,7 +16,7 @@ const Index = () => {
   return (
     <>
       {/* Mobile Interface - Simple Top Nav + Bottom Nav */}
-      <div className="md:hidden min-h-screen">
+      <div className="md:hidden min-h-screen relative">
         <SidePanelNav />
         <div className="pt-16 pb-20">
           <HeroSlider />
@@ -32,7 +32,7 @@ const Index = () => {
       </div>
 
       {/* Desktop Interface */}
-      <div className="hidden md:block min-h-screen pt-20 pb-0" style={{ scrollBehavior: 'smooth' }}>
+      <div className="hidden md:block min-h-screen pt-20 pb-0 relative" style={{ scrollBehavior: 'smooth' }}>
         <SidePanelNav />
         
         {/* Hero Slider for desktop */}
