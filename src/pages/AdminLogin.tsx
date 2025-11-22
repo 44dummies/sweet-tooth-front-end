@@ -68,26 +68,32 @@ const AdminLogin = () => {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2 text-foreground">Email</label>
+            <label htmlFor="admin-email" className="block text-sm font-medium mb-2 text-foreground">Email</label>
             <input
+              id="admin-email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="admin@sweettooth.com"
               className="w-full px-4 py-2 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              autoComplete="email"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-foreground">Password</label>
+            <label htmlFor="admin-password" className="block text-sm font-medium mb-2 text-foreground">Password</label>
             <input
+              id="admin-password"
+              name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
               className="w-full px-4 py-2 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              autoComplete="current-password"
             />
           </div>
 

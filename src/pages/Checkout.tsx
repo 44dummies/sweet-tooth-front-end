@@ -534,8 +534,9 @@ const Checkout = () => {
               ) : (
                 <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Full Name *</label>
+                    <label htmlFor="checkout-name" className="block text-sm font-medium mb-2">Full Name *</label>
                     <input
+                      id="checkout-name"
                       type="text"
                       name="name"
                       value={formData.name}
@@ -543,22 +544,26 @@ const Checkout = () => {
                       placeholder="Your full name"
                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       required
+                      autoComplete="name"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <label htmlFor="checkout-email" className="block text-sm font-medium mb-2">Email</label>
                     <input
+                      id="checkout-email"
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="your@email.com"
                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      autoComplete="email"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Phone Number *</label>
+                    <label htmlFor="checkout-phone" className="block text-sm font-medium mb-2">Phone Number *</label>
                     <input
+                      id="checkout-phone"
                       type="tel"
                       name="phone"
                       value={formData.phone}
@@ -566,11 +571,13 @@ const Checkout = () => {
                       placeholder="254712345678"
                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       required
+                      autoComplete="tel"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Delivery Address *</label>
+                    <label htmlFor="checkout-address" className="block text-sm font-medium mb-2">Delivery Address *</label>
                     <textarea
+                      id="checkout-address"
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
@@ -578,6 +585,7 @@ const Checkout = () => {
                       rows={3}
                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       required
+                      autoComplete="street-address"
                     />
                   </div>
                 </div>
@@ -589,8 +597,9 @@ const Checkout = () => {
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Delivery & Special Requests</h2>
               <div className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Preferred Delivery Date *</label>
+                  <label htmlFor="checkout-delivery-date" className="block text-sm font-medium mb-2">Preferred Delivery Date *</label>
                   <input
+                    id="checkout-delivery-date"
                     type="date"
                     name="deliveryDate"
                     value={formData.deliveryDate}
@@ -598,6 +607,7 @@ const Checkout = () => {
                     min={new Date().toISOString().split('T')[0]}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground [color-scheme:light] dark:[color-scheme:dark]"
                     required
+                    autoComplete="off"
                   />
                   {formData.deliveryDate && (
                     <p className="text-sm text-muted-foreground mt-2">
@@ -606,14 +616,16 @@ const Checkout = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Special Requests (Optional)</label>
+                  <label htmlFor="checkout-cake-specs" className="block text-sm font-medium mb-2">Special Requests (Optional)</label>
                   <textarea
+                    id="checkout-cake-specs"
                     name="cakeSpecifications"
                     value={formData.cakeSpecifications}
                     onChange={handleChange}
                     placeholder="Any special requests, dietary requirements, or customization details..."
                     rows={4}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    autoComplete="off"
                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     e.g., "No nuts", "Gluten-free", "Happy Birthday John on the cake"
