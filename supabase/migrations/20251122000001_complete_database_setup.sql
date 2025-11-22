@@ -343,6 +343,47 @@ ALTER TABLE gift_card_transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cake_size_guide ENABLE ROW LEVEL SECURITY;
 ALTER TABLE delivery_zones ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist to avoid conflicts
+DO $$ 
+BEGIN
+    -- Products policies
+    DROP POLICY IF EXISTS "Public can view products" ON products;
+    DROP POLICY IF EXISTS "Admins can do everything on products" ON products;
+    
+    -- Reviews policies
+    DROP POLICY IF EXISTS "Public can view approved reviews" ON reviews;
+    DROP POLICY IF EXISTS "Public can insert reviews" ON reviews;
+    DROP POLICY IF EXISTS "Admins can do everything on reviews" ON reviews;
+    
+    -- Profiles policies
+    DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+    DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+    DROP POLICY IF EXISTS "Admins can view all profiles" ON profiles;
+    
+    -- Orders policies
+    DROP POLICY IF EXISTS "Users can view own orders" ON orders;
+    DROP POLICY IF EXISTS "Public can insert orders" ON orders;
+    DROP POLICY IF EXISTS "Admins can do everything on orders" ON orders;
+    
+    -- Favorites policies
+    DROP POLICY IF EXISTS "Users can view own favorites" ON favorites;
+    DROP POLICY IF EXISTS "Users can insert own favorites" ON favorites;
+    DROP POLICY IF EXISTS "Users can delete own favorites" ON favorites;
+    
+    -- Other policies
+    DROP POLICY IF EXISTS "Users can view own notifications" ON notifications;
+    DROP POLICY IF EXISTS "Users can view own conversations" ON conversations;
+    DROP POLICY IF EXISTS "Public can insert custom orders" ON custom_orders;
+    DROP POLICY IF EXISTS "Public can insert visitor logs" ON visitor_logs;
+    DROP POLICY IF EXISTS "Public can update visitor logs" ON visitor_logs;
+    DROP POLICY IF EXISTS "Public can insert page views" ON page_views;
+    DROP POLICY IF EXISTS "Public can insert customer messages" ON customer_messages;
+    DROP POLICY IF EXISTS "Public can insert order items" ON order_items;
+    DROP POLICY IF EXISTS "Public can view cake size guide" ON cake_size_guide;
+    DROP POLICY IF EXISTS "Public can view delivery zones" ON delivery_zones;
+    DROP POLICY IF EXISTS "Public can view availability" ON availability_calendar;
+END $$;
+
 -- Public read policies
 CREATE POLICY "Public can view products" ON products FOR SELECT USING (true);
 CREATE POLICY "Public can view approved reviews" ON reviews FOR SELECT USING (approved = true);
