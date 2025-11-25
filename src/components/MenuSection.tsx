@@ -25,6 +25,18 @@ const getCategoryImage = (category?: string, title?: string): string => {
     if (normalizedTitle.includes("vanilla")) {
       return "https://images.pexels.com/photos/140831/pexels-photo-140831.jpeg?auto=compress&cs=tinysrgb&w=600";
     }
+    if (normalizedTitle.includes("carrot")) {
+      return "https://images.pexels.com/photos/3597122/pexels-photo-3597122.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("lemon")) {
+      return "https://images.pexels.com/photos/5938242/pexels-photo-5938242.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("strawberry")) {
+      return "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("black forest")) {
+      return "https://images.pexels.com/photos/2144112/pexels-photo-2144112.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
@@ -36,6 +48,12 @@ const getCategoryImage = (category?: string, title?: string): string => {
     if (normalizedTitle.includes("vanilla")) {
       return "https://images.pexels.com/photos/913136/pexels-photo-913136.jpeg?auto=compress&cs=tinysrgb&w=600";
     }
+    if (normalizedTitle.includes("red velvet")) {
+      return "https://images.pexels.com/photos/1998634/pexels-photo-1998634.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("strawberry")) {
+      return "https://images.pexels.com/photos/1395323/pexels-photo-1395323.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/1034876/pexels-photo-1034876.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
@@ -44,31 +62,64 @@ const getCategoryImage = (category?: string, title?: string): string => {
     if (normalizedTitle.includes("chocolate chip")) {
       return "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=600";
     }
+    if (normalizedTitle.includes("oatmeal")) {
+      return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("sugar")) {
+      return "https://images.pexels.com/photos/1001916/pexels-photo-1001916.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/890577/pexels-photo-890577.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
   // Donuts
   if (normalizedCategory === "donuts" || normalizedTitle.includes("donut") || normalizedTitle.includes("doughnut")) {
+    if (normalizedTitle.includes("glazed")) {
+      return "https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("chocolate")) {
+      return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
   // Brownies
   if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
+    if (normalizedTitle.includes("chocolate")) {
+      return "https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("fudge")) {
+      return "https://images.pexels.com/photos/3026810/pexels-photo-3026810.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
   // Pastries
   if (normalizedCategory === "pastries" || normalizedTitle.includes("pastry") || normalizedTitle.includes("croissant")) {
+    if (normalizedTitle.includes("croissant")) {
+      return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("danish")) {
+      return "https://images.pexels.com/photos/3776944/pexels-photo-3776944.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
   // Muffins
   if (normalizedCategory === "muffins" || normalizedTitle.includes("muffin")) {
+    if (normalizedTitle.includes("blueberry")) {
+      return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("chocolate")) {
+      return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
   // Bread/Loaves
   if (normalizedTitle.includes("bread") || normalizedTitle.includes("loaf")) {
+    if (normalizedTitle.includes("banana")) {
+      return "https://images.pexels.com/photos/6107787/pexels-photo-6107787.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
     return "https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
