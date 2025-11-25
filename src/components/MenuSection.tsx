@@ -3,6 +3,47 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
+// Local product images from assets folder - Direct mapping for Vite
+const getImageFromPath = (imagePath: string): string => {
+  // Remove /src/assets/ prefix if present
+  const fileName = imagePath.replace('/src/assets/', '').replace('../assets/', '');
+  
+  // Map database paths to actual imported images
+  const imageMap: Record<string, string> = {
+    '2 tier cake.jpeg': new URL('../assets/2 tier cake.jpeg', import.meta.url).href,
+    '3 tier cake.jpeg': new URL('../assets/3 tier cake.jpeg', import.meta.url).href,
+    '4 tier cake.jpeg': new URL('../assets/4 tier cake.jpeg', import.meta.url).href,
+    'heart cake.jpeg': new URL('../assets/heart cake.jpeg', import.meta.url).href,
+    'letter cake.jpeg': new URL('../assets/letter cake.jpeg', import.meta.url).href,
+    'number cake.jpeg': new URL('../assets/number cake.jpeg', import.meta.url).href,
+    'round cake.jpeg': new URL('../assets/round cake.jpeg', import.meta.url).href,
+    'square cake.jpeg': new URL('../assets/square cake.jpeg', import.meta.url).href,
+    'sheet cake.jpeg': new URL('../assets/sheet cake.jpeg', import.meta.url).href,
+    'pound cake.jpeg': new URL('../assets/pound cake.jpeg', import.meta.url).href,
+    'birthday-cakes.jpg': new URL('../assets/birthday-cakes.jpg', import.meta.url).href,
+    'fruit-cakes.jpg': new URL('../assets/fruit-cakes.jpg', import.meta.url).href,
+    'cupcakes box of 12.jpeg': new URL('../assets/cupcakes box of 12.jpeg', import.meta.url).href,
+    'cupcakes box of 6.jpeg': new URL('../assets/cupcakes box of 6.jpeg', import.meta.url).href,
+    'mini cupcakes.jpeg': new URL('../assets/mini cupcakes.jpeg', import.meta.url).href,
+    'cupcakes.jpg': new URL('../assets/cupcakes.jpg', import.meta.url).href,
+    'cookie box of 12.jpeg': new URL('../assets/cookie box of 12.jpeg', import.meta.url).href,
+    'cookie box .jpeg': new URL('../assets/cookie box .jpeg', import.meta.url).href,
+    'Giant Cookie.jpeg': new URL('../assets/Giant Cookie.jpeg', import.meta.url).href,
+    'cookies.jpg': new URL('../assets/cookies.jpg', import.meta.url).href,
+    'browies box of 6.jpeg': new URL('../assets/browies box of 6.jpeg', import.meta.url).href,
+    'brownies.jpg': new URL('../assets/brownies.jpg', import.meta.url).href,
+    'muffins.jpg': new URL('../assets/muffins.jpg', import.meta.url).href,
+    'banana-bread.jpg': new URL('../assets/banana-bread.jpg', import.meta.url).href,
+    'loafs.jpg': new URL('../assets/loafs.jpg', import.meta.url).href,
+    'cake pops.jpeg': new URL('../assets/cake pops.jpeg', import.meta.url).href,
+    'cinnamon-rolls.jpg': new URL('../assets/cinnamon-rolls.jpg', import.meta.url).href,
+    'delicious-cake-1.jpeg': new URL('../assets/delicious-cake-1.jpeg', import.meta.url).href,
+    'delicious-cake-2.jpeg': new URL('../assets/delicious-cake-2.jpeg', import.meta.url).href,
+  };
+  
+  return imageMap[fileName] || new URL('../assets/delicious-cake-1.jpeg', import.meta.url).href;
+};
+
 // Local product images from assets folder
 const getCategoryImage = (category?: string, name?: string): string => {
   const normalizedCategory = (category || "").toLowerCase();
@@ -292,9 +333,8 @@ const MenuSection = () => {
               // Use database image_url if available, otherwise use intelligent local matching
               let image: string;
               if (item.image_url) {
-                // Convert database path to Vite-compatible URL
-                const imageName = item.image_url.replace('/src/assets/', '');
-                image = new URL(`../assets/${imageName}`, import.meta.url).href;
+                // Convert database path to actual Vite URL using static mapping
+                image = getImageFromPath(item.image_url);
               } else {
                 // Fallback to intelligent matching if no database image
                 image = getCategoryImage(category, name);
