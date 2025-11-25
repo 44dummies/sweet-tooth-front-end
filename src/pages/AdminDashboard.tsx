@@ -263,9 +263,9 @@ const AdminDashboard = () => {
         .order('created_at', { ascending: false });
 
       if (ordersError) {
-        console.warn('Orders fetch error, using demo data:', ordersError);
-        setDataError('Using demo data - database permissions need configuration');
-        setOrders(generateDemoData());
+        console.error('Orders fetch error:', ordersError);
+        setDataError(`Error loading orders: ${ordersError.message}`);
+        setOrders([]);
       } else {
         // Fetch order items separately to avoid join issues
         const orderIds = ordersData?.map(o => o.id) || [];
@@ -301,8 +301,8 @@ const AdminDashboard = () => {
       
     } catch (err) {
       console.error('Data fetch error:', err);
-      setDataError('Using demo data for analytics');
-      setOrders(generateDemoData());
+      setDataError(`Error loading data: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setOrders([]);
     } finally {
       setLoading(false);
     }
@@ -316,10 +316,6 @@ const AdminDashboard = () => {
   };
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    if (orderId.startsWith('demo-')) {
-      toast.info('Demo mode: Cannot update demo orders');
-      return;
-    }
     try {
       const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
       if (error) throw error;
@@ -331,10 +327,6 @@ const AdminDashboard = () => {
   };
 
   const updatePaymentStatus = async (orderId: string, newStatus: string) => {
-    if (orderId.startsWith('demo-')) {
-      toast.info('Demo mode: Cannot update demo orders');
-      return;
-    }
     try {
       const { error } = await supabase.from('orders').update({ payment_status: newStatus }).eq('id', orderId);
       if (error) throw error;
@@ -603,12 +595,6 @@ const AdminDashboard = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              {dataError && (
-                <Badge variant="outline" className="hidden md:flex gap-1 bg-amber-50 text-amber-700 border-amber-200">
-                  <AlertTriangle className="w-3 h-3" />
-                  Demo Mode
-                </Badge>
-              )}
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-secondary/50 rounded-full">
                 <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${isLiveUpdating ? 'bg-green-500 animate-pulse' : 'bg-green-500'}`} />
                 <span className="text-xs font-medium text-muted-foreground">Live</span>

@@ -185,15 +185,11 @@ CREATE POLICY "Users can update own orders" ON orders
   FOR UPDATE
   USING (auth.uid() = user_id);
 
--- Admins have full access to all orders (check email)
+-- Admins have full access to all orders (check email without recursion)
 CREATE POLICY "Admin full access to orders" ON orders
   FOR ALL
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- =====================================================
@@ -226,15 +222,11 @@ CREATE POLICY "Users can insert own order items" ON order_items
     )
   );
 
--- Admins have full access to all order items (check email)
+-- Admins have full access to all order items (check email without recursion)
 CREATE POLICY "Admin full access to order items" ON order_items
   FOR ALL
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- =====================================================
@@ -249,15 +241,11 @@ CREATE POLICY "Anyone can view products" ON products
   FOR SELECT
   USING (true);
 
--- Only admins can manage products (check email)
+-- Only admins can manage products (check email without recursion)
 CREATE POLICY "Admin can manage products" ON products
   FOR ALL
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- =====================================================
@@ -290,15 +278,11 @@ CREATE POLICY "Users can delete own reviews" ON reviews
   FOR DELETE
   USING (auth.uid() = user_id);
 
--- Admins have full access to all reviews (check email)
+-- Admins have full access to all reviews (check email without recursion)
 CREATE POLICY "Admin full access to reviews" ON reviews
   FOR ALL
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- =====================================================
@@ -325,15 +309,11 @@ CREATE POLICY "Users can update own custom orders" ON custom_orders
   FOR UPDATE
   USING (auth.uid() = user_id);
 
--- Admins have full access to all custom orders (check email)
+-- Admins have full access to all custom orders (check email without recursion)
 CREATE POLICY "Admin full access to custom orders" ON custom_orders
   FOR ALL
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- =====================================================
@@ -346,13 +326,8 @@ DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 DROP POLICY IF EXISTS "Admin full access to profiles" ON profiles;
 
--- Users can view their own profile
-CREATE POLICY "Users can view own profile" ON profiles
-  FOR SELECT
-  USING (auth.uid() = id);
-
--- Authenticated users can view all profiles (needed for order user info)
-CREATE POLICY "Users can view all profiles" ON profiles
+-- All authenticated users can view all profiles (simplified to avoid recursion)
+CREATE POLICY "Authenticated users can view profiles" ON profiles
   FOR SELECT
   USING (auth.role() = 'authenticated');
 
@@ -366,15 +341,11 @@ CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT
   WITH CHECK (auth.uid() = id);
 
--- Admins have full access to all profiles (check email)
-CREATE POLICY "Admin full access to profiles" ON profiles
-  FOR ALL
+-- Admin can delete profiles (email check without recursion)
+CREATE POLICY "Admin can delete profiles" ON profiles
+  FOR DELETE
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 
@@ -486,15 +457,11 @@ DROP POLICY IF EXISTS "Admin can view notifications" ON admin_notifications;
 DROP POLICY IF EXISTS "System can insert notifications" ON admin_notifications;
 DROP POLICY IF EXISTS "Admin can update notifications" ON admin_notifications;
 
--- Only admins can view notifications (check email)
+-- Only admins can view notifications (check email without recursion)
 CREATE POLICY "Admin can view notifications" ON admin_notifications
   FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- System can insert notifications (service role)
@@ -502,15 +469,11 @@ CREATE POLICY "System can insert notifications" ON admin_notifications
   FOR INSERT
   WITH CHECK (true);
 
--- Admins can update notifications (mark as read, check email)
+-- Admins can update notifications (check email without recursion)
 CREATE POLICY "Admin can update notifications" ON admin_notifications
   FOR UPDATE
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid()
-      AND profiles.email = 'muindidamian@gmail.com'
-    )
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 
