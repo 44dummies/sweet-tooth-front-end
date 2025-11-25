@@ -83,6 +83,43 @@ const AdminDashboard = () => {
     checkAuth();
     fetchAllData();
 
+    // Real-time subscriptions for new orders
+    const ordersChannel = supabase
+      .channel('admin-orders-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+        console.log('Order change detected:', payload);
+        if (payload.eventType === 'INSERT') {
+          toast.success('🎉 New order received!', { 
+            description: `From ${payload.new.customer_name}`, 
+            duration: 5000 
+          });
+        }
+        fetchAllData();
+      })
+      .subscribe();
+
+    const customOrdersChannel = supabase
+      .channel('admin-custom-orders-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'custom_orders' }, (payload) => {
+        toast.success('🎂 New custom order!', { 
+          description: `From ${payload.new.customer_name}`, 
+          duration: 5000 
+        });
+        fetchAllData();
+      })
+      .subscribe();
+
+    const reviewsChannel = supabase
+      .channel('admin-reviews-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'reviews' }, (payload) => {
+        toast.success('⭐ New review submitted!', { 
+          description: `From ${payload.new.name}`, 
+          duration: 5000 
+        });
+        fetchAllData();
+      })
+      .subscribe();
+
     // Activity tracking for session timeout
     const markActive = () => localStorage.setItem(lastActiveKey, Date.now().toString());
     const checkIdle = () => {
@@ -108,6 +145,9 @@ const AdminDashboard = () => {
     window.addEventListener('beforeunload', beforeUnload);
 
     return () => {
+      supabase.removeChannel(ordersChannel);
+      supabase.removeChannel(customOrdersChannel);
+      supabase.removeChannel(reviewsChannel);
       if (idleTimerRef.current) window.clearInterval(idleTimerRef.current);
       activityEvents.forEach((evt) => window.removeEventListener(evt, markActive));
       window.removeEventListener('beforeunload', beforeUnload);

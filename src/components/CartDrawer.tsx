@@ -36,7 +36,7 @@ const CartDrawer = () => {
         <Button variant="outline" size="icon" className="relative rounded-full border-2 hover:scale-105 transition-transform">
           <ShoppingCart className="w-5 h-5" />
           {totalItems > 0 && (
-            <Badge className="absolute -top-2.5 -right-2.5 h-5 w-5 min-w-[20px] flex items-center justify-center p-0 rounded-full bg-primary text-primary-foreground text-[10px] font-bold shadow-lg border-2 border-background animate-pulse">
+            <Badge className="absolute -top-2.5 -right-2.5 h-6 w-6 min-w-[24px] flex items-center justify-center p-0 rounded-full bg-gradient-to-br from-red-500 to-red-600 text-white text-[11px] font-bold shadow-lg border-2 border-white dark:border-slate-900 ring-2 ring-red-500/30 animate-pulse">
               {totalItems > 99 ? '99+' : totalItems}
             </Badge>
           )}

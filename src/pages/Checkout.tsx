@@ -108,8 +108,8 @@ const Checkout = () => {
           delivery_date: formData.deliveryDate,
           special_instructions: formData.cakeSpecifications || null,
           total_amount: totalPrice,
-          status: 'pending',
-          payment_status: 'pending',
+          status: 'PENDING',
+          payment_status: 'PENDING',
         };
 
         if (deliveryCoords) {
