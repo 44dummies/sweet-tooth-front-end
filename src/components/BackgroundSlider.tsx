@@ -21,7 +21,7 @@ const BackgroundSlider = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Background Slides */}
+      {}
       {slides.map((slide, index) => (
         <div
           key={index}

@@ -32,7 +32,7 @@ const Register = () => {
       return;
     }
 
-    // Validate phone number (basic validation for Kenyan format)
+
     const phoneRegex = /^(\+?254|0)?[17]\d{8}$/;
     if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
       toast.error("Please enter a valid phone number (e.g., 0712345678 or 254712345678)");
@@ -61,7 +61,7 @@ const Register = () => {
     }
 
     const { data: { session } } = await supabase.auth.getSession();
-    
+
     if (!session) {
       toast.success("Account created! Please check your email to confirm your account.");
       setLoading(false);
@@ -69,7 +69,7 @@ const Register = () => {
       return;
     }
 
-    // Update profile with phone number
+
     const { error: profileError } = await supabase
       .from('profiles')
       .update({ phone: phone.replace(/\s/g, '') })
@@ -88,7 +88,7 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-transparent">
       <BackgroundSlider />
       <div className="w-full max-w-md relative z-10">
-        {/* Back to Home */}
+        {}
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-6 transition-colors">
           <ArrowLeft size={16} />
           Back to Home

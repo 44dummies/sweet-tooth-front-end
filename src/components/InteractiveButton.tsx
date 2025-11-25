@@ -15,13 +15,13 @@ const InteractiveButton = ({
   ...props
 }: InteractiveButtonProps) => {
   const baseStyles = "relative overflow-hidden font-semibold rounded-xl transition-all duration-300";
-  
+
   const variantStyles = {
     primary: "bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:shadow-xl hover:shadow-primary/50",
     secondary: "bg-secondary text-foreground hover:bg-secondary/80",
     outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-white"
   };
-  
+
   const sizeStyles = {
     sm: "px-4 py-2 text-sm",
     md: "px-6 py-3 text-base",
@@ -36,7 +36,7 @@ const InteractiveButton = ({
       {...props}
     >
       <span className="relative z-10">{children}</span>
-      {/* Animated shine effect */}
+      {}
       <motion.div
         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
         initial={{ x: "-100%" }}

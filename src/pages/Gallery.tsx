@@ -44,14 +44,14 @@ const Gallery = () => {
       <ModernNavbar />
       <main className="flex-1 pt-4 md:pt-8 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header with animation */}
-          <motion.div 
+          {}
+          <motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <motion.h1 
+            <motion.h1
               className="text-4xl md:text-5xl font-bold mb-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -61,7 +61,7 @@ const Gallery = () => {
                 Our Gallery
               </span>
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-lg text-muted-foreground max-w-2xl mx-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -71,8 +71,8 @@ const Gallery = () => {
             </motion.p>
           </motion.div>
 
-          {/* Gallery Grid with stagger animation */}
-          <motion.div 
+          {}
+          <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             initial="hidden"
             animate="visible"
@@ -91,9 +91,9 @@ const Gallery = () => {
                 key={image.id}
                 variants={{
                   hidden: { opacity: 0, y: 20, scale: 0.9 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0, 
+                  visible: {
+                    opacity: 1,
+                    y: 0,
                     scale: 1,
                     transition: {
                       type: "spring",
@@ -118,8 +118,8 @@ const Gallery = () => {
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    {/* Zoom icon on hover */}
+
+                    {}
                     <motion.div
                       className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"
                       initial={{ scale: 0 }}
@@ -138,7 +138,7 @@ const Gallery = () => {
         </div>
       </main>
 
-      {/* Lightbox Modal */}
+      {}
       <Dialog open={selectedImageId !== null} onOpenChange={(open) => {
         if (!open) setSelectedImageId(null);
       }}>
@@ -157,7 +157,7 @@ const Gallery = () => {
                   }}
                 />
 
-                {/* Navigation Buttons */}
+                {}
                 <button
                   onClick={handlePrevious}
                   className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full transition-colors duration-200 z-10"
@@ -174,7 +174,7 @@ const Gallery = () => {
                   <ChevronRight className="w-6 h-6" />
                 </button>
 
-                {/* Close Button */}
+                {}
                 <button
                   onClick={() => setSelectedImageId(null)}
                   className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full transition-colors duration-200 z-10"
@@ -183,12 +183,12 @@ const Gallery = () => {
                   <X className="w-6 h-6" />
                 </button>
 
-                {/* Image Counter */}
+                {}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-2 rounded-full text-sm">
                   {selectedIndex + 1} / {galleryImages.length}
                 </div>
 
-                {/* Image Description */}
+                {}
                 <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-2 rounded text-sm text-center">
                   {selectedImage.alt}
                 </div>

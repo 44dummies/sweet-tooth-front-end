@@ -19,13 +19,13 @@ interface MenuCardProps {
   flavorOptions?: string[];
 }
 
-const MenuCard = ({ 
-  id, 
-  image, 
-  title, 
-  description, 
-  price, 
-  available, 
+const MenuCard = ({
+  id,
+  image,
+  title,
+  description,
+  price,
+  available,
   leadTimeDays,
   hasVariants = false,
   variantType = 'flavor',
@@ -42,13 +42,13 @@ const MenuCard = ({
       return;
     }
 
-    // If has variants, open the flavor selector
+
     if (hasVariants && flavorOptions.length > 0) {
       setShowFlavorSelector(true);
       return;
     }
 
-    // No variants - add directly
+
     const item = {
       id,
       title,
@@ -67,32 +67,32 @@ const MenuCard = ({
     ? "from-purple-500 to-pink-500"
     : "from-emerald-500 to-teal-500";
 
-  // Fallback image
+
   const fallbackImage = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
 
-  const variantLabel = variantType === 'flavor' ? 'flavors' : 
+  const variantLabel = variantType === 'flavor' ? 'flavors' :
                        variantType === 'filling' ? 'fillings' :
                        variantType === 'topping' ? 'toppings' : 'options';
 
   return (
     <>
       <div className={`group h-full ${isDisabled ? 'opacity-70' : ''}`}>
-        {/* Card Container */}
+        {}
         <div className="relative h-full bg-card rounded-xl sm:rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 border border-border flex flex-col">
-          
-          {/* Image Section */}
+
+          {}
           <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-muted">
-            {/* Loading Skeleton */}
+            {}
             {!imageLoaded && !imageError && (
               <div className="absolute inset-0 bg-muted animate-pulse" />
             )}
-            
-            {/* Lead Time Badge */}
+
+            {}
             <div className={`absolute top-2 left-2 sm:top-3 sm:left-3 z-20 px-3 py-1 rounded-full font-medium text-[10px] sm:text-xs text-white bg-gradient-to-r ${leadTimeStyles} shadow-lg backdrop-blur`}>
               {leadTimeDays}-day prep
             </div>
 
-            {/* Favorite Button */}
+            {}
             <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20">
               <FavoriteButton productId={id} productName={title} size="sm" />
             </div>
@@ -103,7 +103,7 @@ const MenuCard = ({
               </div>
             )}
 
-            {/* Product Image */}
+            {}
             <img
               src={imageError ? fallbackImage : image}
               alt={title}
@@ -116,24 +116,24 @@ const MenuCard = ({
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
             />
-            
-            {/* Gradient Overlay on Hover */}
+
+            {}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
 
-          {/* Content Section */}
+          {}
           <div className="flex-1 p-3 sm:p-4 flex flex-col">
-            {/* Title */}
+            {}
             <h3 className="font-bold text-sm sm:text-base lg:text-lg text-foreground line-clamp-1 mb-1">
               {title}
             </h3>
 
-            {/* Description */}
+            {}
             <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 flex-1 mb-2">
               {description || 'Delicious homemade treat baked fresh daily.'}
             </p>
 
-            {/* Variant Options Preview */}
+            {}
             {hasVariants && flavorOptions.length > 0 && (
               <div className="mb-2">
                 <p className="text-[10px] sm:text-xs text-primary font-medium">
@@ -142,9 +142,9 @@ const MenuCard = ({
               </div>
             )}
 
-            {/* Price and Action */}
+            {}
             <div className="flex items-center justify-between gap-2 pt-2 border-t border-border">
-              {/* Price */}
+              {}
               <div>
                 <span className="text-[10px] sm:text-xs text-muted-foreground block">From</span>
                 <span className="text-base sm:text-lg lg:text-xl font-bold text-primary">
@@ -156,9 +156,9 @@ const MenuCard = ({
                 </span>
               </div>
 
-              {/* Add to Cart Button */}
-              <Button 
-                onClick={handleAddToCart} 
+              {}
+              <Button
+                onClick={handleAddToCart}
                 disabled={isDisabled}
                 size="sm"
                 className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg font-medium text-xs sm:text-sm"
@@ -180,7 +180,7 @@ const MenuCard = ({
         </div>
       </div>
 
-      {/* Flavor Selector Modal */}
+      {}
       {hasVariants && (
         <FlavorSelector
           isOpen={showFlavorSelector}

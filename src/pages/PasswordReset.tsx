@@ -84,7 +84,7 @@ const PasswordReset = () => {
 
       if (!matchFound) {
         toast.error("This password was never used with your account. Please try again or create a new account.");
-        
+
         const attempts = parseInt(sessionStorage.getItem(`reset_attempts_${userId}`) || '0');
         sessionStorage.setItem(`reset_attempts_${userId}`, String(attempts + 1));
 
@@ -92,28 +92,28 @@ const PasswordReset = () => {
           toast.error("Too many failed attempts. Your account data will be deleted for security.", {
             duration: 5000,
           });
-          
+
           await supabase.from('profiles').delete().eq('id', userId);
           await supabase.from('password_history').delete().eq('user_id', userId);
           await supabase.from('customer_data').delete().eq('user_id', userId);
-          
+
           await supabase.auth.admin.deleteUser(userId).catch(() => {
-            
+
           });
 
           sessionStorage.removeItem(`reset_attempts_${userId}`);
-          
+
           setTimeout(() => {
             navigate("/register");
           }, 2000);
         }
-        
+
         setLoading(false);
         return;
       }
 
       toast.success("Password verified! Sending reset link to your email...");
-      
+
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
@@ -122,7 +122,7 @@ const PasswordReset = () => {
 
       sessionStorage.removeItem(`reset_attempts_${userId}`);
       toast.success("Password reset link sent! Check your email.");
-      
+
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -138,7 +138,7 @@ const PasswordReset = () => {
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-transparent">
       <BackgroundSlider />
       <div className="w-full max-w-md relative z-10">
-        {/* Back to Login */}
+        {}
         <Link to="/login" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-6 transition-colors">
           <ArrowLeft size={16} />
           Back to Login
@@ -151,7 +151,7 @@ const PasswordReset = () => {
             </div>
             <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
             <CardDescription>
-              {step === "email" 
+              {step === "email"
                 ? "Enter your email to begin password recovery"
                 : "Enter any password you've used before to verify your identity"}
             </CardDescription>

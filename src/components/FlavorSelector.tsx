@@ -52,7 +52,7 @@ const FlavorSelector = ({ isOpen, onClose, product }: FlavorSelectorProps) => {
     onClose();
   };
 
-  const variantLabel = product.variantType === 'flavor' ? 'Flavor' : 
+  const variantLabel = product.variantType === 'flavor' ? 'Flavor' :
                        product.variantType === 'filling' ? 'Filling' :
                        product.variantType === 'topping' ? 'Topping' : 'Option';
 
@@ -65,7 +65,7 @@ const FlavorSelector = ({ isOpen, onClose, product }: FlavorSelectorProps) => {
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          {/* Product Image */}
+          {}
           <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
             <img
               src={product.image}
@@ -77,7 +77,7 @@ const FlavorSelector = ({ isOpen, onClose, product }: FlavorSelectorProps) => {
             </div>
           </div>
 
-          {/* Flavor Selection */}
+          {}
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">
               Choose Your {variantLabel}:
@@ -103,7 +103,7 @@ const FlavorSelector = ({ isOpen, onClose, product }: FlavorSelectorProps) => {
             </div>
           </div>
 
-          {/* Selected Summary */}
+          {}
           {selectedFlavor && (
             <div className="bg-muted/50 rounded-lg p-3 border">
               <p className="text-sm text-muted-foreground">Your selection:</p>
@@ -114,7 +114,7 @@ const FlavorSelector = ({ isOpen, onClose, product }: FlavorSelectorProps) => {
           )}
         </div>
 
-        {/* Actions */}
+        {}
         <div className="flex gap-3">
           <Button variant="outline" onClick={onClose} className="flex-1">
             Cancel

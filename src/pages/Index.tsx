@@ -1,4 +1,3 @@
-// Unified responsive layout with ModernNavbar
 import { motion, useScroll, useSpring } from "framer-motion";
 import ModernNavbar from "@/components/ModernNavbar";
 import HeroSlider from "@/components/HeroSlider";
@@ -22,22 +21,22 @@ const Index = () => {
 
   return (
     <>
-      {/* Scroll Progress Bar */}
+      {}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 origin-left z-[60]"
         style={{ scaleX }}
       />
 
-      {/* Unified Responsive Layout */}
-      <motion.div 
+      {}
+      <motion.div
         className="min-h-screen relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <ModernNavbar />
-        
-        {/* Hero Slider */}
+
+        {}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -45,8 +44,8 @@ const Index = () => {
         >
           <HeroSlider />
         </motion.div>
-        
-        {/* Feature sections */}
+
+        {}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -55,8 +54,8 @@ const Index = () => {
         >
           <FeatureSections />
         </motion.div>
-        
-        {/* Service cards */}
+
+        {}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -65,8 +64,8 @@ const Index = () => {
         >
           <ServiceCards />
         </motion.div>
-        
-        {/* Stats */}
+
+        {}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -75,8 +74,8 @@ const Index = () => {
         >
           <StatsSection />
         </motion.div>
-        
-        {/* Custom Order */}
+
+        {}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -85,8 +84,8 @@ const Index = () => {
         >
           <CustomOrderSection />
         </motion.div>
-        
-        {/* Reviews */}
+
+        {}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -95,8 +94,8 @@ const Index = () => {
         >
           <ReviewsSection />
         </motion.div>
-        
-        {/* Contact */}
+
+        {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -105,7 +104,7 @@ const Index = () => {
         >
           <ContactSection />
         </motion.div>
-        
+
         <Footer />
         <FloatingChat />
       </motion.div>

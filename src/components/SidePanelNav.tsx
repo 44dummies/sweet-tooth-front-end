@@ -52,19 +52,19 @@ export const SidePanelNav = () => {
 
   return (
     <>
-      {/* Desktop & Mobile Header */}
-      <motion.header 
+      {}
+      <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed top-0 left-0 right-0 z-40 h-16 md:h-20 px-4 md:px-6 backdrop-blur-md border-b flex items-center justify-between transition-all duration-300 ${
-          scrolled 
-            ? 'bg-background/95 border-border/80 shadow-lg' 
+          scrolled
+            ? 'bg-background/95 border-border/80 shadow-lg'
             : 'bg-gradient-to-b from-background/95 to-background/60 border-border/50 shadow-sm'
         }`}
       >
-        {/* Left: Menu Icon + Logo/Title */}
+        {}
         <div className="flex items-center gap-2 md:gap-3">
-          {/* Menu Button */}
+          {}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -77,7 +77,7 @@ export const SidePanelNav = () => {
             >
               <Menu className="w-6 h-6 md:w-7 md:h-7 text-foreground group-hover:text-primary transition-colors duration-300" />
             </motion.div>
-            <motion.div 
+            <motion.div
               className="absolute inset-0 bg-primary/20 rounded-xl blur-md"
               initial={{ opacity: 0 }}
               whileHover={{ opacity: 1 }}
@@ -85,29 +85,29 @@ export const SidePanelNav = () => {
             />
           </motion.button>
 
-          {/* Logo and Title (Desktop only) */}
-          <motion.div 
+          {}
+          <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="hidden md:flex items-center gap-3 group cursor-pointer" 
+            className="hidden md:flex items-center gap-3 group cursor-pointer"
             onClick={() => navigate('/')}
           >
             <div className="relative">
-              <motion.img 
+              <motion.img
                 whileHover={{ rotate: [0, -10, 10, -10, 0] }}
                 transition={{ duration: 0.5 }}
-                src={logo} 
-                alt="Sweet Tooth" 
-                className="h-12 w-12 rounded-full shadow-lg brightness-75 dark:brightness-100 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300" 
+                src={logo}
+                alt="Sweet Tooth"
+                className="h-12 w-12 rounded-full shadow-lg brightness-75 dark:brightness-100 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300"
               />
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/30 blur-lg"
                 initial={{ opacity: 0 }}
                 whileHover={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               />
             </div>
-            <motion.span 
+            <motion.span
               className="font-dancing text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
@@ -116,23 +116,23 @@ export const SidePanelNav = () => {
             </motion.span>
           </motion.div>
 
-          {/* Mobile Logo Only */}
-          <motion.div 
+          {}
+          <motion.div
             whileTap={{ scale: 0.95 }}
-            className="md:hidden cursor-pointer" 
+            className="md:hidden cursor-pointer"
             onClick={() => navigate('/')}
           >
-            <img 
-              src={logo} 
-              alt="Sweet Tooth" 
-              className="h-9 w-9 rounded-full shadow-md brightness-75 dark:brightness-100 ring-2 ring-primary/20" 
+            <img
+              src={logo}
+              alt="Sweet Tooth"
+              className="h-9 w-9 rounded-full shadow-md brightness-75 dark:brightness-100 ring-2 ring-primary/20"
             />
           </motion.div>
         </div>
-        
-        {/* Right: Cart + Theme Toggle */}
+
+        {}
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Cart Icon with Badge */}
+          {}
           <div className="relative">
             <CartDrawer />
             <AnimatePresence>
@@ -161,10 +161,10 @@ export const SidePanelNav = () => {
         </div>
       </motion.header>
 
-      {/* Side panel overlay */}
+      {}
       <AnimatePresence>
         {open && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -178,49 +178,49 @@ export const SidePanelNav = () => {
               className="absolute inset-0 bg-black/60 backdrop-blur-md"
               onClick={() => setOpen(false)}
             />
-            
-            {/* Side panel navigation */}
-            <motion.nav 
+
+            {}
+            <motion.nav
               initial={{ x: -320 }}
               animate={{ x: 0 }}
               exit={{ x: -320 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="relative w-80 max-w-[85vw] h-full bg-gradient-to-b from-background via-background to-background/95 border-r border-border/50 shadow-2xl flex flex-col"
             >
-              
-              {/* Header */}
+
+              {}
               <div className="px-6 py-5 border-b border-border/50 bg-gradient-to-r from-primary/5 to-purple-500/5">
                 <div className="flex items-center justify-between mb-4">
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
                     className="flex items-center gap-3"
                   >
-                    <motion.img 
+                    <motion.img
                       whileHover={{ rotate: 360 }}
                       transition={{ duration: 0.6 }}
-                      src={logo} 
-                      alt="Sweet Tooth" 
-                      className="h-10 w-10 rounded-full brightness-75 dark:brightness-100 ring-2 ring-primary/30 shadow-md cursor-pointer" 
+                      src={logo}
+                      alt="Sweet Tooth"
+                      className="h-10 w-10 rounded-full brightness-75 dark:brightness-100 ring-2 ring-primary/30 shadow-md cursor-pointer"
                     />
                     <span className="font-dancing text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                       Sweet Tooth
                     </span>
                   </motion.div>
-                  <motion.button 
+                  <motion.button
                     whileHover={{ rotate: 90, scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    onClick={() => setOpen(false)} 
+                    onClick={() => setOpen(false)}
                     className="p-2 rounded-xl hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
                   >
                     <X className="w-5 h-5" />
                   </motion.button>
                 </div>
 
-                {/* User Profile Section */}
+                {}
                 {user && profile && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
@@ -242,13 +242,13 @@ export const SidePanelNav = () => {
                 )}
               </div>
 
-              {/* Navigation Links */}
+              {}
               <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-4">
                 <div className="space-y-1">
                   {routes.map((route, index) => {
                     const Icon = route.icon;
                     const isActive = location.pathname === route.path;
-                    
+
                     return (
                       <motion.button
                         key={route.path}
@@ -259,20 +259,20 @@ export const SidePanelNav = () => {
                         whileHover={{ scale: 1.02, x: 4 }}
                         whileTap={{ scale: 0.98 }}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative overflow-hidden ${
-                          isActive 
-                            ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/25' 
+                          isActive
+                            ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/25'
                             : 'hover:bg-accent/50 text-foreground'
                         }`}
                       >
-                        {/* Active indicator */}
+                        {}
                         {isActive && (
-                          <motion.div 
+                          <motion.div
                             layoutId="activeIndicator"
                             className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                           />
                         )}
-                        
+
                         <motion.div
                           animate={isActive ? { scale: [1, 1.2, 1] } : {}}
                           transition={{ duration: 0.3 }}
@@ -280,7 +280,7 @@ export const SidePanelNav = () => {
                           <Icon className="w-5 h-5" />
                         </motion.div>
                         <span className="flex-1 text-left">{route.label}</span>
-                        
+
                         <motion.div
                           initial={{ x: -4, opacity: 0 }}
                           animate={isActive ? { x: 0, opacity: 1 } : {}}
@@ -296,8 +296,8 @@ export const SidePanelNav = () => {
 
               <Separator className="opacity-50" />
 
-              {/* Footer Actions */}
-              <motion.div 
+              {}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -305,9 +305,9 @@ export const SidePanelNav = () => {
               >
                 {user ? (
                   <div className="space-y-2">
-                    <Button 
-                      onClick={handleSignOut} 
-                      variant="outline" 
+                    <Button
+                      onClick={handleSignOut}
+                      variant="outline"
                       className="w-full flex items-center justify-center gap-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all duration-200"
                     >
                       <LogOut className="w-4 h-4" />
@@ -316,16 +316,16 @@ export const SidePanelNav = () => {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <Button 
-                      onClick={() => handleNav('/login')} 
-                      variant="outline" 
+                    <Button
+                      onClick={() => handleNav('/login')}
+                      variant="outline"
                       className="w-full flex items-center justify-center gap-2 hover:bg-primary/10 hover:border-primary transition-all duration-200"
                     >
                       <LogIn className="w-4 h-4" />
                       Sign In
                     </Button>
-                    <Button 
-                      onClick={() => handleNav('/register')} 
+                    <Button
+                      onClick={() => handleNav('/register')}
                       className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 shadow-lg hover:shadow-xl transition-all duration-200"
                     >
                       <UserPlus className="w-4 h-4" />

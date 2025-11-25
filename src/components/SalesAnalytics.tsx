@@ -40,7 +40,7 @@ const SalesAnalytics = () => {
 
   const processDailyRevenue = (orders: any[]) => {
     const grouped: any = {};
-    
+
     orders.forEach(order => {
       const date = new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       if (!grouped[date]) {
@@ -50,12 +50,12 @@ const SalesAnalytics = () => {
       grouped[date].orders += 1;
     });
 
-    return Object.values(grouped).slice(-30); 
+    return Object.values(grouped).slice(-30);
   };
 
   const processProductSales = (orders: any[]) => {
     const products: any = {};
-    
+
     orders.forEach(order => {
       order.order_items?.forEach((item: any) => {
         const productName = item.product_name || 'Unknown Product';
@@ -72,7 +72,7 @@ const SalesAnalytics = () => {
 
   const processOrderStatus = (orders: any[]) => {
     const statuses: any = {};
-    
+
     orders.forEach(order => {
       const status = order.status || 'PENDING';
       if (!statuses[status]) {
@@ -109,7 +109,7 @@ const SalesAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-card p-6 rounded-lg border">
           <div className="flex items-center justify-between">
@@ -152,7 +152,7 @@ const SalesAnalytics = () => {
         </div>
       </div>
 
-      {/* Revenue Chart */}
+      {}
       <div className="bg-card p-6 rounded-lg border">
         <h3 className="text-lg font-semibold mb-4">Daily Revenue (Last 30 Days)</h3>
         <ResponsiveContainer width="100%" height={300}>
@@ -167,7 +167,7 @@ const SalesAnalytics = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Product Sales & Order Status */}
+      {}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-card p-6 rounded-lg border">
           <h3 className="text-lg font-semibold mb-4">Top Products by Revenue</h3>

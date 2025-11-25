@@ -81,18 +81,18 @@ const AvailabilityCalendar = () => {
     const dateInfo = availability.get(dateStr);
 
     if (!dateInfo) {
-      // No data means available (default capacity)
+
       return { status: 'available', slotsLeft: 10, color: 'text-green-600' };
     }
 
     const slotsLeft = dateInfo.total_capacity - dateInfo.booked_slots;
-    
+
     if (slotsLeft === 0) {
       return { status: 'fully-booked', slotsLeft: 0, color: 'text-red-600' };
     } else if (slotsLeft <= 3) {
       return { status: 'limited', slotsLeft, color: 'text-orange-600' };
     }
-    
+
     return { status: 'available', slotsLeft, color: 'text-green-600' };
   };
 
@@ -133,7 +133,7 @@ const AvailabilityCalendar = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {/* Calendar */}
+          {}
           <div className="flex justify-center">
             <Calendar
               mode="single"
@@ -146,7 +146,7 @@ const AvailabilityCalendar = () => {
             />
           </div>
 
-          {/* Date Info */}
+          {}
           <div className="space-y-4">
             <div className="p-4 bg-secondary/20 rounded-lg">
               <h3 className="font-semibold mb-3">Legend</h3>
@@ -169,21 +169,21 @@ const AvailabilityCalendar = () => {
             {selectedDate && selectedDateInfo && (
               <div className="p-4 border rounded-lg">
                 <h3 className="font-semibold mb-3">
-                  {selectedDate.toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  {selectedDate.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}
                 </h3>
-                
+
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Status:</span>
-                    <Badge 
+                    <Badge
                       variant={
                         selectedDateInfo.status === 'fully-booked' ? 'destructive' :
-                        selectedDateInfo.status === 'limited' ? 'default' : 
+                        selectedDateInfo.status === 'limited' ? 'default' :
                         'outline'
                       }
                       className={selectedDateInfo.color}

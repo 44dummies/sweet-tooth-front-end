@@ -54,7 +54,7 @@ const FloatingChat = () => {
 
     setLoading(true);
     try {
-      // Check if conversation exists
+
       const { data: existingConv, error: convError } = await supabase
         .from('conversations')
         .select('*')
@@ -71,7 +71,7 @@ const FloatingChat = () => {
         convId = existingConv.id;
         setConversationId(convId);
       } else {
-        // Create new conversation
+
         const { data: newConv, error: createError } = await supabase
           .from('conversations')
           .insert({
@@ -84,11 +84,11 @@ const FloatingChat = () => {
           .single();
 
         if (createError) throw createError;
-        
+
         convId = newConv.id;
         setConversationId(convId);
 
-        // Send welcome message
+
         await supabase
           .from('conversation_messages')
           .insert({
@@ -100,7 +100,7 @@ const FloatingChat = () => {
           });
       }
 
-      // Load existing messages
+
       const { data: msgs, error: msgsError } = await supabase
         .from('conversation_messages')
         .select('*')
@@ -111,7 +111,7 @@ const FloatingChat = () => {
 
       setMessages(msgs || []);
 
-      // Mark admin messages as read
+
       await supabase
         .from('conversation_messages')
         .update({ read: true })
@@ -119,7 +119,7 @@ const FloatingChat = () => {
         .eq('sender_type', 'admin')
         .eq('read', false);
 
-      // Update unread count for customer
+
       await supabase
         .from('conversations')
         .update({ unread_customer_count: 0 })
@@ -148,21 +148,21 @@ const FloatingChat = () => {
         },
         (payload) => {
           const newMsg = payload.new as Message;
-          
-          // Only add if not already in list
+
+
           setMessages(prev => {
             if (prev.find(m => m.id === newMsg.id)) return prev;
             return [...prev, newMsg];
           });
 
-          // If it's an admin message and chat is minimized, show notification
+
           if (newMsg.sender_type === 'admin') {
             if (isMinimized || !isOpen) {
               setUnreadCount(prev => prev + 1);
               toast.success('New message from Sweet Tooth Support!');
             }
-            
-            // Mark as read if chat is open
+
+
             if (isOpen && !isMinimized) {
               supabase
                 .from('conversation_messages')
@@ -198,7 +198,7 @@ const FloatingChat = () => {
 
       if (error) throw error;
 
-      // Update conversation
+
       await supabase
         .from('conversations')
         .update({
@@ -232,8 +232,8 @@ const FloatingChat = () => {
   const handleRestore = () => {
     setIsMinimized(false);
     setUnreadCount(0);
-    
-    // Mark unread admin messages as read
+
+
     if (conversationId) {
       supabase
         .from('conversation_messages')

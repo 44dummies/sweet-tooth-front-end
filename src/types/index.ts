@@ -1,5 +1,3 @@
-// Common Types and Interfaces for Sweet Tooth Application
-
 export interface Product {
   id: string;
   name: string;

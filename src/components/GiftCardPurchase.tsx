@@ -50,7 +50,7 @@ const GiftCardPurchase = () => {
     try {
       const code = generateGiftCardCode();
       const expiresAt = new Date();
-      expiresAt.setFullYear(expiresAt.getFullYear() + 1); // Valid for 1 year
+      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
 
       const { error } = await supabase
         .from('gift_cards')
@@ -68,11 +68,11 @@ const GiftCardPurchase = () => {
 
       if (error) throw error;
 
-      // Record transaction
+
       await supabase
         .from('gift_card_transactions')
         .insert({
-          gift_card_id: code, // We'll need to get the ID
+          gift_card_id: code,
           amount: finalAmount,
           transaction_type: 'purchase'
         });
@@ -80,7 +80,7 @@ const GiftCardPurchase = () => {
       setGeneratedCode(code);
       toast.success('Gift card created successfully!');
 
-      // Reset form
+
       setAmount("");
       setCustomAmount("");
       setRecipientName("");
@@ -156,7 +156,7 @@ const GiftCardPurchase = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Amount Selection */}
+        {}
         <div>
           <Label className="mb-3 block">Select Amount</Label>
           <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-3">
@@ -201,7 +201,7 @@ const GiftCardPurchase = () => {
           )}
         </div>
 
-        {/* Recipient Details */}
+        {}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="recipientName">Recipient Name (Optional)</Label>
@@ -225,7 +225,7 @@ const GiftCardPurchase = () => {
           </div>
         </div>
 
-        {/* Personal Message */}
+        {}
         <div>
           <Label htmlFor="message">Personal Message (Optional)</Label>
           <Textarea
@@ -237,7 +237,7 @@ const GiftCardPurchase = () => {
           />
         </div>
 
-        {/* Summary */}
+        {}
         {(amount && amount !== 'custom') || (amount === 'custom' && customAmount) ? (
           <div className="p-4 bg-secondary/20 rounded-lg">
             <div className="flex items-center justify-between mb-2">
@@ -252,7 +252,7 @@ const GiftCardPurchase = () => {
           </div>
         ) : null}
 
-        {/* Action Buttons */}
+        {}
         <div className="flex gap-3">
           <Button
             onClick={handlePurchase}

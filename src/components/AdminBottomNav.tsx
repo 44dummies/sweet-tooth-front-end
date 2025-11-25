@@ -12,8 +12,8 @@ const AdminBottomNav = () => {
   };
 
   const navItems = [
-    { 
-      tab: "summary", 
+    {
+      tab: "summary",
       label: "Summary",
       Icon: () => (
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
@@ -25,8 +25,8 @@ const AdminBottomNav = () => {
         </svg>
       )
     },
-    { 
-      tab: "orders", 
+    {
+      tab: "orders",
       label: "Orders",
       Icon: () => (
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
@@ -39,8 +39,8 @@ const AdminBottomNav = () => {
         </svg>
       )
     },
-    { 
-      tab: "messages", 
+    {
+      tab: "messages",
       label: "Messages",
       Icon: () => (
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
@@ -50,8 +50,8 @@ const AdminBottomNav = () => {
         </svg>
       )
     },
-    { 
-      tab: "inventory", 
+    {
+      tab: "inventory",
       label: "Inventory",
       Icon: () => (
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
@@ -62,8 +62,8 @@ const AdminBottomNav = () => {
         </svg>
       )
     },
-    { 
-      tab: "reviews", 
+    {
+      tab: "reviews",
       label: "Reviews",
       Icon: () => (
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
@@ -94,8 +94,8 @@ const AdminBottomNav = () => {
               key={tab}
               onClick={() => handleNavigation(tab)}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 rounded-xl ${
-                active 
-                  ? "text-primary scale-110" 
+                active
+                  ? "text-primary scale-110"
                   : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
               }`}
             >

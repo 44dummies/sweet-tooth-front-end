@@ -53,7 +53,7 @@ const DeliveryZoneMap = () => {
     }
 
     const term = searchTerm.toLowerCase().trim();
-    const found = zones.find(zone => 
+    const found = zones.find(zone =>
       zone.areas.some(area => area.toLowerCase().includes(term)) ||
       zone.zone_name.toLowerCase().includes(term)
     );
@@ -132,8 +132,8 @@ const DeliveryZoneMap = () => {
                       <DollarSign className="w-4 h-4 text-green-600" />
                       <span>
                         Delivery Fee: <strong>
-                          {matchedZone.delivery_fee === 0 
-                            ? 'FREE' 
+                          {matchedZone.delivery_fee === 0
+                            ? 'FREE'
                             : `Ksh ${matchedZone.delivery_fee}`}
                         </strong>
                       </span>
@@ -167,11 +167,11 @@ const DeliveryZoneMap = () => {
           </Card>
         ) : (
           zones.map((zone) => (
-            <Card 
-              key={zone.id} 
+            <Card
+              key={zone.id}
               className={`p-4 md:p-6 border-2 transition-all duration-300 hover:shadow-xl hover:scale-105 ${
-                matchedZone?.id === zone.id 
-                  ? 'ring-2 ring-green-500 scale-105' 
+                matchedZone?.id === zone.id
+                  ? 'ring-2 ring-green-500 scale-105'
                   : ''
               } ${getZoneColor(zone.delivery_fee)}`}
             >
@@ -196,11 +196,11 @@ const DeliveryZoneMap = () => {
                 <p className="text-sm font-medium mb-2">Areas covered:</p>
                 <div className="flex flex-wrap gap-2">
                   {zone.areas.map((area, idx) => (
-                    <Badge 
-                      key={idx} 
+                    <Badge
+                      key={idx}
                       variant="secondary"
                       className={
-                        searchTerm.trim() && 
+                        searchTerm.trim() &&
                         area.toLowerCase().includes(searchTerm.toLowerCase().trim())
                           ? 'bg-green-200 dark:bg-green-800 border-green-400'
                           : ''

@@ -48,12 +48,12 @@ const normalizeProduct = (item: any): Product => {
   const category = item.category || "other";
   const id = item.id || `${title}-${category}`.toLowerCase().replace(/\s+/g, '-');
 
-  // Parse flavor_options from JSONB
+
   let flavorOptions: string[] = [];
   if (item.flavor_options) {
     try {
-      flavorOptions = typeof item.flavor_options === 'string' 
-        ? JSON.parse(item.flavor_options) 
+      flavorOptions = typeof item.flavor_options === 'string'
+        ? JSON.parse(item.flavor_options)
         : item.flavor_options;
     } catch {
       flavorOptions = [];
@@ -96,7 +96,7 @@ const Menu = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [categories, setCategories] = useState<string[]>([]);
-  
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -111,9 +111,9 @@ const Menu = () => {
   const fetchProducts = async () => {
     console.log('🔍 Fetching products from Supabase...');
     console.log('🔗 Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
-    
+
     try {
-      // Fetch ALL products - RLS policy allows public read
+
       const { data, error, status, statusText } = await supabase
         .from('products')
         .select('*')
@@ -123,22 +123,22 @@ const Menu = () => {
 
       if (error) {
         console.error('❌ Error fetching products:', error.message, error.details, error.hint, error.code);
-        // Show error in UI for debugging
+
         setMenuItems([]);
         setCategories([]);
       } else if (data && data.length > 0) {
         console.log(`✅ Found ${data.length} products in database`);
         console.log('📦 Raw first product:', data[0]);
-        
+
         const products: Product[] = data
           .map((item) => normalizeProduct(item))
           .filter((product) => product.available);
-        
+
         console.log('📋 Mapped products count:', products.length);
         console.log('📋 First mapped product:', products[0]);
         setMenuItems(products);
-        
-        // Extract unique categories from database
+
+
         const uniqueCategories = Array.from(
           new Set(products.map(item => item.category).filter(Boolean))
         ) as string[];
@@ -158,11 +158,11 @@ const Menu = () => {
     }
   };
 
-  const filteredItems = selectedCategory === "all" 
-    ? menuItems 
+  const filteredItems = selectedCategory === "all"
+    ? menuItems
     : menuItems.filter(item => item.category === selectedCategory);
 
-  // Container variants for stagger animation
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -187,24 +187,24 @@ const Menu = () => {
 
   return (
     <>
-      {/* Scroll Progress Bar */}
+      {}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 origin-left z-50"
         style={{ scaleX }}
       />
 
-      {/* Desktop Version */}
+      {}
       <div className="min-h-screen pb-0 bg-background relative">
         <ModernNavbar />
-        
-        {/* Hero Section with parallax */}
-        <motion.section 
+
+        {}
+        <motion.section
           className="pt-12 pb-16 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-blue-950/20 overflow-hidden relative"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Animated background elements */}
+          {}
           <div className="absolute inset-0 overflow-hidden">
             <motion.div
               className="absolute top-20 left-10 w-72 h-72 bg-pink-300/20 dark:bg-pink-500/10 rounded-full blur-3xl"
@@ -253,7 +253,7 @@ const Menu = () => {
                 </span>
               </motion.div>
 
-              <motion.h1 
+              <motion.h1
                 className="text-7xl font-bold mb-6"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -263,8 +263,8 @@ const Menu = () => {
                   Our Menu
                 </span>
               </motion.h1>
-              
-              <motion.p 
+
+              <motion.p
                 className="text-2xl text-muted-foreground max-w-3xl mx-auto"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -276,8 +276,8 @@ const Menu = () => {
           </div>
         </motion.section>
 
-        {/* Delivery Timeline Highlights */}
-        <motion.section 
+        {}
+        <motion.section
           className="py-10 bg-background"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -326,8 +326,8 @@ const Menu = () => {
           </div>
         </motion.section>
 
-        {/* Category Filter with hover effects */}
-        <motion.section 
+        {}
+        <motion.section
           className="py-8 bg-background border-b sticky top-20 z-40 backdrop-blur-lg bg-background/80"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -372,16 +372,16 @@ const Menu = () => {
           </div>
         </motion.section>
 
-        {/* Menu Items Grid with stagger animation */}
+        {}
         <section className="py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {loading ? (
-              <motion.div 
+              <motion.div
                 className="text-center py-20"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <motion.div 
+                <motion.div
                   className="inline-block w-12 h-12 border-4 border-primary border-t-transparent rounded-full"
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -389,7 +389,7 @@ const Menu = () => {
                 <p className="mt-4 text-lg text-muted-foreground">Loading delicious items...</p>
               </motion.div>
             ) : filteredItems.length === 0 ? (
-              <motion.div 
+              <motion.div
                 className="text-center py-20"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -417,7 +417,7 @@ const Menu = () => {
                   const image = item.image_url || "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
                   return (
                     <div key={item.id}>
-                      <MenuCard 
+                      <MenuCard
                         id={item.id}
                         image={image}
                         title={item.title}

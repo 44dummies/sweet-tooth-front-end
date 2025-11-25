@@ -11,7 +11,6 @@ import { Plus, Minus, Lock } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useNotifications } from "@/hooks/useNotifications";
 
-// Default placeholder image for products without images
 const defaultProductImage = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80";
 
 const Checkout = () => {
@@ -36,7 +35,7 @@ const Checkout = () => {
   const [showPlacedAnimation, setShowPlacedAnimation] = useState(false);
   const [notificationRequested, setNotificationRequested] = useState(false);
 
-  // Request notification permission on mount
+
   useEffect(() => {
     if (user && !notificationRequested && permission !== 'granted') {
       const timer = setTimeout(() => {
@@ -46,7 +45,6 @@ const Checkout = () => {
       return () => clearTimeout(timer);
     }
   }, [user, permission, notificationRequested, requestPermission]);
-
 
   useEffect(() => {
     if (profile) {
@@ -60,7 +58,7 @@ const Checkout = () => {
     }
   }, [profile]);
 
-  // Fetch menu items from database
+
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
@@ -71,8 +69,8 @@ const Checkout = () => {
           .order('name');
 
         if (error) throw error;
-        
-        // Map to expected format
+
+
         const mappedItems = (data || []).map(item => ({
           id: item.id,
           image: item.image_url || defaultProductImage,
@@ -80,7 +78,7 @@ const Checkout = () => {
           description: item.description || '',
           price: item.price,
         }));
-        
+
         setMenuItems(mappedItems);
       } catch (err) {
         console.error('Error fetching menu items:', err);
@@ -261,14 +259,14 @@ const Checkout = () => {
 
       clearCart();
       setShowPlacedAnimation(true);
-      
-      // Send browser notification
+
+
       sendNotification('Order Placed Successfully! 🎉', {
         body: `Your order #${orderId?.toString().slice(0, 8) || 'NEW'} has been received. We'll notify you when it's confirmed.`,
         icon: '/logo.png',
         badge: '/logo.png',
       });
-      
+
       toast.success("Order confirmed! We'll contact you soon via WhatsApp.");
       setTimeout(() => {
         setShowPlacedAnimation(false);
@@ -308,7 +306,7 @@ const Checkout = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
-          {/* Product Selection */}
+          {}
           <div className="lg:col-span-1 bg-card p-4 sm:p-6 rounded-lg border h-fit lg:sticky lg:top-24">
             <h2 className="text-lg sm:text-xl font-semibold mb-4">Select Products</h2>
             {loadingMenu ? (
@@ -379,7 +377,7 @@ const Checkout = () => {
             </div>
             )}
 
-            {/* Selected Product Details */}
+            {}
             {selectedProduct && (() => {
               const isInCart = items.some((item) => item.id === selectedProduct.id);
               const cartItem = items.find((item) => item.id === selectedProduct.id);
@@ -401,7 +399,7 @@ const Checkout = () => {
 
                     {!isInCart ? (
                       <>
-                        {/* Quantity Selector */}
+                        {}
                         <div className="flex items-center gap-2 mb-4">
                           <button
                             onClick={() => setProductQuantity(Math.max(1, productQuantity - 1))}
@@ -474,9 +472,9 @@ const Checkout = () => {
             })()}
           </div>
 
-          {/* Checkout Form */}
+          {}
           <form className="lg:col-span-2 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
-            {/* Customer Information */}
+            {}
             <div className="bg-card p-4 sm:p-6 rounded-lg border">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Order Information</h2>
               {user && profile ? (
@@ -489,8 +487,8 @@ const Checkout = () => {
                       <p className="text-sm text-muted-foreground mt-1">📱 {formData.phone}</p>
                     )}
                   </div>
-                  
-                  {/* Editable Delivery Address */}
+
+                  {}
                   <div className="space-y-2">
                     <label htmlFor="checkout-address-logged" className="block text-sm font-medium">
                       Delivery Address *
@@ -572,7 +570,7 @@ const Checkout = () => {
               )}
             </div>
 
-            {/* Delivery Details */}
+            {}
             <div className="bg-card p-4 sm:p-6 rounded-lg border">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Delivery & Special Requests</h2>
               <div className="space-y-3 sm:space-y-4">
@@ -614,7 +612,7 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
+            {}
             {!user ? (
               <Button
                 type="button"
@@ -640,7 +638,7 @@ const Checkout = () => {
             )}
           </form>
 
-          {/* Order Summary Sidebar */}
+          {}
           <aside className="bg-card border rounded-lg p-4 sm:p-6 h-fit lg:sticky lg:top-24">
             <h2 className="text-lg sm:text-xl font-semibold mb-4">Order Summary</h2>
             {items.length === 0 ? (

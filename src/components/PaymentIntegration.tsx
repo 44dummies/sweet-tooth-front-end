@@ -20,7 +20,7 @@ const PaymentIntegration = ({ orderId, amount, onSuccess, onCancel }: PaymentInt
   const handlePayment = async () => {
     try {
       setProcessing(true);
-      
+
       await supabase.from('payments').insert([{
         order_id: orderId,
         payment_method: selectedMethod,
@@ -44,7 +44,7 @@ const PaymentIntegration = ({ orderId, amount, onSuccess, onCancel }: PaymentInt
         <p className="text-3xl font-bold text-primary">Ksh {amount.toLocaleString()}</p>
       </div>
 
-      {/* Payment Method Selection */}
+      {}
       <div className="space-y-3">
         <button
           onClick={() => setSelectedMethod('BANK_TRANSFER')}
@@ -77,7 +77,7 @@ const PaymentIntegration = ({ orderId, amount, onSuccess, onCancel }: PaymentInt
         </button>
       </div>
 
-      {/* Action Buttons */}
+      {}
       <div className="flex gap-3">
         <Button
           variant="outline"
@@ -96,7 +96,7 @@ const PaymentIntegration = ({ orderId, amount, onSuccess, onCancel }: PaymentInt
         </Button>
       </div>
 
-      {/* Payment Info */}
+      {}
       {selectedMethod === 'BANK_TRANSFER' && (
         <div className="bg-secondary/20 p-4 rounded-lg text-sm">
           <p className="font-semibold mb-2">Bank Details:</p>

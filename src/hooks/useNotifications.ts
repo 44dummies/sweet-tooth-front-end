@@ -25,7 +25,7 @@ export const useNotifications = () => {
     try {
       const result = await Notification.requestPermission();
       setPermission(result);
-      
+
       if (result === 'granted') {
         toast.success('Notifications enabled! You\'ll receive updates about your orders.');
         return true;

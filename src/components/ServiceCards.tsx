@@ -6,7 +6,7 @@ import { useReducedAnimations } from "@/hooks/use-mobile";
 const ServiceCards = () => {
   const navigate = useNavigate();
   const reduceAnimations = useReducedAnimations();
-  
+
   const services = [
     {
       title: "Wedding Cakes",
@@ -64,7 +64,7 @@ const ServiceCards = () => {
               onClick={() => navigate('/custom-order', { state: { cakeType: service.cakeType } })}
             >
               <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500">
-                {/* Image */}
+                {}
                 <div className="relative h-64 md:h-80 overflow-hidden">
                   <img
                     src={service.image}
@@ -74,14 +74,14 @@ const ServiceCards = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
 
-                {/* Content */}
+                {}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
                   <h3 className="text-xl md:text-2xl font-bold mb-2">{service.title}</h3>
                   <p className="text-white/90 mb-3 md:mb-4 text-xs md:text-sm leading-relaxed">
                     {service.description}
                   </p>
 
-                  {/* Custom Order button */}
+                  {}
                   <motion.button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -96,7 +96,7 @@ const ServiceCards = () => {
                   </motion.button>
                 </div>
 
-                {/* Hover overlay */}
+                {}
                 <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/20 rounded-2xl transition-colors duration-500" />
               </div>
             </motion.div>

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Info, 
-  Flame, 
-  AlertCircle, 
-  Leaf, 
-  ChevronDown, 
-  ChevronUp 
+import {
+  Info,
+  Flame,
+  AlertCircle,
+  Leaf,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import {
   Popover,
@@ -73,7 +73,7 @@ const NutritionalInfo = ({
 
   return (
     <div className="space-y-3">
-      {/* Quick Info Bar */}
+      {}
       <div className="flex flex-wrap gap-2 items-center">
         {calories && (
           <Badge variant="secondary" className="flex items-center gap-1">
@@ -83,9 +83,9 @@ const NutritionalInfo = ({
         )}
 
         {dietary_tags.map((tag) => (
-          <Badge 
-            key={tag} 
-            variant="outline" 
+          <Badge
+            key={tag}
+            variant="outline"
             className="bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-700"
           >
             <span className="mr-1">{dietaryIcons[tag] || '✓'}</span>
@@ -96,8 +96,8 @@ const NutritionalInfo = ({
         {allergens.length > 0 && (
           <Popover>
             <PopoverTrigger asChild>
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="bg-red-50 dark:bg-red-950/30 border-red-300 dark:border-red-700 cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/50"
               >
                 <AlertCircle className="w-3 h-3 mr-1" />
@@ -138,11 +138,11 @@ const NutritionalInfo = ({
         </Button>
       </div>
 
-      {/* Expanded Details */}
+      {}
       {expanded && (
         <Card className="p-4 bg-muted/50">
           <div className="space-y-4">
-            {/* Nutritional Facts */}
+            {}
             {nutritional_info && (
               <div>
                 <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
@@ -193,7 +193,7 @@ const NutritionalInfo = ({
               </div>
             )}
 
-            {/* Ingredients */}
+            {}
             {ingredients.length > 0 && (
               <div>
                 <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
@@ -206,7 +206,7 @@ const NutritionalInfo = ({
               </div>
             )}
 
-            {/* Allergen Details */}
+            {}
             {allergens.length > 0 && (
               <div className="pt-3 border-t">
                 <h4 className="font-semibold text-sm mb-2 flex items-center gap-2 text-red-700 dark:text-red-400">
@@ -215,7 +215,7 @@ const NutritionalInfo = ({
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {allergens.map((allergen) => (
-                    <Badge 
+                    <Badge
                       key={allergen}
                       variant="outline"
                       className="bg-red-50 dark:bg-red-950/30 border-red-300 dark:border-red-700 text-xs"
@@ -226,13 +226,13 @@ const NutritionalInfo = ({
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  ⚠️ Made in a facility that also processes various allergens. 
+                  ⚠️ Made in a facility that also processes various allergens.
                   Cross-contamination is possible.
                 </p>
               </div>
             )}
 
-            {/* Dietary Tags */}
+            {}
             {dietary_tags.length > 0 && (
               <div className="pt-3 border-t">
                 <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
@@ -241,7 +241,7 @@ const NutritionalInfo = ({
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {dietary_tags.map((tag) => (
-                    <Badge 
+                    <Badge
                       key={tag}
                       className="bg-green-600 text-white text-xs"
                     >

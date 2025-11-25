@@ -13,11 +13,11 @@ interface FavoriteButtonProps {
   showLabel?: boolean;
 }
 
-const FavoriteButton = ({ 
-  productId, 
+const FavoriteButton = ({
+  productId,
   productName = "this item",
   size = "md",
-  showLabel = false 
+  showLabel = false
 }: FavoriteButtonProps) => {
   const { user } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -48,7 +48,7 @@ const FavoriteButton = ({
       setIsFavorite(!!data);
     } catch (error: any) {
       console.error('Error checking favorite status:', error);
-      // Silently fail - just assume not favorited
+
       setIsFavorite(false);
     }
   };
@@ -67,7 +67,7 @@ const FavoriteButton = ({
 
     try {
       if (isFavorite) {
-        // Remove from favorites
+
         const { error } = await supabase
           .from('favorites')
           .delete()
@@ -82,7 +82,7 @@ const FavoriteButton = ({
         setIsFavorite(false);
         toast.success(`Removed from favorites`);
       } else {
-        // Add to favorites
+
         const { data, error } = await supabase
           .from('favorites')
           .insert({
@@ -93,7 +93,7 @@ const FavoriteButton = ({
 
         if (error) {
           console.error('Insert error:', error);
-          // If duplicate, just set as favorite
+
           if (error.code === '23505') {
             setIsFavorite(true);
             toast.success(`Already in favorites!`);
@@ -131,8 +131,8 @@ const FavoriteButton = ({
       variant={isFavorite ? "default" : "outline"}
       size="icon"
       className={`${sizeClasses[size]} ${
-        isFavorite 
-          ? "bg-red-500 hover:bg-red-600 text-white border-red-500" 
+        isFavorite
+          ? "bg-red-500 hover:bg-red-600 text-white border-red-500"
           : "hover:bg-red-50 dark:hover:bg-red-950/20 hover:border-red-300 dark:hover:border-red-700"
       } transition-all duration-200 ${showLabel ? 'rounded-full' : ''}`}
       onClick={toggleFavorite}

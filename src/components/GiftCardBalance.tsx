@@ -34,7 +34,7 @@ const GiftCardBalance = () => {
       }
 
       setCardInfo(data);
-      
+
     } catch (error) {
       console.error('Error checking balance:', error);
       toast.error('Failed to check balance');
@@ -142,8 +142,8 @@ const GiftCardBalance = () => {
                   <XCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="font-semibold text-red-900 dark:text-red-100 mb-1">
-                      {cardInfo.status === 'used' ? 'Fully Redeemed' : 
-                       cardInfo.status === 'expired' ? 'Expired' : 
+                      {cardInfo.status === 'used' ? 'Fully Redeemed' :
+                       cardInfo.status === 'expired' ? 'Expired' :
                        'Inactive'}
                     </h3>
                     <p className="text-sm text-red-700 dark:text-red-300">

@@ -14,11 +14,10 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 
-// Generate avatars for selection
 const generateAvatars = () => {
   const styles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'micah', 'pixel-art'];
   const seeds = Array.from({ length: 12 }, (_, i) => `avatar-${i}`);
-  
+
   return seeds.map((seed, index) => ({
     id: `${styles[index % styles.length]}-${seed}`,
     url: `https://api.dicebear.com/7.x/${styles[index % styles.length]}/svg?seed=${seed}`,
@@ -61,8 +60,8 @@ const Profile = () => {
     if (!authLoading && !user) {
       navigate("/login", { state: { from: { pathname: "/profile" } } });
     }
-    // Don't redirect to profile setup if they've skipped it
-    // Users can complete profile details from the profile page itself
+
+
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
@@ -91,7 +90,7 @@ const Profile = () => {
     try {
       const userEmail = profile?.email || user.email;
       if (!userEmail) return;
-      
+
       const { data, error } = await supabase
         .from('orders')
         .select('*, order_items(*)')
@@ -136,7 +135,7 @@ const Profile = () => {
 
   const handleDeleteAccount = async () => {
     const { error } = await deleteAccount();
-    
+
     if (error) {
       toast.error('Failed to delete account');
       return;
@@ -184,7 +183,7 @@ const Profile = () => {
     return null;
   }
 
-  // Handle case where profile is still loading or doesn't exist
+
   const displayProfile = profile || {
     first_name: user.user_metadata?.first_name || '',
     last_name: user.user_metadata?.last_name || '',
@@ -198,14 +197,14 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-8 relative">
       <ModernNavbar />
-      
+
       <div className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl">
-        {/* Profile Header */}
+        {}
         <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             {displayProfile.avatar ? (
-              <img 
-                src={displayProfile.avatar} 
+              <img
+                src={displayProfile.avatar}
                 alt={`${displayProfile.username || 'User'}'s avatar`}
                 className="h-20 w-20 sm:h-24 sm:w-24 rounded-full border-4 border-background shadow-lg"
               />
@@ -218,8 +217,8 @@ const Profile = () => {
             )}
             <div className="flex-1 text-center sm:text-left">
               <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-                {displayProfile.first_name || displayProfile.last_name 
-                  ? `${displayProfile.first_name} ${displayProfile.last_name}`.trim() 
+                {displayProfile.first_name || displayProfile.last_name
+                  ? `${displayProfile.first_name} ${displayProfile.last_name}`.trim()
                   : 'Welcome!'}
               </h1>
               {displayProfile.username && (
@@ -239,7 +238,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Tabs */}
+        {}
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid h-auto">
             <TabsTrigger value="profile" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm py-2 sm:py-2.5">
@@ -259,7 +258,7 @@ const Profile = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Profile Settings Tab */}
+          {}
           <TabsContent value="profile" className="mt-4 sm:mt-6">
             <Card>
               <CardHeader className="p-4 sm:p-6">
@@ -290,7 +289,7 @@ const Profile = () => {
                   </div>
                 )}
 
-                {/* Avatar Selection - Show when editing */}
+                {}
                 {editing && (
                   <div className="space-y-3">
                     <Label className="flex items-center gap-2">
@@ -332,8 +331,8 @@ const Profile = () => {
                         <div>
                           <p className="text-xs text-muted-foreground">Selected Avatar</p>
                           <p className="text-sm font-medium">
-                            {formData.first_name || formData.last_name 
-                              ? `${formData.first_name} ${formData.last_name}`.trim() 
+                            {formData.first_name || formData.last_name
+                              ? `${formData.first_name} ${formData.last_name}`.trim()
                               : 'Your Profile'}
                           </p>
                         </div>
@@ -457,7 +456,7 @@ const Profile = () => {
             </Card>
           </TabsContent>
 
-          {/* Account Management Tab */}
+          {}
           <TabsContent value="account" className="mt-4 sm:mt-6">
             <Card>
               <CardHeader className="p-4 sm:p-6">
@@ -465,7 +464,7 @@ const Profile = () => {
                 <CardDescription className="text-xs sm:text-sm">Manage your account settings and data</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6 p-4 sm:p-6">
-                {/* Logout Section */}
+                {}
                 <div className="border rounded-lg p-4 space-y-3">
                   <div className="flex items-start gap-3">
                     <LogOut className="w-5 h-5 text-muted-foreground mt-0.5" />
@@ -482,7 +481,7 @@ const Profile = () => {
                   </Button>
                 </div>
 
-                {/* Delete Account Section */}
+                {}
                 <div className="border border-destructive/50 rounded-lg p-4 space-y-3 bg-destructive/5">
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 text-destructive mt-0.5" />
@@ -498,7 +497,7 @@ const Profile = () => {
                       </ul>
                     </div>
                   </div>
-                  
+
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" className="w-full sm:w-auto">
@@ -527,7 +526,7 @@ const Profile = () => {
             </Card>
           </TabsContent>
 
-          {/* Order History Tab */}
+          {}
           <TabsContent value="orders" className="mt-4 sm:mt-6">
             <Card>
               <CardHeader className="p-4 sm:p-6">

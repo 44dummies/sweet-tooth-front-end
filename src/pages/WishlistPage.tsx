@@ -65,7 +65,7 @@ const WishlistPage = () => {
 
     setLoading(true);
     try {
-      // First get the favorites
+
       const { data: favoritesData, error: favError } = await supabase
         .from('favorites')
         .select('id, product_id, created_at')
@@ -80,7 +80,7 @@ const WishlistPage = () => {
         return;
       }
 
-      // Then get the product details for each favorite
+
       const productIds = favoritesData.map(fav => fav.product_id);
       const { data: productsData, error: prodError } = await supabase
         .from('products')
@@ -89,7 +89,7 @@ const WishlistPage = () => {
 
       if (prodError) throw prodError;
 
-      // Combine favorites with product data
+
       const combinedData = favoritesData.map(fav => {
         const product = productsData?.find(p => p.id === fav.product_id);
         return {
@@ -216,10 +216,10 @@ const WishlistPage = () => {
                         alt={favorite.products.name}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      
+
                       {!favorite.products.in_stock && (
-                        <Badge 
-                          variant="destructive" 
+                        <Badge
+                          variant="destructive"
                           className="absolute top-2 left-2"
                         >
                           Out of Stock
@@ -252,9 +252,9 @@ const WishlistPage = () => {
                       {favorite.products.dietary_tags && favorite.products.dietary_tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-3">
                           {favorite.products.dietary_tags.map((tag) => (
-                            <Badge 
-                              key={tag} 
-                              variant="outline" 
+                            <Badge
+                              key={tag}
+                              variant="outline"
                               className="text-xs"
                             >
                               {tag}

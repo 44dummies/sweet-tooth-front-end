@@ -12,7 +12,7 @@ import { supabase } from "@/lib/supabase";
 const generateAvatars = () => {
   const styles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'micah', 'pixel-art'];
   const seeds = Array.from({ length: 12 }, (_, i) => `avatar-${i}`);
-  
+
   return seeds.map((seed, index) => ({
     id: `${styles[index % styles.length]}-${seed}`,
     url: `https://api.dicebear.com/7.x/${styles[index % styles.length]}/svg?seed=${seed}`,
@@ -37,7 +37,7 @@ const ProfileSetup = () => {
       navigate('/login');
       return;
     }
-    
+
     if (profile?.username) {
       navigate("/");
     }
@@ -49,33 +49,33 @@ const ProfileSetup = () => {
     }
   }, []);
 
-  // Skip function - navigate directly without requiring profile completion
+
   const handleSkip = async () => {
     setSkipping(true);
-    
+
     try {
-      // Generate a random username and set default avatar
+
       const randomUsername = `user_${Date.now().toString(36)}`;
       const defaultAvatar = avatars[0]?.url || '';
-      
-      // Try to save basic profile, but don't block navigation on failure
+
+
       try {
         await updateProfile({
           username: randomUsername,
           avatar: defaultAvatar,
         });
       } catch (err) {
-        // Silently ignore - user can set up profile later
+
         console.log('Skip profile setup - will complete later');
       }
-      
+
       toast.info("You can complete your profile anytime from settings");
-      
-      // Force navigation regardless of update success
+
+
       window.location.href = '/';
     } catch (err) {
       console.error('Skip error:', err);
-      // Force navigation even on error
+
       window.location.href = '/';
     }
   };
@@ -92,7 +92,7 @@ const ProfileSetup = () => {
         .from('profiles')
         .select('username, id')
         .eq('username', username.toLowerCase());
-      
+
       if (user?.id) {
         query = query.neq('id', user.id);
       }
@@ -159,21 +159,21 @@ const ProfileSetup = () => {
 
       if (error) {
         console.error('Profile update error:', error);
-        
+
         if (error.message && (error.message.includes('duplicate key') || error.message.includes('profiles_username_key'))) {
           toast.error("This username is already taken. Please choose another one.");
           setUsernameAvailable(false);
         } else {
           toast.error(error?.message || "Failed to setup profile");
         }
-        
+
         setLoading(false);
         return;
       }
 
       toast.success("Profile setup complete!");
-      
-      // Use setTimeout to ensure state updates are complete before navigation
+
+
       setTimeout(() => {
         setLoading(false);
         navigate("/", { replace: true });
@@ -196,7 +196,7 @@ const ProfileSetup = () => {
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-6">
-              {/* Username */}
+              {}
               <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
                 <div className="relative">
@@ -233,7 +233,7 @@ const ProfileSetup = () => {
                 </p>
               </div>
 
-              {/* Avatar Selection */}
+              {}
               <div className="space-y-3">
                 <Label>Choose Your Avatar</Label>
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
@@ -263,7 +263,7 @@ const ProfileSetup = () => {
                 </div>
               </div>
 
-              {/* Preview */}
+              {}
               {selectedAvatar && (
                 <div className="bg-secondary/30 rounded-lg p-4 flex items-center gap-4">
                   <img
@@ -288,7 +288,7 @@ const ProfileSetup = () => {
                 {loading ? "Setting up..." : "Complete Setup"}
               </Button>
 
-              {/* Skip Button */}
+              {}
               <Button
                 type="button"
                 variant="ghost"

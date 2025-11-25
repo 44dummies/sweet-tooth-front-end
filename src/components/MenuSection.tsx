@@ -3,7 +3,6 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
-// Default placeholder image for products without images
 const defaultProductImage = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
 
 interface Product {
@@ -101,11 +100,11 @@ const MenuSection = () => {
         ) : (
           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {menuItems.map((item) => {
-              // Use image_url from database, fall back to default placeholder
+
                   const image = item.image_url || defaultProductImage;
                   const title = item.title || item.name || 'Untitled';
               return (
-                <MenuCard 
+                <MenuCard
                   key={item.id}
                   id={item.id}
                   image={image}

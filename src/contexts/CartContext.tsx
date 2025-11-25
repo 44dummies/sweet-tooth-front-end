@@ -7,8 +7,8 @@ export interface CartItem {
   price: number;
   quantity: number;
   image: string;
-  variant?: string;        // e.g., "Chocolate", "Red Velvet"
-  baseProductId?: string;  // Original product ID for reference
+  variant?: string;
+  baseProductId?: string;
 }
 
 interface CartContextType {

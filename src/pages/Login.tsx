@@ -48,7 +48,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-transparent">
       <BackgroundSlider />
       <div className="w-full max-w-md relative z-10">
-        {/* Back to Home */}
+        {}
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-6 transition-colors">
           <ArrowLeft size={16} />
           Back to Home

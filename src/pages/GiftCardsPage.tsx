@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Gift } from "lucide-react";
@@ -31,7 +30,7 @@ const GiftCardsPage = () => {
 
           <TabsContent value="purchase" className="space-y-6">
             <GiftCardPurchase />
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-6 md:mt-8">
               <div className="p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-105">
                 <div className="text-2xl md:text-3xl mb-2 md:mb-3">🎁</div>

@@ -54,8 +54,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const activityWriteRef = useRef<number>(0);
   const idleTimerRef = useRef<number | null>(null);
 
-  const IDLE_LIMIT_MS = 30 * 60 * 1000; 
-  const ACTIVITY_DEBOUNCE_MS = 60 * 1000; 
+  const IDLE_LIMIT_MS = 30 * 60 * 1000;
+  const ACTIVITY_DEBOUNCE_MS = 60 * 1000;
 
   useEffect(() => {
     const setupAuth = async () => {
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .single();
 
       if (error) {
-        // Profile doesn't exist, try to create it
+
         if (error.code === 'PGRST116') {
           console.log('Profile not found, creating new profile...');
           const user = await supabase.auth.getUser();
@@ -149,16 +149,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (data.user) {
         const bcrypt = await import('bcryptjs');
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         const { error: historyError } = await supabase
           .from('password_history')
           .insert({
             user_id: data.user.id,
             password_hash: hashedPassword,
           });
-        
+
         if (historyError) {
-          // Password history tracking failed silently
+
         }
       }
 
@@ -228,7 +228,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (profileError) return { error: profileError };
 
       const { error: authError } = await supabase.rpc('delete_user');
-      
+
       if (authError) {
         console.warn('delete_user RPC not available, signing out instead');
       }
@@ -254,7 +254,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           .from('profiles')
           .update({ last_active_at: new Date().toISOString() })
           .eq('id', user.id)
-          .then(() => { /* silent */ }, () => { /* silent */ });
+          .then(() => {  }, () => {  });
       }
     };
 
@@ -269,10 +269,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
-    const activityEvents: (keyof WindowEventMap)[] = ["mousemove","keydown","click","touchstart","scroll"]; 
+    const activityEvents: (keyof WindowEventMap)[] = ["mousemove","keydown","click","touchstart","scroll"];
     activityEvents.forEach(evt => window.addEventListener(evt, markActive, { passive: true }));
     document.addEventListener('visibilitychange', () => { if (!document.hidden) markActive(); });
-    idleTimerRef.current = window.setInterval(checkIdle, 60000); 
+    idleTimerRef.current = window.setInterval(checkIdle, 60000);
 
     return () => {
       if (idleTimerRef.current) window.clearInterval(idleTimerRef.current);

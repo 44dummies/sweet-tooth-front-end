@@ -42,8 +42,8 @@ const HeroSlider = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  // Simplified animations for mobile
-  const bgAnimation = reduceAnimations 
+
+  const bgAnimation = reduceAnimations
     ? { initial: { opacity: 0 }, animate: { opacity: 0.3 }, exit: { opacity: 0 }, transition: { duration: 0.3 } }
     : { initial: { scale: 1.1, opacity: 0 }, animate: { scale: 1, opacity: 0.3 }, exit: { scale: 0.95, opacity: 0 }, transition: { duration: 1.2, ease: "easeInOut" } };
 
@@ -53,7 +53,7 @@ const HeroSlider = () => {
 
   return (
     <section className="relative h-[60vh] md:h-[calc(100vh-5rem)] w-full overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 dark:from-gray-900 dark:via-purple-950 dark:to-pink-950">
-      {/* Background with parallax effect */}
+      {}
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">
           <motion.div
@@ -70,7 +70,7 @@ const HeroSlider = () => {
         </AnimatePresence>
       </div>
 
-      {/* Main Content */}
+      {}
       <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16">
         <div className="w-full max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
@@ -79,10 +79,10 @@ const HeroSlider = () => {
               {...slideAnimation}
               className="relative"
             >
-              {/* Glass Card */}
+              {}
               <div className="relative overflow-hidden rounded-3xl backdrop-blur-2xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 shadow-2xl">
                 <div className="grid md:grid-cols-2 gap-0">
-                  {/* Image Side */}
+                  {}
                   <div className="relative h-64 md:h-auto">
                     <motion.img
                       src={slides[currentSlide].image}
@@ -92,13 +92,13 @@ const HeroSlider = () => {
                       animate={reduceAnimations ? undefined : { scale: 1 }}
                       transition={reduceAnimations ? undefined : { duration: 1.5, ease: "easeOut" }}
                     />
-                    {/* Gradient overlay on image */}
+                    {}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 dark:to-black/40" />
                   </div>
 
-                  {/* Story Side */}
+                  {}
                   <div className="relative p-6 md:p-12 lg:p-16 flex flex-col justify-center">
-                    {/* Brand Badge */}
+                    {}
                     <motion.div
                       initial={reduceAnimations ? undefined : { opacity: 0, y: 20 }}
                       animate={reduceAnimations ? undefined : { opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ const HeroSlider = () => {
                       </span>
                     </motion.div>
 
-                    {/* Title */}
+                    {}
                     <motion.h1
                       initial={reduceAnimations ? undefined : { opacity: 0, y: 20 }}
                       animate={reduceAnimations ? undefined : { opacity: 1, y: 0 }}
@@ -121,7 +121,7 @@ const HeroSlider = () => {
                       Our Story
                     </motion.h1>
 
-                    {/* Story Text */}
+                    {}
                     <motion.p
                       initial={reduceAnimations ? undefined : { opacity: 0, y: 20 }}
                       animate={reduceAnimations ? undefined : { opacity: 1, y: 0 }}
@@ -131,7 +131,7 @@ const HeroSlider = () => {
                       {slides[currentSlide].story}
                     </motion.p>
 
-                    {/* CTA Button */}
+                    {}
                     <motion.div
                       initial={reduceAnimations ? undefined : { opacity: 0, y: 20 }}
                       animate={reduceAnimations ? undefined : { opacity: 1, y: 0 }}
@@ -160,7 +160,7 @@ const HeroSlider = () => {
                       </motion.button>
                     </motion.div>
 
-                    {/* Slide Counter */}
+                    {}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -177,7 +177,7 @@ const HeroSlider = () => {
         </div>
       </div>
 
-      {/* Navigation Arrows - Hidden on mobile */}
+      {}
       <button
         onClick={prevSlide}
         className="hidden md:block absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full backdrop-blur-xl bg-white/20 dark:bg-black/20 border border-white/30 hover:bg-white/30 dark:hover:bg-black/30 transition-all hover:scale-110 active:scale-95"
@@ -194,7 +194,7 @@ const HeroSlider = () => {
         <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white" />
       </button>
 
-      {/* Slide Indicators */}
+      {}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {slides.map((_, index) => (
           <button
@@ -210,7 +210,7 @@ const HeroSlider = () => {
         ))}
       </div>
 
-      {/* Decorative Elements */}
+      {}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-20 w-2 h-2 bg-pink-400/30 rounded-full blur-sm" />
         <div className="absolute top-40 right-32 w-3 h-3 bg-purple-400/30 rounded-full blur-sm" />

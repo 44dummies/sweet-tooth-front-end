@@ -24,7 +24,7 @@ const CustomOrderSection = () => {
     specialRequests: "",
   });
 
-  // Auto-fill cake type if passed from navigation
+
   useEffect(() => {
     if (location.state?.cakeType) {
       setFormData(prev => ({ ...prev, cakeType: location.state.cakeType }));
@@ -73,7 +73,7 @@ const CustomOrderSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.phone || !formData.cakeType) {
       toast.error("Please fill in all required fields");
       return;
@@ -93,12 +93,12 @@ const CustomOrderSection = () => {
       if (error) throw error;
 
       const message = `🎂 *Custom Cake Order Request*\n\n👤 Name: ${formData.name}\n📞 Phone: ${formData.phone}\n📧 Email: ${formData.email || 'Not provided'}\n\n🎨 Cake Type: ${formData.cakeType}\n👥 Servings: ${formData.servings}\n🍰 Flavor: ${formData.flavor}\n📅 Delivery: ${formData.deliveryDate}\n💰 Budget: ${formData.budget}\n\n✨ Special Requests:\n${formData.specialRequests || 'None'}`;
-      
+
       const whatsappUrl = `https://wa.me/254795436192?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
 
       toast.success("Order request sent! We'll contact you soon.");
-      
+
       setFormData({
         name: "",
         phone: "",
@@ -130,7 +130,7 @@ const CustomOrderSection = () => {
             Design Your Dream Cake
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Make your celebration extra special with a custom cake designed just for you. 
+            Make your celebration extra special with a custom cake designed just for you.
             Tell us your vision and we'll bring it to life!
           </p>
         </div>
@@ -139,13 +139,13 @@ const CustomOrderSection = () => {
           <Card className="border-2 shadow-2xl">
             <CardContent className="p-4 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-                {/* Personal Information */}
+                {}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold flex items-center gap-2">
                     <User className="w-5 h-5 text-primary" />
                     Your Information
                   </h3>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name" className="flex items-center gap-2">
@@ -195,7 +195,7 @@ const CustomOrderSection = () => {
                   </div>
                 </div>
 
-                {/* Cake Details */}
+                {}
                 <div className="space-y-4 pt-4 border-t">
                   <h3 className="text-xl font-semibold flex items-center gap-2">
                     <Cake className="w-5 h-5 text-primary" />
@@ -281,7 +281,7 @@ const CustomOrderSection = () => {
                   </div>
                 </div>
 
-                {/* Special Requests */}
+                {}
                 <div className="space-y-2 pt-4 border-t">
                   <Label htmlFor="specialRequests" className="flex items-center gap-2">
                     <MessageSquare className="w-4 h-4" />
@@ -299,7 +299,7 @@ const CustomOrderSection = () => {
                   </p>
                 </div>
 
-                {/* Submit Button */}
+                {}
                 <Button
                   type="submit"
                   disabled={loading}

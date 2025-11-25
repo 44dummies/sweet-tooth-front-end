@@ -124,18 +124,18 @@ const ReviewsSection = () => {
   const maxIndex = Math.max(0, allReviews.length - itemsPerPage);
 
   useEffect(() => {
-    if (window.innerWidth >= 768) return; 
+    if (window.innerWidth >= 768) return;
 
     const startAutoScroll = () => {
       if (autoScrollTimer.current) {
         window.clearInterval(autoScrollTimer.current);
       }
-      
+
       autoScrollTimer.current = window.setInterval(() => {
         if (!isPaused && !isPointerDown.current) {
           setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
         }
-      }, 4000); 
+      }, 4000);
     };
 
     startAutoScroll();
@@ -157,7 +157,7 @@ const ReviewsSection = () => {
 
   const onPointerDown = (e: React.PointerEvent) => {
     isPointerDown.current = true;
-    setIsPaused(true); 
+    setIsPaused(true);
     startX.current = e.clientX;
     (e.target as Element).setPointerCapture(e.pointerId);
   };
@@ -165,7 +165,7 @@ const ReviewsSection = () => {
   const onPointerUp = (e: React.PointerEvent) => {
     if (!isPointerDown.current || startX.current === null) return;
     isPointerDown.current = false;
-    setIsPaused(false); 
+    setIsPaused(false);
     const endX = e.clientX;
     const diff = startX.current - endX;
     startX.current = null;
@@ -178,7 +178,7 @@ const ReviewsSection = () => {
 
   const onPointerCancel = (e: React.PointerEvent) => {
     isPointerDown.current = false;
-    setIsPaused(false); 
+    setIsPaused(false);
     startX.current = null;
     try { (e.target as Element).releasePointerCapture(e.pointerId); } catch {}
   };
@@ -245,7 +245,7 @@ const ReviewsSection = () => {
           )}
         </div>
 
-        {/* Review Submission Form */}
+        {}
         <div className="mt-16 animate-fade-in">
           <ReviewSubmission />
         </div>

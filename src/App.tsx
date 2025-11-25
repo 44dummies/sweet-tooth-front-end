@@ -30,14 +30,13 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 import GiftCardsPage from "./pages/GiftCardsPage";
 import WishlistPage from "./pages/WishlistPage";
 
-// Scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
-  
+
   return null;
 };
 

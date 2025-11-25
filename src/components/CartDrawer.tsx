@@ -23,7 +23,7 @@ const CartDrawer = () => {
       }, 150);
       return;
     }
-    
+
     setOpen(false);
     setTimeout(() => {
       navigate("/checkout");
@@ -58,7 +58,7 @@ const CartDrawer = () => {
             )}
           </SheetTitle>
         </SheetHeader>
-        
+
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center flex-1 text-center">
             <ShoppingCart className="w-16 h-16 text-muted-foreground mb-4" />
@@ -69,8 +69,8 @@ const CartDrawer = () => {
           <>
             <div className="flex-1 overflow-y-auto py-4 space-y-4">
               {items.map((item, index) => (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   className="flex gap-4 p-4 rounded-2xl border-2 border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-lg animate-fade-in"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -116,7 +116,7 @@ const CartDrawer = () => {
                 </div>
               ))}
             </div>
-            
+
             <div className="border-t-2 pt-4 space-y-4">
               <div className="flex items-center justify-between text-lg animate-fade-in">
                 <span className="font-semibold">Total:</span>
@@ -132,8 +132,8 @@ const CartDrawer = () => {
                   </p>
                 </div>
               )}
-              <Button 
-                className="w-full h-12 text-lg rounded-full hover:scale-105 active:scale-95 transition-transform duration-300 shadow-lg hover:shadow-xl" 
+              <Button
+                className="w-full h-12 text-lg rounded-full hover:scale-105 active:scale-95 transition-transform duration-300 shadow-lg hover:shadow-xl"
                 size="lg"
                 onClick={handleCheckout}
               >

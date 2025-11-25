@@ -135,7 +135,7 @@ const VisitorAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -183,7 +183,7 @@ const VisitorAnalytics = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top Pages */}
+        {}
         <Card>
           <CardHeader>
             <CardTitle>Top Pages</CardTitle>
@@ -212,7 +212,7 @@ const VisitorAnalytics = () => {
           </CardContent>
         </Card>
 
-        {/* Device Breakdown */}
+        {}
         <Card>
           <CardHeader>
             <CardTitle>Device Breakdown</CardTitle>
@@ -242,7 +242,7 @@ const VisitorAnalytics = () => {
         </Card>
       </div>
 
-      {/* Recent Visitors */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Recent Visitors</CardTitle>

@@ -20,7 +20,7 @@ const ReviewSubmission = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (rating === 0) {
       toast.error("Please select a rating");
       return;
@@ -42,7 +42,7 @@ const ReviewSubmission = () => {
             email: formData.email.trim(),
             rating: rating,
             comment: formData.comment.trim(),
-            approved: false, 
+            approved: false,
             created_at: new Date().toISOString()
           }
         ]);

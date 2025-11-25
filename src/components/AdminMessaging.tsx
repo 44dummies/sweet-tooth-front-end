@@ -94,7 +94,7 @@ const AdminMessaging = () => {
 
   const markMessagesAsRead = async (conversationId: string) => {
     try {
-      // Mark all unread customer messages as read
+
       await supabase
         .from('conversation_messages')
         .update({ read: true })
@@ -102,7 +102,7 @@ const AdminMessaging = () => {
         .eq('sender_type', 'customer')
         .eq('read', false);
 
-      // Reset unread count for admin
+
       await supabase
         .from('conversations')
         .update({ unread_admin_count: 0 })
@@ -149,7 +149,7 @@ const AdminMessaging = () => {
         (payload) => {
           const newMsg = payload.new as Message;
           setMessages(prev => [...prev, newMsg]);
-          
+
           if (newMsg.sender_type === 'customer') {
             markMessagesAsRead(conversationId);
           }
@@ -166,7 +166,7 @@ const AdminMessaging = () => {
     if (!newMessage.trim() || !selectedConversation) return;
 
     try {
-      // Insert new message
+
       const { error: msgError } = await supabase
         .from('conversation_messages')
         .insert({
@@ -179,7 +179,7 @@ const AdminMessaging = () => {
 
       if (msgError) throw msgError;
 
-      // Update conversation
+
       await supabase
         .from('conversations')
         .update({
@@ -207,7 +207,7 @@ const AdminMessaging = () => {
 
   return (
     <div className="grid md:grid-cols-3 gap-4 h-[calc(100vh-200px)]">
-      {/* Conversations List - Hidden on mobile when conversation is selected */}
+      {}
       <Card className={`md:col-span-1 flex flex-col ${
         selectedConversation ? 'hidden md:flex' : 'flex'
       }`}>
@@ -287,7 +287,7 @@ const AdminMessaging = () => {
         </ScrollArea>
       </Card>
 
-      {/* Messages Area - Show only when conversation selected on mobile */}
+      {}
       <Card className={`md:col-span-2 flex flex-col ${
         selectedConversation ? 'flex' : 'hidden md:flex'
       }`}>
@@ -295,7 +295,7 @@ const AdminMessaging = () => {
           <>
             <div className="p-4 border-b">
               <div className="flex items-center gap-3">
-                {/* Back button for mobile */}
+                {}
                 <Button
                   variant="ghost"
                   size="icon"

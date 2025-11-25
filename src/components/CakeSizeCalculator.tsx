@@ -24,7 +24,7 @@ const CakeSizeCalculator = () => {
   const [cakeSizes, setCakeSizes] = useState<CakeSize[]>([]);
   const [recommendations, setRecommendations] = useState<CakeSize[]>([]);
   const [loading, setLoading] = useState(true);
-  const [basePrice] = useState(2500); // Base price for standard cake
+  const [basePrice] = useState(2500);
 
   useEffect(() => {
     fetchCakeSizes();
@@ -61,18 +61,18 @@ const CakeSizeCalculator = () => {
       return;
     }
 
-    // Find sizes that can serve the number of guests
+
     const suitable = cakeSizes.filter(
       size => numGuests >= size.serves_min && numGuests <= size.serves_max
     );
 
-    // If no exact match, find the next size up
+
     if (suitable.length === 0) {
       const nextSizeUp = cakeSizes.find(size => size.serves_min > numGuests);
       if (nextSizeUp) {
         setRecommendations([nextSizeUp]);
       } else {
-        // Need multiple cakes
+
         const largestSize = cakeSizes[cakeSizes.length - 1];
         const numCakes = Math.ceil(numGuests / largestSize.serves_max);
         toast.info(`We recommend ${numCakes} ${largestSize.size_name} cakes for your event`);
@@ -136,7 +136,7 @@ const CakeSizeCalculator = () => {
                 <CakeSlice className="w-5 h-5" />
                 Recommended Sizes for {guests} Guests:
               </h3>
-              
+
               <div className="grid gap-3 md:gap-4 sm:grid-cols-2">
                 {recommendations.map((size) => (
                   <Card key={size.id} className="p-3 md:p-4 bg-white/50 dark:bg-black/20 transition-all duration-300 hover:shadow-md hover:scale-105">
@@ -191,7 +191,7 @@ const CakeSizeCalculator = () => {
 
       <Card className="p-6">
         <h3 className="text-xl font-semibold mb-4">All Available Sizes</h3>
-        
+
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">
             Loading sizes...

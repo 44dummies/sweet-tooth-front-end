@@ -123,7 +123,7 @@ const AdminDashboard = () => {
     const checkIdle = () => {
       const last = Number(localStorage.getItem(lastActiveKey) || Date.now());
       const idleMs = Date.now() - last;
-      const limit = 5 * 60 * 1000; 
+      const limit = 5 * 60 * 1000;
       if (idleMs > limit) {
         window.clearInterval(idleTimerRef.current!);
         supabase.auth.signOut().finally(() => navigate("/admin/login", { replace: true, state: { reason: 'timeout' } }));
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
       navigate("/admin/login");
       return;
     }
-    
+
     const adminEmail = "muindidamian@gmail.com";
     if (session.user.email !== adminEmail) {
       await supabase.auth.signOut();
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
       navigate("/admin/login");
       return;
     }
-    
+
     setUser(session.user);
   };
 
@@ -239,10 +239,10 @@ const AdminDashboard = () => {
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
       const order = orders.find(o => o.id === orderId);
-      
+
       const { error } = await supabase
         .from('orders')
-        .update({ 
+        .update({
           status: newStatus,
           confirmed_by: user?.email || 'admin',
           notification_sent: newStatus === 'CONFIRMED' ? false : undefined,
@@ -250,11 +250,11 @@ const AdminDashboard = () => {
         .eq('id', orderId);
 
       if (error) throw error;
-      
-      // Send notification to customer if order is confirmed
+
+
       if (newStatus === 'CONFIRMED' && order?.customer_email) {
         try {
-          // Send email notification
+
           if (order.customer_email) {
             await supabase.functions.invoke('send-email-notification', {
               body: {
@@ -266,8 +266,8 @@ const AdminDashboard = () => {
               }
             });
           }
-          
-          // Send WhatsApp notification
+
+
           if (order.customer_phone) {
             await supabase.functions.invoke('send-whatsapp-notification', {
               body: {
@@ -279,13 +279,13 @@ const AdminDashboard = () => {
               }
             });
           }
-          
-          // Mark notification as sent
+
+
           await supabase
             .from('orders')
             .update({ notification_sent: true })
             .eq('id', orderId);
-          
+
           toast.success('Order confirmed and customer notified!');
         } catch (notifError) {
           console.error('Notification error:', notifError);
@@ -294,7 +294,7 @@ const AdminDashboard = () => {
       } else {
         toast.success('Order status updated');
       }
-      
+
       fetchOrders();
     } catch (err) {
       console.error('Error updating order:', err);
@@ -334,7 +334,7 @@ const AdminDashboard = () => {
 
   const deleteReview = async (reviewId: string) => {
     if (!confirm('Are you sure you want to delete this review?')) return;
-    
+
     try {
       const { error } = await supabase
         .from('reviews')
@@ -369,7 +369,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-secondary/30">
-      {/* Header */}
+      {}
       <div className="bg-card border-b">
         <div className="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 md:gap-3">
@@ -386,9 +386,9 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Main Content */}
+      {}
       <div className="container mx-auto px-4 py-6">
-        {/* Tabs for different sections */}
+        {}
         <Tabs defaultValue="summary" className="w-full pb-20 md:pb-0">
           <TabsList className="w-full grid grid-cols-5 md:inline-flex md:w-auto gap-1">
             <TabsTrigger value="summary" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
@@ -414,7 +414,7 @@ const AdminDashboard = () => {
           </TabsList>
 
           <TabsContent value="summary" className="mt-6 space-y-6">
-            {/* Stats Cards */}
+            {}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-card p-4 rounded-lg border hover:shadow-lg transition-shadow">
                 <div className="flex flex-col gap-2">
@@ -457,7 +457,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {/* Recent Activity */}
+            {}
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-card rounded-lg border">
                 <div className="p-4 border-b">
@@ -508,7 +508,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {/* Analytics Preview */}
+            {}
             <div className="bg-card rounded-lg border">
               <div className="p-4 border-b">
                 <h3 className="font-semibold">Quick Stats</h3>
@@ -520,7 +520,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="orders" className="mt-6">
-            {/* Regular Orders Table */}
+            {}
             <div className="bg-card rounded-lg border mb-6">
           <div className="p-4 border-b">
             <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -597,7 +597,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-            {/* Custom Orders Section */}
+            {}
             <div className="bg-card rounded-lg border">
               <div className="p-4 border-b">
                 <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -671,7 +671,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">
-            {/* Reviews Management */}
+            {}
             <div className="bg-card rounded-lg border">
               <div className="p-6 border-b">
                 <div className="flex items-center justify-between">
@@ -722,8 +722,8 @@ const AdminDashboard = () => {
                         </td>
                         <td className="p-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            review.approved 
-                              ? 'bg-green-500/20 text-green-700 dark:text-green-400' 
+                            review.approved
+                              ? 'bg-green-500/20 text-green-700 dark:text-green-400'
                               : 'bg-orange-500/20 text-orange-700 dark:text-orange-400'
                           }`}>
                             {review.approved ? 'Approved' : 'Pending'}

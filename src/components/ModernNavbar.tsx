@@ -27,7 +27,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-// Cake Inspo icon
 const InspoIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
@@ -98,7 +97,7 @@ export const ModernNavbar = () => {
 
   return (
     <>
-      {/* Main Navbar */}
+      {}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
@@ -108,7 +107,7 @@ export const ModernNavbar = () => {
       >
         <div className="w-full px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-14 md:h-16 lg:h-20">
-            {/* Logo */}
+            {}
             <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
               <img
                 src={logo}
@@ -120,7 +119,7 @@ export const ModernNavbar = () => {
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
+            {}
             <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -141,7 +140,7 @@ export const ModernNavbar = () => {
                 );
               })}
 
-              {/* More Dropdown */}
+              {}
               <div className="relative more-dropdown">
                 <button
                   onClick={(e) => {
@@ -192,9 +191,9 @@ export const ModernNavbar = () => {
               </div>
             </nav>
 
-            {/* Right Actions */}
+            {}
             <div className="flex items-center gap-1 sm:gap-2">
-              {/* Cart */}
+              {}
               <div className="relative">
                 <CartDrawer />
                 {totalItems > 0 && (
@@ -206,7 +205,7 @@ export const ModernNavbar = () => {
 
               <ThemeToggle />
 
-              {/* Desktop Profile */}
+              {}
               <div className="hidden md:flex items-center gap-2">
                 {user ? (
                   <div className="relative profile-dropdown">
@@ -279,7 +278,7 @@ export const ModernNavbar = () => {
                 )}
               </div>
 
-              {/* Mobile Menu Button */}
+              {}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 rounded-xl hover:bg-white/10 dark:hover:bg-secondary/50 text-white dark:text-foreground"
@@ -292,7 +291,7 @@ export const ModernNavbar = () => {
         </div>
       </header>
 
-      {/* Mobile Full-Screen Menu */}
+      {}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -301,7 +300,7 @@ export const ModernNavbar = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] lg:hidden"
           >
-            {/* Backdrop */}
+            {}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -310,7 +309,7 @@ export const ModernNavbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Panel */}
+            {}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -318,7 +317,7 @@ export const ModernNavbar = () => {
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-background shadow-2xl flex flex-col"
             >
-              {/* Header */}
+              {}
               <div className="flex items-center justify-between p-4 border-b border-border/50">
                 <div className="flex items-center gap-2">
                   <img src={logo} alt="Sweet Tooth" className="h-8 w-8" />
@@ -331,7 +330,7 @@ export const ModernNavbar = () => {
                 </button>
               </div>
 
-              {/* User Profile */}
+              {}
               {user && (
                 <Link
                   to="/profile"
@@ -354,7 +353,7 @@ export const ModernNavbar = () => {
                 </Link>
               )}
 
-              {/* Navigation */}
+              {}
               <div className="flex-1 overflow-y-auto p-4">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Navigation</p>
                 <div className="space-y-1">
@@ -408,7 +407,7 @@ export const ModernNavbar = () => {
                   })}
                 </div>
 
-                {/* Contact */}
+                {}
                 <div className="mt-6 p-4 rounded-xl bg-secondary/30 border border-border/50">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Contact Us</p>
                   <a href="tel:+254795436192" className="flex items-center gap-3 text-foreground hover:text-primary">
@@ -420,7 +419,7 @@ export const ModernNavbar = () => {
                 </div>
               </div>
 
-              {/* Auth Buttons */}
+              {}
               <div className="p-4 border-t border-border/50 bg-background">
                 {user ? (
                   <Button
@@ -454,7 +453,7 @@ export const ModernNavbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Mobile Bottom Navigation Bar - Always visible on mobile */}
+      {}
       <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white dark:bg-background border-t border-border/50 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
         <div className="flex items-center justify-around h-16 px-2 max-w-md mx-auto">
           {navItems.slice(0, 4).map((item) => {
@@ -492,7 +491,7 @@ export const ModernNavbar = () => {
               </Link>
             );
           })}
-          {/* More button for mobile */}
+          {}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="flex flex-col items-center justify-center flex-1 py-2 group"
@@ -507,7 +506,7 @@ export const ModernNavbar = () => {
         </div>
       </nav>
 
-      {/* Spacer */}
+      {}
       <div className="h-14 md:h-16 lg:h-20" />
     </>
   );

@@ -67,7 +67,7 @@ const Navbar = () => {
         .select('*', { count: 'exact', head: true })
         .eq('status', 'SENT')
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
-      
+
       setUnreadCount(count || 0);
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -125,16 +125,16 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+          {}
           <button
             onClick={() => handleNavClick("hero", false)}
             className="flex items-center gap-3 hover:opacity-80 transition-all duration-300 group"
           >
             <div className="relative">
-              <img 
-                src={logo} 
-                alt="Sweet Tooth Pastries" 
-                className="h-12 md:h-14 brightness-125 contrast-125 dark:brightness-100 dark:contrast-100 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" 
+              <img
+                src={logo}
+                alt="Sweet Tooth Pastries"
+                className="h-12 md:h-14 brightness-125 contrast-125 dark:brightness-100 dark:contrast-100 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
               />
               <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
             </div>
@@ -143,7 +143,7 @@ const Navbar = () => {
             </span>
           </button>
 
-          {/* Desktop Navigation */}
+          {}
           <div className="hidden md:flex items-center gap-2 lg:gap-4">
             {navLinks.map((link) => (
               <button
@@ -155,8 +155,8 @@ const Navbar = () => {
                 <span className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             ))}
-            
-            {/* More Dropdown */}
+
+            {}
             <div className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === "more" ? null : "more")}
@@ -170,7 +170,7 @@ const Navbar = () => {
                   } group-hover:translate-y-0.5`}
                 />
               </button>
-              
+
               {openDropdown === "more" && (
                 <div className="absolute right-0 mt-2 w-56 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl py-2 z-50 animate-scale-in overflow-hidden">
                   {moreLinks.map((link, index) => (
@@ -196,12 +196,12 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-            
+
             <div className="h-6 w-px bg-border/50" />
-            
+
             <CartDrawer />
-            
-            {/* Notification Bell (Desktop, non-admin only) */}
+
+            {}
             {!isAdminRoute && (
               <button
                 onClick={() => setOpenDropdown(openDropdown === "notifications" ? null : "notifications")}
@@ -216,10 +216,10 @@ const Navbar = () => {
                 <span className="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300 -z-10" />
               </button>
             )}
-            
+
             <ThemeToggle />
 
-            {/* Auth Section */}
+            {}
             {!isAdminRoute && (
               <>
                 {user ? (
@@ -230,7 +230,7 @@ const Navbar = () => {
                       className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-secondary/50 transition-all duration-300 group"
                     >
                       {profile.avatar ? (
-                        <img 
+                        <img
                           src={profile.avatar}
                           alt={`${profile.username}'s avatar`}
                           className="h-8 w-8 rounded-full border-2 border-primary/20 group-hover:border-primary transition-colors"
@@ -319,7 +319,7 @@ const Navbar = () => {
                 )}
               </>
             )}
-            
+
             {user && (
               <Button
                 onClick={goToCheckout}
@@ -331,19 +331,19 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button & Cart */}
+          {}
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
           </div>
         </div>
       </div>
 
-      {/* Custom Order Modal */}
+      {}
       {isCustomOrderOpen && (
         <CustomOrderModal open={isCustomOrderOpen} onClose={() => setIsCustomOrderOpen(false)} />
       )}
 
-      {/* Notification Panel Dropdown */}
+      {}
       {openDropdown === "notifications" && !isAdminRoute && (
         <div className="fixed md:absolute top-20 md:top-full right-2 md:right-4 left-2 md:left-auto md:mt-2 w-auto md:w-96 max-w-[calc(100vw-1rem)] md:max-w-[calc(100vw-2rem)] bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl animate-scale-in z-50 max-h-[calc(100vh-6rem)] md:max-h-[500px] overflow-hidden">
           <NotificationPanel onClose={() => setOpenDropdown(null)} />
@@ -405,15 +405,15 @@ const NotificationPanel = ({ onClose }: { onClose: () => void }) => {
         ) : (
           <div className="divide-y divide-border/50">
             {notifications.map((notif, index) => (
-              <div 
-                key={notif.id} 
+              <div
+                key={notif.id}
                 className="p-4 hover:bg-secondary/30 transition-all duration-200 cursor-pointer relative overflow-hidden group"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-primary/50 transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
                 <div className="flex items-start gap-3 pl-1">
                   <div className={`w-2.5 h-2.5 rounded-full mt-2 flex-shrink-0 shadow-lg ${
-                    notif.status === 'SENT' ? 'bg-green-500 animate-pulse' : 
+                    notif.status === 'SENT' ? 'bg-green-500 animate-pulse' :
                     notif.status === 'FAILED' ? 'bg-red-500' : 'bg-yellow-500 animate-pulse'
                   }`} />
                   <div className="flex-1 min-w-0">
@@ -448,8 +448,8 @@ const NotificationPanel = ({ onClose }: { onClose: () => void }) => {
           </div>
         )}
       </div>
-      
-      {/* Custom scrollbar styles */}
+
+      {}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;

@@ -31,7 +31,7 @@ const ReviewCard = ({ name, rating, comment, date }: ReviewCardProps) => {
         </div>
       </div>
 
-      {/* Stars */}
+      {}
       <div className="flex gap-1 mb-4">
         {[...Array(5)].map((_, i) => (
           <Star
@@ -46,7 +46,7 @@ const ReviewCard = ({ name, rating, comment, date }: ReviewCardProps) => {
         ))}
       </div>
 
-      {/* Comment */}
+      {}
       <p className="text-sm text-muted-foreground leading-relaxed flex-grow">{comment}</p>
     </Card>
   );
