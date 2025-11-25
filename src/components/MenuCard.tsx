@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Plus, CalendarClock, ChevronRight } from "lucide-react";
 import FavoriteButton from "./FavoriteButton";
@@ -43,11 +45,20 @@ const MenuCard = ({
   quantityOptions = [],
 }: MenuCardProps) => {
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [showVariantSelector, setShowVariantSelector] = useState(false);
 
   const handleAddToCart = () => {
+    // Check if user is signed in
+    if (!user) {
+      toast.error("Please sign in to add items to cart");
+      navigate("/login");
+      return;
+    }
+
     if (!available) {
       toast.error(`${title} is currently unavailable`);
       return;

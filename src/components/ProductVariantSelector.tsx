@@ -10,6 +10,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Check, ShoppingCart, Minus, Plus } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface ProductVariant {
@@ -41,6 +43,8 @@ const ProductVariantSelector = ({ isOpen, onClose, product }: ProductVariantSele
   const [selectedQuantity, setSelectedQuantity] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const hasFlavors = product.flavorOptions && product.flavorOptions.length > 0;
   const hasSizes = product.sizeOptions && product.sizeOptions.length > 0;
@@ -59,6 +63,14 @@ const ProductVariantSelector = ({ isOpen, onClose, product }: ProductVariantSele
   };
 
   const handleAddToCart = () => {
+    // Check if user is signed in
+    if (!user) {
+      toast.error("Please sign in to add items to cart");
+      onClose();
+      navigate("/login");
+      return;
+    }
+
     // Validate required selections
     if (hasFlavors && !selectedFlavor) {
       toast.error(`Please select a flavor`);
