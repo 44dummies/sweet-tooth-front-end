@@ -255,7 +255,8 @@ const MenuSection = () => {
             {menuItems.map((item) => {
               const title = item.title || item.name || 'Untitled';
               const category = item.category;
-              const image = item.image_url || getCategoryImage(category, title);
+              // Always use Pexels images for consistent, high-quality product photos
+              const image = getCategoryImage(category, title);
               
               // Get variant options
               const sizeOptions = getSizeOptions(category, title);

@@ -78,7 +78,8 @@ const MenuCard = ({
     : "from-emerald-500 to-teal-500";
 
 
-  const fallbackImage = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+  // High-quality Pexels fallback for bakery products
+  const fallbackImage = "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&w=600";
 
   const variantLabel = variantType === 'flavor' ? 'flavors' :
                        variantType === 'filling' ? 'fillings' :

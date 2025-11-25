@@ -27,6 +27,9 @@
 -- Clean up: Remove products with price below 500
 DELETE FROM products WHERE price < 500;
 
+-- Clear all existing image URLs to force use of Pexels images from frontend
+UPDATE products SET image_url = NULL, image_key = NULL WHERE image_url IS NOT NULL OR image_key IS NOT NULL;
+
 -- Drop and recreate publication for clean setup
 DROP PUBLICATION IF EXISTS supabase_realtime CASCADE;
 
