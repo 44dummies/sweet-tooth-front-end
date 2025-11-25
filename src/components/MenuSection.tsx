@@ -4,107 +4,107 @@ import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
 // Local product images from assets folder
-const getCategoryImage = (category?: string, title?: string): string => {
+const getCategoryImage = (category?: string, name?: string): string => {
   const normalizedCategory = (category || "").toLowerCase();
-  const normalizedTitle = (title || "").toLowerCase();
+  const normalizedName = (name || "").toLowerCase();
   
   // Cakes - Match with local cake images
-  if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
-    if (normalizedTitle.includes("2 tier") || normalizedTitle.includes("two tier")) {
+  if (normalizedCategory === "cakes" || normalizedName.includes("cake")) {
+    if (normalizedName.includes("2 tier") || normalizedName.includes("two tier")) {
       return new URL("../assets/2 tier cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("3 tier") || normalizedTitle.includes("three tier")) {
+    if (normalizedName.includes("3 tier") || normalizedName.includes("three tier")) {
       return new URL("../assets/3 tier cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("4 tier") || normalizedTitle.includes("four tier")) {
+    if (normalizedName.includes("4 tier") || normalizedName.includes("four tier")) {
       return new URL("../assets/4 tier cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("heart")) {
+    if (normalizedName.includes("heart")) {
       return new URL("../assets/heart cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("letter")) {
+    if (normalizedName.includes("letter")) {
       return new URL("../assets/letter cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("number")) {
+    if (normalizedName.includes("number")) {
       return new URL("../assets/number cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("round")) {
+    if (normalizedName.includes("round")) {
       return new URL("../assets/round cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("square")) {
+    if (normalizedName.includes("square")) {
       return new URL("../assets/square cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("sheet")) {
+    if (normalizedName.includes("sheet")) {
       return new URL("../assets/sheet cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("pound")) {
+    if (normalizedName.includes("pound")) {
       return new URL("../assets/pound cake.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("birthday")) {
+    if (normalizedName.includes("birthday")) {
       return new URL("../assets/birthday-cakes.jpg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("fruit")) {
+    if (normalizedName.includes("fruit")) {
       return new URL("../assets/fruit-cakes.jpg", import.meta.url).href;
     }
     return new URL("../assets/delicious-cake-1.jpeg", import.meta.url).href;
   }
   
   // Cupcakes - Match with cupcake images
-  if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
-    if (normalizedTitle.includes("box of 12") || normalizedTitle.includes("12")) {
+  if (normalizedCategory === "cupcakes" || normalizedName.includes("cupcake")) {
+    if (normalizedName.includes("box of 12") || normalizedName.includes("12")) {
       return new URL("../assets/cupcakes box of 12.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("box of 6") || normalizedTitle.includes("6")) {
+    if (normalizedName.includes("box of 6") || normalizedName.includes("6")) {
       return new URL("../assets/cupcakes box of 6.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("mini")) {
+    if (normalizedName.includes("mini")) {
       return new URL("../assets/mini cupcakes.jpeg", import.meta.url).href;
     }
     return new URL("../assets/cupcakes.jpg", import.meta.url).href;
   }
   
   // Cookies - Match with cookie images
-  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
-    if (normalizedTitle.includes("box of 12") || normalizedTitle.includes("12")) {
+  if (normalizedCategory === "cookies" || normalizedName.includes("cookie")) {
+    if (normalizedName.includes("box of 12") || normalizedName.includes("12")) {
       return new URL("../assets/cookie box of 12.jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("box") && !normalizedTitle.includes("12")) {
+    if (normalizedName.includes("box") && !normalizedName.includes("12")) {
       return new URL("../assets/cookie box .jpeg", import.meta.url).href;
     }
-    if (normalizedTitle.includes("giant")) {
+    if (normalizedName.includes("giant")) {
       return new URL("../assets/Giant Cookie.jpeg", import.meta.url).href;
     }
     return new URL("../assets/cookies.jpg", import.meta.url).href;
   }
   
   // Brownies - Match with brownie images
-  if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
-    if (normalizedTitle.includes("box of 6") || normalizedTitle.includes("6")) {
+  if (normalizedCategory === "brownies" || normalizedName.includes("brownie")) {
+    if (normalizedName.includes("box of 6") || normalizedName.includes("6")) {
       return new URL("../assets/browies box of 6.jpeg", import.meta.url).href;
     }
     return new URL("../assets/brownies.jpg", import.meta.url).href;
   }
   
   // Muffins
-  if (normalizedCategory === "muffins" || normalizedTitle.includes("muffin")) {
+  if (normalizedCategory === "muffins" || normalizedName.includes("muffin")) {
     return new URL("../assets/muffins.jpg", import.meta.url).href;
   }
   
   // Bread/Loaves
-  if (normalizedTitle.includes("bread") || normalizedTitle.includes("loaf")) {
-    if (normalizedTitle.includes("banana")) {
+  if (normalizedName.includes("bread") || normalizedName.includes("loaf")) {
+    if (normalizedName.includes("banana")) {
       return new URL("../assets/banana-bread.jpg", import.meta.url).href;
     }
     return new URL("../assets/loafs.jpg", import.meta.url).href;
   }
   
   // Cake Pops
-  if (normalizedTitle.includes("cake pop")) {
+  if (normalizedName.includes("cake pop")) {
     return new URL("../assets/cake pops.jpeg", import.meta.url).href;
   }
   
   // Cinnamon Rolls
-  if (normalizedTitle.includes("cinnamon")) {
+  if (normalizedName.includes("cinnamon")) {
     return new URL("../assets/cinnamon rolls.jpeg", import.meta.url).href;
   }
   
@@ -114,15 +114,12 @@ const getCategoryImage = (category?: string, title?: string): string => {
 
 interface Product {
   id: string;
-  name?: string;
-  title?: string;
+  name: string;
   description?: string;
   price: number;
   category?: string;
   image_url?: string;
-  image_key?: string;
   in_stock?: boolean;
-  available?: boolean;
 }
 
 const LARGE_CAKE_KEYWORDS = ["wedding", "tier", "custom", "anniversary", "birthday", "per kg"];
@@ -135,11 +132,11 @@ interface ProductVariant {
 }
 
 // Helper function to get size options based on category
-const getSizeOptions = (category?: string, title?: string): ProductVariant[] => {
+const getSizeOptions = (category?: string, name?: string): ProductVariant[] => {
   const normalizedCategory = (category || "").toLowerCase();
-  const normalizedTitle = (title || "").toLowerCase();
+  const normalizedName = (name || "").toLowerCase();
   
-  if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
+  if (normalizedCategory === "cakes" || normalizedName.includes("cake")) {
     return [
       { id: "small", name: "Small", priceModifier: 0, description: "6-8 servings" },
       { id: "medium", name: "Medium", priceModifier: 300, description: "12-15 servings" },
@@ -147,7 +144,7 @@ const getSizeOptions = (category?: string, title?: string): ProductVariant[] => 
     ];
   }
   
-  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+  if (normalizedCategory === "cookies" || normalizedName.includes("cookie")) {
     return [
       { id: "regular", name: "Regular", priceModifier: 0, description: "Standard size" },
       { id: "large", name: "Large", priceModifier: 50, description: "Extra large" },
@@ -158,11 +155,11 @@ const getSizeOptions = (category?: string, title?: string): ProductVariant[] => 
 };
 
 // Helper function to get quantity options based on category
-const getQuantityOptions = (category?: string, title?: string): ProductVariant[] => {
+const getQuantityOptions = (category?: string, name?: string): ProductVariant[] => {
   const normalizedCategory = (category || "").toLowerCase();
-  const normalizedTitle = (title || "").toLowerCase();
+  const normalizedName = (name || "").toLowerCase();
   
-  if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
+  if (normalizedCategory === "cupcakes" || normalizedName.includes("cupcake")) {
     return [
       { id: "6", name: "6 pcs", priceModifier: 0 },
       { id: "12", name: "12 pcs", priceModifier: 300 },
@@ -170,7 +167,7 @@ const getQuantityOptions = (category?: string, title?: string): ProductVariant[]
     ];
   }
   
-  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+  if (normalizedCategory === "cookies" || normalizedName.includes("cookie")) {
     return [
       { id: "6", name: "6 pcs", priceModifier: 0 },
       { id: "12", name: "12 pcs", priceModifier: 200 },
@@ -178,7 +175,7 @@ const getQuantityOptions = (category?: string, title?: string): ProductVariant[]
     ];
   }
   
-  if (normalizedCategory === "donuts" || normalizedTitle.includes("donut")) {
+  if (normalizedCategory === "donuts" || normalizedName.includes("donut")) {
     return [
       { id: "6", name: "6 pcs", priceModifier: 0 },
       { id: "12", name: "12 pcs", priceModifier: 250 },
@@ -189,32 +186,32 @@ const getQuantityOptions = (category?: string, title?: string): ProductVariant[]
 };
 
 // Helper function to get flavor options based on category
-const getFlavorOptions = (category?: string, title?: string): string[] => {
+const getFlavorOptions = (category?: string, name?: string): string[] => {
   const normalizedCategory = (category || "").toLowerCase();
-  const normalizedTitle = (title || "").toLowerCase();
+  const normalizedName = (name || "").toLowerCase();
   
-  if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
+  if (normalizedCategory === "cupcakes" || normalizedName.includes("cupcake")) {
     return ["Vanilla", "Chocolate", "Red Velvet", "Lemon", "Strawberry"];
   }
   
-  if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
+  if (normalizedCategory === "cakes" || normalizedName.includes("cake")) {
     return ["Vanilla", "Chocolate", "Red Velvet", "Carrot", "Lemon"];
   }
   
-  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+  if (normalizedCategory === "cookies" || normalizedName.includes("cookie")) {
     return ["Chocolate Chip", "Oatmeal Raisin", "Sugar", "Peanut Butter"];
   }
   
   return [];
 };
 
-const getLeadTimeDays = (category?: string, title?: string) => {
+const getLeadTimeDays = (category?: string, name?: string) => {
   const normalizedCategory = (category || "").toLowerCase();
-  const normalizedTitle = (title || "").toLowerCase();
+  const normalizedName = (name || "").toLowerCase();
   const isLargeCake =
     normalizedCategory === "wedding" ||
-    (normalizedCategory === "cakes" && LARGE_CAKE_KEYWORDS.some((keyword) => normalizedTitle.includes(keyword))) ||
-    LARGE_CAKE_KEYWORDS.some((keyword) => normalizedTitle.includes(keyword));
+    (normalizedCategory === "cakes" && LARGE_CAKE_KEYWORDS.some((keyword) => normalizedName.includes(keyword))) ||
+    LARGE_CAKE_KEYWORDS.some((keyword) => normalizedName.includes(keyword));
 
   return isLargeCake ? 3 : 2;
 };
@@ -289,7 +286,7 @@ const MenuSection = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {menuItems.map((item) => {
-              const title = item.title || item.name || 'Untitled';
+              const name = item.name;
               const category = item.category;
               
               // Use database image_url if available, otherwise use intelligent local matching
@@ -300,16 +297,16 @@ const MenuSection = () => {
                 image = new URL(`../assets/${imageName}`, import.meta.url).href;
               } else {
                 // Fallback to intelligent matching if no database image
-                image = getCategoryImage(category, title);
+                image = getCategoryImage(category, name);
               }
               
               // Debug: Log product-to-image mapping
-              console.log(`Product: "${title}" (${category}) → Image: ${image.split('/').pop()}`);
+              console.log(`Product: "${name}" (${category}) → Image: ${image.split('/').pop()}`);
               
               // Get variant options
-              const sizeOptions = getSizeOptions(category, title);
-              const quantityOptions = getQuantityOptions(category, title);
-              const flavorOptions = getFlavorOptions(category, title);
+              const sizeOptions = getSizeOptions(category, name);
+              const quantityOptions = getQuantityOptions(category, name);
+              const flavorOptions = getFlavorOptions(category, name);
               const hasVariants = sizeOptions.length > 0 || quantityOptions.length > 0 || flavorOptions.length > 0;
               
               return (
@@ -317,11 +314,11 @@ const MenuSection = () => {
                   key={item.id}
                   id={item.id}
                   image={image}
-                  title={title}
+                  title={name}
                   description={item.description || ''}
                   price={item.price}
                   available={item.in_stock !== false}
-                  leadTimeDays={getLeadTimeDays(category, title)}
+                  leadTimeDays={getLeadTimeDays(category, name)}
                   hasVariants={hasVariants}
                   variantType="flavor"
                   flavorOptions={flavorOptions}
