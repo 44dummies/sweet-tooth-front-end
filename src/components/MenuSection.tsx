@@ -3,7 +3,47 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
-const defaultProductImage = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+// Category-specific images
+const getCategoryImage = (category?: string, title?: string): string => {
+  const normalizedCategory = (category || "").toLowerCase();
+  const normalizedTitle = (title || "").toLowerCase();
+  
+  if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
+    if (normalizedTitle.includes("chocolate")) {
+      return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+    }
+    if (normalizedTitle.includes("wedding")) {
+      return "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80";
+    }
+    if (normalizedTitle.includes("red velvet")) {
+      return "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=600&q=80";
+    }
+    return "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600&q=80";
+  }
+  
+  if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
+    return "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=600&q=80";
+  }
+  
+  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+    return "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80";
+  }
+  
+  if (normalizedCategory === "donuts" || normalizedTitle.includes("donut")) {
+    return "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80";
+  }
+  
+  if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
+    return "https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=600&q=80";
+  }
+  
+  if (normalizedCategory === "pastries" || normalizedTitle.includes("pastry") || normalizedTitle.includes("croissant")) {
+    return "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80";
+  }
+  
+  // Default bakery image
+  return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+};
 
 interface Product {
   id: string;
@@ -144,6 +184,7 @@ const MenuSection = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
+        .gte('price', 500) // Only show products >= 500
         .order('title');
 
       if (error) throw error;
@@ -181,9 +222,9 @@ const MenuSection = () => {
         ) : (
           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {menuItems.map((item) => {
-              const image = item.image_url || defaultProductImage;
               const title = item.title || item.name || 'Untitled';
               const category = item.category;
+              const image = item.image_url || getCategoryImage(category, title);
               
               // Get variant options
               const sizeOptions = getSizeOptions(category, title);

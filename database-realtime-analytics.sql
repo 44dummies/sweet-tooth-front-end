@@ -24,6 +24,9 @@
 -- SECTION 1: REAL-TIME SETUP
 -- =====================================================
 
+-- Clean up: Remove products with price below 500
+DELETE FROM products WHERE price < 500;
+
 -- Drop and recreate publication for clean setup
 DROP PUBLICATION IF EXISTS supabase_realtime CASCADE;
 
@@ -451,14 +454,11 @@ CREATE TABLE IF NOT EXISTS admin_notifications (
   message TEXT,
   reference_id UUID,
   reference_type VARCHAR(50),
-  is_read BOOLEAN DEFAULT false,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  read_at TIMESTAMP WITH TIME ZONE
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Index for admin notifications
 CREATE INDEX IF NOT EXISTS idx_admin_notifications_created_at ON admin_notifications(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_admin_notifications_is_read ON admin_notifications(is_read);
 
 -- Enable RLS on admin notifications
 ALTER TABLE admin_notifications ENABLE ROW LEVEL SECURITY;
