@@ -3,7 +3,6 @@ import ModernNavbar from "@/components/ModernNavbar";
 import HeroSlider from "@/components/HeroSlider";
 import FeatureSections from "@/components/FeatureSections";
 import ServiceCards from "@/components/ServiceCards";
-import StatsSection from "@/components/StatsSection";
 import MenuSection from "@/components/MenuSection";
 import CustomOrderSection from "@/components/CustomOrderSection";
 import ReviewsSection from "@/components/ReviewSection";
@@ -66,15 +65,6 @@ const Index = () => {
         </motion.div>
 
         {}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <StatsSection />
-        </motion.div>
-
         {}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
