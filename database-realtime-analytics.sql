@@ -325,9 +325,11 @@ CREATE POLICY "Admin full access to custom orders" ON custom_orders
 
 DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
 DROP POLICY IF EXISTS "Users can view all profiles" ON profiles;
+DROP POLICY IF EXISTS "Authenticated users can view profiles" ON profiles;
 DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 DROP POLICY IF EXISTS "Admin full access to profiles" ON profiles;
+DROP POLICY IF EXISTS "Admin can delete profiles" ON profiles;
 
 -- All authenticated users can view all profiles (simplified to avoid recursion)
 CREATE POLICY "Authenticated users can view profiles" ON profiles
