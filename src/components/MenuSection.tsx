@@ -20,6 +20,87 @@ interface Product {
 
 const LARGE_CAKE_KEYWORDS = ["wedding", "tier", "custom", "anniversary", "birthday", "per kg"];
 
+interface ProductVariant {
+  id: string;
+  name: string;
+  priceModifier?: number;
+  description?: string;
+}
+
+// Helper function to get size options based on category
+const getSizeOptions = (category?: string, title?: string): ProductVariant[] => {
+  const normalizedCategory = (category || "").toLowerCase();
+  const normalizedTitle = (title || "").toLowerCase();
+  
+  if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
+    return [
+      { id: "small", name: "Small", priceModifier: 0, description: "6-8 servings" },
+      { id: "medium", name: "Medium", priceModifier: 300, description: "12-15 servings" },
+      { id: "large", name: "Large", priceModifier: 600, description: "20-25 servings" },
+    ];
+  }
+  
+  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+    return [
+      { id: "regular", name: "Regular", priceModifier: 0, description: "Standard size" },
+      { id: "large", name: "Large", priceModifier: 50, description: "Extra large" },
+    ];
+  }
+  
+  return [];
+};
+
+// Helper function to get quantity options based on category
+const getQuantityOptions = (category?: string, title?: string): ProductVariant[] => {
+  const normalizedCategory = (category || "").toLowerCase();
+  const normalizedTitle = (title || "").toLowerCase();
+  
+  if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
+    return [
+      { id: "6", name: "6 pcs", priceModifier: 0 },
+      { id: "12", name: "12 pcs", priceModifier: 300 },
+      { id: "24", name: "24 pcs", priceModifier: 550 },
+    ];
+  }
+  
+  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+    return [
+      { id: "6", name: "6 pcs", priceModifier: 0 },
+      { id: "12", name: "12 pcs", priceModifier: 200 },
+      { id: "24", name: "24 pcs", priceModifier: 380 },
+    ];
+  }
+  
+  if (normalizedCategory === "donuts" || normalizedTitle.includes("donut")) {
+    return [
+      { id: "6", name: "6 pcs", priceModifier: 0 },
+      { id: "12", name: "12 pcs", priceModifier: 250 },
+    ];
+  }
+  
+  return [];
+};
+
+// Helper function to get flavor options based on category
+const getFlavorOptions = (category?: string, title?: string): string[] => {
+  const normalizedCategory = (category || "").toLowerCase();
+  const normalizedTitle = (title || "").toLowerCase();
+  
+  if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
+    return ["Vanilla", "Chocolate", "Red Velvet", "Lemon", "Strawberry"];
+  }
+  
+  if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
+    return ["Vanilla", "Chocolate", "Red Velvet", "Carrot", "Lemon"];
+  }
+  
+  if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
+    return ["Chocolate Chip", "Oatmeal Raisin", "Sugar", "Peanut Butter"];
+  }
+  
+  return [];
+};
+
 const getLeadTimeDays = (category?: string, title?: string) => {
   const normalizedCategory = (category || "").toLowerCase();
   const normalizedTitle = (title || "").toLowerCase();
@@ -100,19 +181,31 @@ const MenuSection = () => {
         ) : (
           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {menuItems.map((item) => {
-
-                  const image = item.image_url || defaultProductImage;
-                  const title = item.title || item.name || 'Untitled';
+              const image = item.image_url || defaultProductImage;
+              const title = item.title || item.name || 'Untitled';
+              const category = item.category;
+              
+              // Get variant options
+              const sizeOptions = getSizeOptions(category, title);
+              const quantityOptions = getQuantityOptions(category, title);
+              const flavorOptions = getFlavorOptions(category, title);
+              const hasVariants = sizeOptions.length > 0 || quantityOptions.length > 0 || flavorOptions.length > 0;
+              
               return (
                 <MenuCard
                   key={item.id}
                   id={item.id}
                   image={image}
-                      title={title}
+                  title={title}
                   description={item.description || ''}
                   price={item.price}
-                      available={item.in_stock !== false}
-                      leadTimeDays={getLeadTimeDays(item.category, title)}
+                  available={item.in_stock !== false}
+                  leadTimeDays={getLeadTimeDays(category, title)}
+                  hasVariants={hasVariants}
+                  variantType="flavor"
+                  flavorOptions={flavorOptions}
+                  sizeOptions={sizeOptions}
+                  quantityOptions={quantityOptions}
                 />
               );
             })}

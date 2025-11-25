@@ -259,7 +259,7 @@ const AdminDashboard = () => {
       // Try fetching orders without user join to avoid RLS issues
       const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
-        .select('id, customer_name, customer_phone, customer_email, total_amount, status, payment_status, created_at, delivery_address, delivery_method')
+        .select('id, customer_name, customer_phone, customer_email, total_amount, status, payment_status, created_at, delivery_address, delivery_date, special_instructions')
         .order('created_at', { ascending: false });
 
       if (ordersError) {

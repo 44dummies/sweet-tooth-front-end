@@ -3,8 +3,15 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { Plus, CalendarClock, ChevronRight } from "lucide-react";
 import FavoriteButton from "./FavoriteButton";
-import FlavorSelector from "./FlavorSelector";
+import ProductVariantSelector from "./ProductVariantSelector";
 import { useState } from "react";
+
+interface ProductVariant {
+  id: string;
+  name: string;
+  priceModifier?: number;
+  description?: string;
+}
 
 interface MenuCardProps {
   id: string;
@@ -17,6 +24,8 @@ interface MenuCardProps {
   hasVariants?: boolean;
   variantType?: string;
   flavorOptions?: string[];
+  sizeOptions?: ProductVariant[];
+  quantityOptions?: ProductVariant[];
 }
 
 const MenuCard = ({
@@ -30,11 +39,13 @@ const MenuCard = ({
   hasVariants = false,
   variantType = 'flavor',
   flavorOptions = [],
+  sizeOptions = [],
+  quantityOptions = [],
 }: MenuCardProps) => {
   const { addItem } = useCart();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [showFlavorSelector, setShowFlavorSelector] = useState(false);
+  const [showVariantSelector, setShowVariantSelector] = useState(false);
 
   const handleAddToCart = () => {
     if (!available) {
@@ -42,12 +53,11 @@ const MenuCard = ({
       return;
     }
 
-
-    if (hasVariants && flavorOptions.length > 0) {
-      setShowFlavorSelector(true);
+    // Show variant selector if product has any variants
+    if (hasVariants && (flavorOptions.length > 0 || sizeOptions.length > 0 || quantityOptions.length > 0)) {
+      setShowVariantSelector(true);
       return;
     }
-
 
     const item = {
       id,
@@ -141,6 +151,15 @@ const MenuCard = ({
                 </p>
               </div>
             )}
+            {hasVariants && (sizeOptions.length > 0 || quantityOptions.length > 0) && (
+              <div className="mb-2">
+                <p className="text-[10px] sm:text-xs text-primary font-medium">
+                  {sizeOptions.length > 0 && `${sizeOptions.length} sizes `}
+                  {sizeOptions.length > 0 && quantityOptions.length > 0 && '• '}
+                  {quantityOptions.length > 0 && `${quantityOptions.length} quantities`}
+                </p>
+              </div>
+            )}
 
             {}
             <div className="flex items-center justify-between gap-2 pt-2 border-t border-border">
@@ -182,9 +201,9 @@ const MenuCard = ({
 
       {}
       {hasVariants && (
-        <FlavorSelector
-          isOpen={showFlavorSelector}
-          onClose={() => setShowFlavorSelector(false)}
+        <ProductVariantSelector
+          isOpen={showVariantSelector}
+          onClose={() => setShowVariantSelector(false)}
           product={{
             id,
             title,
@@ -193,6 +212,8 @@ const MenuCard = ({
             image: imageError ? fallbackImage : image,
             variantType,
             flavorOptions,
+            sizeOptions,
+            quantityOptions,
           }}
         />
       )}
