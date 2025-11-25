@@ -37,6 +37,8 @@ const AdminDashboard = () => {
   const [dateRange, setDateRange] = useState("30d");
   const [searchQuery, setSearchQuery] = useState("");
   const [dataError, setDataError] = useState<string | null>(null);
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [isLiveUpdating, setIsLiveUpdating] = useState(false);
   const idleTimerRef = useRef<number | null>(null);
   const lastActiveKey = 'admin:lastActive';
   const reauthFlagKey = 'admin:forceReauth';
@@ -83,40 +85,118 @@ const AdminDashboard = () => {
     checkAuth();
     fetchAllData();
 
-    // Real-time subscriptions for new orders
+    // Real-time subscriptions for all data changes
     const ordersChannel = supabase
       .channel('admin-orders-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
         console.log('Order change detected:', payload);
+        setIsLiveUpdating(true);
+        setLastUpdate(new Date());
+        
         if (payload.eventType === 'INSERT') {
           toast.success('🎉 New order received!', { 
             description: `From ${payload.new.customer_name}`, 
             duration: 5000 
           });
+        } else if (payload.eventType === 'UPDATE') {
+          const statusChanged = payload.old?.status !== payload.new?.status;
+          const paymentChanged = payload.old?.payment_status !== payload.new?.payment_status;
+          
+          if (statusChanged) {
+            toast.info('📦 Order status updated', {
+              description: `${payload.new.customer_name}: ${payload.new.status}`,
+              duration: 3000
+            });
+          }
+          if (paymentChanged) {
+            toast.info('💳 Payment status updated', {
+              description: `${payload.new.customer_name}: ${payload.new.payment_status}`,
+              duration: 3000
+            });
+          }
         }
+        
         fetchAllData();
+        setTimeout(() => setIsLiveUpdating(false), 1000);
       })
       .subscribe();
 
     const customOrdersChannel = supabase
       .channel('admin-custom-orders-realtime')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'custom_orders' }, (payload) => {
-        toast.success('🎂 New custom order!', { 
-          description: `From ${payload.new.customer_name}`, 
-          duration: 5000 
-        });
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'custom_orders' }, (payload) => {
+        setIsLiveUpdating(true);
+        setLastUpdate(new Date());
+        
+        if (payload.eventType === 'INSERT') {
+          toast.success('🎂 New custom order!', { 
+            description: `From ${payload.new.customer_name}`, 
+            duration: 5000 
+          });
+        } else if (payload.eventType === 'UPDATE') {
+          toast.info('✅ Custom order updated', {
+            description: `Status: ${payload.new.status}`,
+            duration: 3000
+          });
+        }
+        
         fetchAllData();
+        setTimeout(() => setIsLiveUpdating(false), 1000);
       })
       .subscribe();
 
     const reviewsChannel = supabase
       .channel('admin-reviews-realtime')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'reviews' }, (payload) => {
-        toast.success('⭐ New review submitted!', { 
-          description: `From ${payload.new.name}`, 
-          duration: 5000 
-        });
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, (payload) => {
+        setIsLiveUpdating(true);
+        setLastUpdate(new Date());
+        
+        if (payload.eventType === 'INSERT') {
+          toast.success('⭐ New review submitted!', { 
+            description: `From ${payload.new.name}`, 
+            duration: 5000 
+          });
+        } else if (payload.eventType === 'UPDATE') {
+          if (payload.new.approved && !payload.old?.approved) {
+            toast.info('✅ Review approved', {
+              description: `From ${payload.new.name}`,
+              duration: 3000
+            });
+          }
+        } else if (payload.eventType === 'DELETE') {
+          toast.info('🗑️ Review deleted', { duration: 2000 });
+        }
+        
         fetchAllData();
+        setTimeout(() => setIsLiveUpdating(false), 1000);
+      })
+      .subscribe();
+
+    const productsChannel = supabase
+      .channel('admin-products-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, (payload) => {
+        setIsLiveUpdating(true);
+        setLastUpdate(new Date());
+        
+        if (payload.eventType === 'UPDATE') {
+          const stockChanged = payload.old?.in_stock !== payload.new?.in_stock;
+          const offerChanged = payload.old?.on_offer !== payload.new?.on_offer;
+          
+          if (stockChanged) {
+            toast.info('📦 Product stock updated', {
+              description: `${payload.new.name}: ${payload.new.in_stock ? 'Available' : 'Sold Out'}`,
+              duration: 2000
+            });
+          }
+          if (offerChanged) {
+            toast.info('🏷️ Product offer updated', {
+              description: `${payload.new.name}: ${payload.new.on_offer ? 'On Offer' : 'Regular Price'}`,
+              duration: 2000
+            });
+          }
+        }
+        
+        fetchAllData();
+        setTimeout(() => setIsLiveUpdating(false), 1000);
       })
       .subscribe();
 
@@ -148,6 +228,7 @@ const AdminDashboard = () => {
       supabase.removeChannel(ordersChannel);
       supabase.removeChannel(customOrdersChannel);
       supabase.removeChannel(reviewsChannel);
+      supabase.removeChannel(productsChannel);
       if (idleTimerRef.current) window.clearInterval(idleTimerRef.current);
       activityEvents.forEach((evt) => window.removeEventListener(evt, markActive));
       window.removeEventListener('beforeunload', beforeUnload);
@@ -528,6 +609,13 @@ const AdminDashboard = () => {
                   Demo Mode
                 </Badge>
               )}
+              <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-secondary/50 rounded-full">
+                <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${isLiveUpdating ? 'bg-green-500 animate-pulse' : 'bg-green-500'}`} />
+                <span className="text-xs font-medium text-muted-foreground">Live</span>
+                <span className="text-[10px] text-muted-foreground/60">
+                  {lastUpdate.toLocaleTimeString()}
+                </span>
+              </div>
               <Select value={dateRange} onValueChange={setDateRange}>
                 <SelectTrigger className="w-[140px] h-9 text-xs">
                   <Calendar className="w-3 h-3 mr-1" />
