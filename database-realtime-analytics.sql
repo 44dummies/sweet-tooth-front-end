@@ -4,8 +4,122 @@
 -- Clean up: Remove products with price below 500
 DELETE FROM products WHERE price < 500;
 
--- Clear all existing image URLs to force use of Pexels images from frontend
-UPDATE products SET image_url = NULL WHERE image_url IS NOT NULL;
+-- ============================================================================
+-- INTELLIGENT IMAGE MAPPING: Match database products to local asset files
+-- ============================================================================
+-- This section updates product image_url to point to local /src/assets/ images
+-- Uses intelligent keyword matching since product names may differ from filenames
+
+-- CAKES: Tiered Cakes
+UPDATE products SET image_url = '/src/assets/2 tier cake.jpeg'
+WHERE (LOWER(title) LIKE '%2 tier%' OR LOWER(title) LIKE '%two tier%') 
+AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/3 tier cake.jpeg'
+WHERE (LOWER(title) LIKE '%3 tier%' OR LOWER(title) LIKE '%three tier%') 
+AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/4 tier cake.jpeg'
+WHERE (LOWER(title) LIKE '%4 tier%' OR LOWER(title) LIKE '%four tier%') 
+AND category = 'cakes';
+
+-- CAKES: Special Shapes
+UPDATE products SET image_url = '/src/assets/heart cake.jpeg'
+WHERE LOWER(title) LIKE '%heart%' AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/letter cake.jpeg'
+WHERE LOWER(title) LIKE '%letter%' AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/number cake.jpeg'
+WHERE (LOWER(title) LIKE '%number%' OR LOWER(title) LIKE '%digit%') 
+AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/round cake.jpeg'
+WHERE LOWER(title) LIKE '%round%' AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/square cake.jpeg'
+WHERE LOWER(title) LIKE '%square%' AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/sheet cake.jpeg'
+WHERE LOWER(title) LIKE '%sheet%' AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/pound cake.jpeg'
+WHERE LOWER(title) LIKE '%pound%' AND category = 'cakes';
+
+-- CAKES: Special Occasions
+UPDATE products SET image_url = '/src/assets/birthday-cakes.jpg'
+WHERE LOWER(title) LIKE '%birthday%' AND category = 'cakes';
+
+UPDATE products SET image_url = '/src/assets/fruit-cakes.jpg'
+WHERE LOWER(title) LIKE '%fruit%' AND category = 'cakes';
+
+-- CUPCAKES: Box Sizes
+UPDATE products SET image_url = '/src/assets/cupcakes box of 12.jpeg'
+WHERE (LOWER(title) LIKE '%12%' OR LOWER(title) LIKE '%dozen%' OR LOWER(title) LIKE '%box of 12%') 
+AND category = 'cupcakes';
+
+UPDATE products SET image_url = '/src/assets/cupcakes box of 6.jpeg'
+WHERE (LOWER(title) LIKE '%6%' OR LOWER(title) LIKE '%box of 6%' OR LOWER(title) LIKE '%half dozen%') 
+AND category = 'cupcakes';
+
+UPDATE products SET image_url = '/src/assets/mini cupcakes.jpeg'
+WHERE LOWER(title) LIKE '%mini%' AND category = 'cupcakes';
+
+-- CUPCAKES: Default for remaining cupcakes
+UPDATE products SET image_url = '/src/assets/cupcakes.jpg'
+WHERE category = 'cupcakes' AND image_url IS NULL;
+
+-- COOKIES: Box Sizes and Types
+UPDATE products SET image_url = '/src/assets/cookie box of 12.jpeg'
+WHERE (LOWER(title) LIKE '%12%' OR LOWER(title) LIKE '%dozen%' OR LOWER(title) LIKE '%box of 12%') 
+AND category = 'cookies';
+
+UPDATE products SET image_url = '/src/assets/cookie box .jpeg'
+WHERE LOWER(title) LIKE '%box%' AND category = 'cookies' AND image_url IS NULL;
+
+UPDATE products SET image_url = '/src/assets/Giant Cookie.jpeg'
+WHERE (LOWER(title) LIKE '%giant%' OR LOWER(title) LIKE '%large%' OR LOWER(title) LIKE '%jumbo%') 
+AND category = 'cookies';
+
+-- COOKIES: Default for remaining cookies
+UPDATE products SET image_url = '/src/assets/cookies.jpg'
+WHERE category = 'cookies' AND image_url IS NULL;
+
+-- BROWNIES: Box Sizes
+UPDATE products SET image_url = '/src/assets/browies box of 6.jpeg'
+WHERE (LOWER(title) LIKE '%6%' OR LOWER(title) LIKE '%box of 6%' OR LOWER(title) LIKE '%half dozen%') 
+AND category = 'brownies';
+
+-- BROWNIES: Default for remaining brownies
+UPDATE products SET image_url = '/src/assets/brownies.jpg'
+WHERE category = 'brownies' AND image_url IS NULL;
+
+-- MUFFINS
+UPDATE products SET image_url = '/src/assets/muffins.jpg'
+WHERE category = 'muffins' OR LOWER(title) LIKE '%muffin%';
+
+-- BREAD & LOAVES
+UPDATE products SET image_url = '/src/assets/banana-bread.jpg'
+WHERE LOWER(title) LIKE '%banana%' AND (LOWER(title) LIKE '%bread%' OR LOWER(title) LIKE '%loaf%');
+
+UPDATE products SET image_url = '/src/assets/loafs.jpg'
+WHERE (LOWER(title) LIKE '%bread%' OR LOWER(title) LIKE '%loaf%') AND image_url IS NULL;
+
+-- CAKE POPS
+UPDATE products SET image_url = '/src/assets/cake pops.jpeg'
+WHERE LOWER(title) LIKE '%cake pop%';
+
+-- CINNAMON ROLLS
+UPDATE products SET image_url = '/src/assets/cinnamon-rolls.jpg'
+WHERE LOWER(title) LIKE '%cinnamon%';
+
+-- DEFAULT FALLBACK: Any remaining cakes without images
+UPDATE products SET image_url = '/src/assets/delicious-cake-1.jpeg'
+WHERE category = 'cakes' AND image_url IS NULL;
+
+-- DEFAULT FALLBACK: Any remaining products without images get a generic cake image
+UPDATE products SET image_url = '/src/assets/delicious-cake-2.jpeg'
+WHERE image_url IS NULL;
 
 -- Drop and recreate publication for clean setup
 DROP PUBLICATION IF EXISTS supabase_realtime CASCADE;

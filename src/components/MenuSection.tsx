@@ -291,8 +291,20 @@ const MenuSection = () => {
             {menuItems.map((item) => {
               const title = item.title || item.name || 'Untitled';
               const category = item.category;
-              // Always use Pexels images for consistent, high-quality product photos
-              const image = getCategoryImage(category, title);
+              
+              // Use database image_url if available, otherwise use intelligent local matching
+              let image: string;
+              if (item.image_url) {
+                // Convert database path to Vite-compatible URL
+                const imageName = item.image_url.replace('/src/assets/', '');
+                image = new URL(`../assets/${imageName}`, import.meta.url).href;
+              } else {
+                // Fallback to intelligent matching if no database image
+                image = getCategoryImage(category, title);
+              }
+              
+              // Debug: Log product-to-image mapping
+              console.log(`Product: "${title}" (${category}) → Image: ${image.split('/').pop()}`);
               
               // Get variant options
               const sizeOptions = getSizeOptions(category, title);
