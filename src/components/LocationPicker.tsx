@@ -205,7 +205,21 @@ const LocationPicker = ({ value, onChange, placeholder = "Enter delivery address
       },
       (error) => {
         toast.dismiss();
-        toast.error("Failed to get your location. Please enable location access.");
+        let errorMessage = "Failed to get your location.";
+        
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = "Location access denied. Please enable location services in your browser settings.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = "Location information unavailable. Please try again.";
+            break;
+          case error.TIMEOUT:
+            errorMessage = "Location request timed out. Please try again.";
+            break;
+        }
+        
+        toast.error(errorMessage);
         console.error("Geolocation error:", error);
       }
     );

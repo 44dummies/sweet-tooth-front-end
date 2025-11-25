@@ -102,7 +102,7 @@ const Checkout = () => {
       try {
         const orderData: any = {
           customer_name: formData.name,
-          customer_email: formData.email || user.email,
+          customer_email: user.email,
           customer_phone: formData.phone,
           delivery_address: formData.address,
           delivery_date: formData.deliveryDate,
