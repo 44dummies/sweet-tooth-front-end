@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-npm install @supabase/supabase-js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -23,7 +23,30 @@ npm install @supabase/supabase-js
 *.sln
 *.sw?
 
-# Environment variables
+# Environment variables - NEVER COMMIT
 .env
+.env.*
 .env.local
 .env.*.local
+*.env
+
+# Sensitive files
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+config/secrets.*
+
+# Database
+*.sqlite
+*.db
+
+# Build artifacts
+build/
+.cache/
+.parcel-cache/
+
+# OS files
+Thumbs.db
+ehthumbs.db
