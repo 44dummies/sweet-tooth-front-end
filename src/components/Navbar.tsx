@@ -209,8 +209,8 @@ const Navbar = () => {
               >
                 <Bell className="w-5 h-5 group-hover:animate-wiggle" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-lg animate-bounce">
-                    {unreadCount > 9 ? '9+' : unreadCount}
+                  <span className="absolute -top-1.5 -right-1.5 bg-gradient-to-br from-red-500 to-red-600 text-white text-[10px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold shadow-lg animate-pulse px-1">
+                    {unreadCount > 99 ? '99+' : unreadCount}
                   </span>
                 )}
                 <span className="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300 -z-10" />
@@ -229,9 +229,9 @@ const Navbar = () => {
                       onClick={() => setOpenDropdown(openDropdown === "profile" ? null : "profile")}
                       className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-secondary/50 transition-all duration-300 group"
                     >
-                      {profile.avatar ? (
+                      {(profile.avatar_url || profile.avatar) ? (
                         <img
-                          src={profile.avatar}
+                          src={profile.avatar_url || profile.avatar}
                           alt={`${profile.username}'s avatar`}
                           className="h-8 w-8 rounded-full border-2 border-primary/20 group-hover:border-primary transition-colors"
                         />
@@ -345,7 +345,7 @@ const Navbar = () => {
 
       {}
       {openDropdown === "notifications" && !isAdminRoute && (
-        <div className="fixed md:absolute top-20 md:top-full right-2 md:right-4 left-2 md:left-auto md:mt-2 w-auto md:w-96 max-w-[calc(100vw-1rem)] md:max-w-[calc(100vw-2rem)] bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl animate-scale-in z-50 max-h-[calc(100vh-6rem)] md:max-h-[500px] overflow-hidden">
+        <div className="fixed inset-x-0 top-20 mx-auto md:absolute md:top-full md:right-4 md:left-auto md:inset-x-auto md:mt-2 w-[calc(100%-1rem)] md:w-96 max-w-md md:max-w-[calc(100vw-2rem)] bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl animate-scale-in z-[100] max-h-[calc(100vh-6rem)] md:max-h-[500px] overflow-hidden mx-2 md:mx-0">
           <NotificationPanel onClose={() => setOpenDropdown(null)} />
         </div>
       )}

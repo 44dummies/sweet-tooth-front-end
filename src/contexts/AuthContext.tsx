@@ -9,11 +9,11 @@ interface Profile {
   email: string;
   username?: string;
   avatar?: string;
+  avatar_url?: string;
   phone?: string;
   address?: string;
   city?: string;
   postal_code?: string;
-  avatar_url?: string;
   created_at: string;
   updated_at: string;
 }
@@ -192,9 +192,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (!user) return { error: new Error('No user logged in') };
 
     try {
+      const safeUpdates: any = { ...updates };
+      if ('avatar' in safeUpdates && safeUpdates.avatar !== undefined) {
+        safeUpdates.avatar_url = safeUpdates.avatar;
+      }
+      delete safeUpdates.avatar;
+
       const { error } = await supabase
         .from('profiles')
-        .update(updates)
+        .update(safeUpdates)
         .eq('id', user.id);
 
       if (error) {

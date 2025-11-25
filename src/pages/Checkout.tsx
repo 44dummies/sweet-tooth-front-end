@@ -7,22 +7,17 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Plus, Minus, Lock } from "lucide-react";
+import { Lock, Trash2, Plus, Minus } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useNotifications } from "@/hooks/useNotifications";
-
-const defaultProductImage = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80";
+import LocationPicker from "@/components/LocationPicker";
 
 const Checkout = () => {
-  const { items, totalPrice, clearCart, addItem, updateQuantity, removeItem } = useCart();
+  const { items, totalPrice, clearCart, updateQuantity, removeItem } = useCart();
   const { user, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { permission, requestPermission, sendNotification } = useNotifications();
 
-  const [menuItems, setMenuItems] = useState<any[]>([]);
-  const [loadingMenu, setLoadingMenu] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
-  const [productQuantity, setProductQuantity] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,10 +26,10 @@ const Checkout = () => {
     deliveryDate: "",
     cakeSpecifications: "",
   });
+  const [deliveryCoords, setDeliveryCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPlacedAnimation, setShowPlacedAnimation] = useState(false);
   const [notificationRequested, setNotificationRequested] = useState(false);
-
 
   useEffect(() => {
     if (user && !notificationRequested && permission !== 'granted') {
@@ -58,63 +53,16 @@ const Checkout = () => {
     }
   }, [profile]);
 
-
-  useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('in_stock', true)
-          .order('name');
-
-        if (error) throw error;
-
-
-        const mappedItems = (data || []).map(item => ({
-          id: item.id,
-          image: item.image_url || defaultProductImage,
-          title: item.name || item.title,
-          description: item.description || '',
-          price: item.price,
-        }));
-
-        setMenuItems(mappedItems);
-      } catch (err) {
-        console.error('Error fetching menu items:', err);
-      } finally {
-        setLoadingMenu(false);
-      }
-    };
-
-    fetchMenuItems();
-  }, []);
-
-  const handleAddProduct = () => {
-    if (selectedProduct) {
-      addItem({
-        id: selectedProduct.id,
-        title: selectedProduct.title,
-        price: selectedProduct.price,
-        image: selectedProduct.image,
-      });
-      for (let i = 1; i < productQuantity; i++) {
-        addItem({
-          id: selectedProduct.id,
-          title: selectedProduct.title,
-          price: selectedProduct.price,
-          image: selectedProduct.image,
-        });
-      }
-      toast.success(`${selectedProduct.title} added to cart!`);
-      setSelectedProduct(null);
-      setProductQuantity(1);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleLocationChange = (address: string, coordinates?: { lat: number; lng: number }) => {
+    setFormData((prev) => ({ ...prev, address }));
+    if (coordinates) {
+      setDeliveryCoords(coordinates);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -152,24 +100,31 @@ const Checkout = () => {
       let orderId = null;
 
       try {
+        const orderData: any = {
+          customer_name: formData.name,
+          customer_email: formData.email || user.email,
+          customer_phone: formData.phone,
+          delivery_address: formData.address,
+          delivery_date: formData.deliveryDate,
+          special_instructions: formData.cakeSpecifications || null,
+          total_amount: totalPrice,
+          status: 'pending',
+          payment_status: 'pending',
+        };
+
+        if (deliveryCoords) {
+          orderData.delivery_lat = deliveryCoords.lat;
+          orderData.delivery_lng = deliveryCoords.lng;
+        }
+
         const { data: order, error: orderError } = await supabase
           .from('orders')
-          .insert([{
-            customer_name: formData.name,
-            customer_email: formData.email || user.email,
-            customer_phone: formData.phone,
-            delivery_address: formData.address,
-            delivery_date: formData.deliveryDate,
-            special_instructions: formData.cakeSpecifications || null,
-            total_amount: totalPrice,
-            status: 'pending',
-            payment_status: 'pending',
-          }])
+          .insert([orderData])
           .select()
           .single();
 
         if (orderError) {
-          console.error('❌ Supabase order insert error:', orderError);
+          console.error('Supabase order insert error:', orderError);
           throw orderError;
         }
 
@@ -188,17 +143,11 @@ const Checkout = () => {
             .insert(itemsPayload);
 
           if (itemsError) {
-            console.error('❌ Failed to insert order items:', itemsError);
+            console.error('Failed to insert order items:', itemsError);
           }
         }
       } catch (supabaseError: any) {
-        console.error('❌ SUPABASE ERROR:', supabaseError);
-        console.error('Error details:', {
-          message: supabaseError?.message,
-          details: supabaseError?.details,
-          hint: supabaseError?.hint,
-          code: supabaseError?.code
-        });
+        console.error('SUPABASE ERROR:', supabaseError);
         toast.error(`Database error: ${supabaseError?.message || 'Failed to save order'}`);
       }
 
@@ -257,9 +206,7 @@ const Checkout = () => {
         }
       }
 
-      clearCart();
       setShowPlacedAnimation(true);
-
 
       sendNotification('Order Placed Successfully! 🎉', {
         body: `Your order #${orderId?.toString().slice(0, 8) || 'NEW'} has been received. We'll notify you when it's confirmed.`,
@@ -305,176 +252,8 @@ const Checkout = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
-          {}
-          <div className="lg:col-span-1 bg-card p-4 sm:p-6 rounded-lg border h-fit lg:sticky lg:top-24">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Select Products</h2>
-            {loadingMenu ? (
-              <div className="text-center py-8">
-                <div className="inline-block w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                <p className="mt-2 text-sm text-muted-foreground">Loading menu...</p>
-              </div>
-            ) : menuItems.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-sm text-muted-foreground">No products available at the moment.</p>
-              </div>
-            ) : (
-            <div className="space-y-3 max-h-80 sm:max-h-96 overflow-y-auto">
-              {menuItems.map((item) => {
-                const isInCart = items.some((cartItem) => cartItem.id === item.id);
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      if (!isInCart) {
-                        addItem({
-                          id: item.id,
-                          title: item.title,
-                          price: item.price,
-                          image: item.image,
-                        });
-                        setSelectedProduct(item);
-                        toast.success(`${item.title} added to cart!`);
-                      } else {
-                        setSelectedProduct(item);
-                      }
-                    }}
-                    className={`w-full text-left p-2 sm:p-3 rounded-lg border-2 transition-all relative group ${
-                      selectedProduct?.id === item.id
-                        ? "border-primary bg-primary/10"
-                        : isInCart
-                        ? "border-green-500 bg-green-500/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-20 sm:h-24 object-cover rounded-md mb-2"
-                    />
-                    <div className="font-medium text-xs sm:text-sm">{item.title}</div>
-                    <div className="text-xs sm:text-sm text-primary font-semibold">Ksh{item.price}</div>
-                    {isInCart && (
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="text-xs bg-green-500 text-white px-2 py-1 rounded">
-                          In Cart
-                        </span>
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeItem(item.id);
-                            toast.success(`${item.title} removed from cart!`);
-                          }}
-                          className="text-xs bg-destructive text-white px-2 py-1 rounded hover:bg-destructive/90 transition-colors cursor-pointer"
-                        >
-                          Remove
-                        </div>
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-            )}
-
-            {}
-            {selectedProduct && (() => {
-              const isInCart = items.some((item) => item.id === selectedProduct.id);
-              const cartItem = items.find((item) => item.id === selectedProduct.id);
-              return (
-                <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t space-y-3 sm:space-y-4">
-                  <img
-                    src={selectedProduct.image}
-                    alt={selectedProduct.title}
-                    className="w-full h-32 sm:h-40 object-cover rounded-lg"
-                  />
-                  <div>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2">{selectedProduct.title}</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
-                      {selectedProduct.description}
-                    </p>
-                    <div className="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4">
-                      Ksh{selectedProduct.price}
-                    </div>
-
-                    {!isInCart ? (
-                      <>
-                        {}
-                        <div className="flex items-center gap-2 mb-4">
-                          <button
-                            onClick={() => setProductQuantity(Math.max(1, productQuantity - 1))}
-                            className="p-2 rounded-lg border hover:bg-secondary"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="flex-1 text-center font-semibold">
-                            {productQuantity}
-                          </span>
-                          <button
-                            onClick={() => setProductQuantity(productQuantity + 1)}
-                            className="p-2 rounded-lg border hover:bg-secondary"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        <Button
-                          onClick={handleAddProduct}
-                          className="w-full rounded-full h-10"
-                        >
-                          Add to Cart
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <div className="bg-green-500/10 border border-green-500 rounded-lg p-3 mb-4">
-                          <p className="text-sm text-green-700 dark:text-green-400 font-medium">
-                            ✓ This item is in your cart
-                          </p>
-                          {cartItem && (
-                            <p className="text-xs text-green-600 dark:text-green-500 mt-1">
-                              Quantity: {cartItem.quantity}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={() => {
-                              removeItem(selectedProduct.id);
-                              toast.success("Item removed from cart");
-                            }}
-                            variant="outline"
-                            className="flex-1 rounded-full border-destructive text-destructive hover:bg-destructive/10"
-                          >
-                            Remove from Cart
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              addItem({
-                                id: selectedProduct.id,
-                                title: selectedProduct.title,
-                                price: selectedProduct.price,
-                                image: selectedProduct.image,
-                              });
-                              toast.success("Added another to cart");
-                            }}
-                            className="flex-1 rounded-full"
-                          >
-                            Add More
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-
-          {}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           <form className="lg:col-span-2 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
-            {}
             <div className="bg-card p-4 sm:p-6 rounded-lg border">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Order Information</h2>
               {user && profile ? (
@@ -488,24 +267,17 @@ const Checkout = () => {
                     )}
                   </div>
 
-                  {}
                   <div className="space-y-2">
                     <label htmlFor="checkout-address-logged" className="block text-sm font-medium">
-                      Delivery Address *
+                      Delivery Location *
                     </label>
-                    <textarea
-                      id="checkout-address-logged"
-                      name="address"
+                    <LocationPicker
                       value={formData.address}
-                      onChange={handleChange}
-                      placeholder="Enter your delivery address (street, building, city)"
-                      rows={3}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background"
-                      required
-                      autoComplete="street-address"
+                      onChange={handleLocationChange}
+                      placeholder="Click to select delivery location on map"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Enter the address where you'd like your order delivered
+                      Click to open map and select your exact delivery location
                     </p>
                   </div>
                 </div>
@@ -553,24 +325,17 @@ const Checkout = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="checkout-address" className="block text-sm font-medium mb-2">Delivery Address *</label>
-                    <textarea
-                      id="checkout-address"
-                      name="address"
+                    <label htmlFor="checkout-address" className="block text-sm font-medium mb-2">Delivery Location *</label>
+                    <LocationPicker
                       value={formData.address}
-                      onChange={handleChange}
-                      placeholder="Street address, city, postal code"
-                      rows={3}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                      required
-                      autoComplete="street-address"
+                      onChange={handleLocationChange}
+                      placeholder="Click to select delivery location on map"
                     />
                   </div>
                 </div>
               )}
             </div>
 
-            {}
             <div className="bg-card p-4 sm:p-6 rounded-lg border">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Delivery & Special Requests</h2>
               <div className="space-y-3 sm:space-y-4">
@@ -612,7 +377,6 @@ const Checkout = () => {
               </div>
             </div>
 
-            {}
             {!user ? (
               <Button
                 type="button"
@@ -638,11 +402,15 @@ const Checkout = () => {
             )}
           </form>
 
-          {}
           <aside className="bg-card border rounded-lg p-4 sm:p-6 h-fit lg:sticky lg:top-24">
             <h2 className="text-lg sm:text-xl font-semibold mb-4">Order Summary</h2>
             {items.length === 0 ? (
-              <p className="text-muted-foreground">Your cart is empty</p>
+              <div className="text-center py-8">
+                <p className="text-muted-foreground mb-4">Your cart is empty</p>
+                <Button variant="outline" onClick={() => navigate('/menu')}>
+                  Browse Menu
+                </Button>
+              </div>
             ) : (
               <div className="space-y-3 sm:space-y-4">
                 <div className="space-y-2 sm:space-y-3 max-h-80 sm:max-h-96 overflow-y-auto">
@@ -655,18 +423,44 @@ const Checkout = () => {
                       />
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-xs sm:text-sm truncate">{item.title}</div>
-                        <div className="text-xs text-muted-foreground">x{item.quantity}</div>
-                        <div className="text-xs sm:text-sm font-semibold text-primary mt-0.5 sm:mt-1">
-                          Ksh{(item.price * item.quantity).toFixed(2)}
+                        {item.variant && (
+                          <div className="text-xs text-primary">{item.variant}</div>
+                        )}
+                        <div className="flex items-center gap-2 mt-1">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <span className="text-xs font-medium w-6 text-center">{item.quantity}</span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeItem(item.id)}
-                          className="text-xs text-destructive mt-0.5 sm:mt-1 h-5 sm:h-6 px-1 sm:px-2"
-                        >
-                          Remove
-                        </Button>
+                        <div className="flex items-center justify-between mt-1">
+                          <div className="text-xs sm:text-sm font-semibold text-primary">
+                            Ksh{(item.price * item.quantity).toFixed(2)}
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeItem(item.id)}
+                            className="text-xs text-destructive h-6 px-2"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}

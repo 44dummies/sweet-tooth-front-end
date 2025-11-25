@@ -60,8 +60,6 @@ const Profile = () => {
     if (!authLoading && !user) {
       navigate("/login", { state: { from: { pathname: "/profile" } } });
     }
-
-
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
@@ -73,7 +71,7 @@ const Profile = () => {
         address: profile.address || "",
         city: profile.city || "",
         postal_code: profile.postal_code || "",
-        avatar: profile.avatar || "",
+        avatar: profile.avatar_url || profile.avatar || "",
       });
     }
   }, [profile]);
@@ -88,20 +86,45 @@ const Profile = () => {
     if (!user) return;
 
     try {
+      setLoadingOrders(true);
       const userEmail = profile?.email || user.email;
-      if (!userEmail) return;
+      if (!userEmail) {
+        setLoadingOrders(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from('orders')
-        .select('*, order_items(*)')
+        .select(`
+          id,
+          customer_name,
+          customer_email,
+          status,
+          total_amount,
+          payment_status,
+          created_at,
+          order_items (
+            id,
+            product_name,
+            quantity,
+            price
+          )
+        `)
         .eq('customer_email', userEmail)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setOrders(data || []);
+      if (error) {
+        console.error('Orders fetch error:', error);
+        if (error.code !== 'PGRST116') {
+          toast.error('Failed to load order history');
+        }
+        setOrders([]);
+      } else {
+        setOrders(data || []);
+      }
     } catch (error) {
       console.error('Error fetching orders:', error);
-      toast.error('Failed to load order history');
+      setOrders([]);
     } finally {
       setLoadingOrders(false);
     }
@@ -190,8 +213,10 @@ const Profile = () => {
     email: user.email || '',
     username: '',
     avatar: '',
+    avatar_url: '',
   };
 
+  const avatarUrl = displayProfile.avatar_url || displayProfile.avatar || '';
   const initials = `${displayProfile.first_name?.[0] || user.email?.[0] || ''}${displayProfile.last_name?.[0] || ''}`.toUpperCase();
 
   return (
@@ -202,9 +227,9 @@ const Profile = () => {
         {}
         <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-            {displayProfile.avatar ? (
+            {avatarUrl ? (
               <img
-                src={displayProfile.avatar}
+                src={avatarUrl}
                 alt={`${displayProfile.username || 'User'}'s avatar`}
                 className="h-20 w-20 sm:h-24 sm:w-24 rounded-full border-4 border-background shadow-lg"
               />
