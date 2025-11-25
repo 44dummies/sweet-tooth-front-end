@@ -3,46 +3,77 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
-// Category-specific images
+// High-quality Pexels images for bakery products
 const getCategoryImage = (category?: string, title?: string): string => {
   const normalizedCategory = (category || "").toLowerCase();
   const normalizedTitle = (title || "").toLowerCase();
   
+  // Cakes
   if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
     if (normalizedTitle.includes("chocolate")) {
-      return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+      return "https://images.pexels.com/photos/1414234/pexels-photo-1414234.jpeg?auto=compress&cs=tinysrgb&w=600";
     }
     if (normalizedTitle.includes("wedding")) {
-      return "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80";
+      return "https://images.pexels.com/photos/265841/pexels-photo-265841.jpeg?auto=compress&cs=tinysrgb&w=600";
     }
     if (normalizedTitle.includes("red velvet")) {
-      return "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=600&q=80";
+      return "https://images.pexels.com/photos/6032875/pexels-photo-6032875.jpeg?auto=compress&cs=tinysrgb&w=600";
     }
-    return "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600&q=80";
+    if (normalizedTitle.includes("birthday")) {
+      return "https://images.pexels.com/photos/1702373/pexels-photo-1702373.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("vanilla")) {
+      return "https://images.pexels.com/photos/140831/pexels-photo-140831.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    return "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
+  // Cupcakes
   if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
-    return "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=600&q=80";
+    if (normalizedTitle.includes("chocolate")) {
+      return "https://images.pexels.com/photos/1055272/pexels-photo-1055272.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    if (normalizedTitle.includes("vanilla")) {
+      return "https://images.pexels.com/photos/913136/pexels-photo-913136.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    return "https://images.pexels.com/photos/1034876/pexels-photo-1034876.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
+  // Cookies
   if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
-    return "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80";
+    if (normalizedTitle.includes("chocolate chip")) {
+      return "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=600";
+    }
+    return "https://images.pexels.com/photos/890577/pexels-photo-890577.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
-  if (normalizedCategory === "donuts" || normalizedTitle.includes("donut")) {
-    return "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80";
+  // Donuts
+  if (normalizedCategory === "donuts" || normalizedTitle.includes("donut") || normalizedTitle.includes("doughnut")) {
+    return "https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
+  // Brownies
   if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
-    return "https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=600&q=80";
+    return "https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
+  // Pastries
   if (normalizedCategory === "pastries" || normalizedTitle.includes("pastry") || normalizedTitle.includes("croissant")) {
-    return "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80";
+    return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
+  }
+  
+  // Muffins
+  if (normalizedCategory === "muffins" || normalizedTitle.includes("muffin")) {
+    return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+  }
+  
+  // Bread/Loaves
+  if (normalizedTitle.includes("bread") || normalizedTitle.includes("loaf")) {
+    return "https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600";
   }
   
   // Default bakery image
-  return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+  return "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&w=600";
 };
 
 interface Product {

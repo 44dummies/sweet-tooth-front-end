@@ -167,6 +167,7 @@ ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 -- Drop existing policies
 DROP POLICY IF EXISTS "Users can view own orders" ON orders;
 DROP POLICY IF EXISTS "Users can insert own orders" ON orders;
+DROP POLICY IF EXISTS "Users can update own orders" ON orders;
 DROP POLICY IF EXISTS "Admin full access to orders" ON orders;
 
 -- Users can view their own orders
@@ -178,6 +179,11 @@ CREATE POLICY "Users can view own orders" ON orders
 CREATE POLICY "Users can insert own orders" ON orders
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
+
+-- Users can update their own orders (for status changes)
+CREATE POLICY "Users can update own orders" ON orders
+  FOR UPDATE
+  USING (auth.uid() = user_id);
 
 -- Admins have full access to all orders (check email)
 CREATE POLICY "Admin full access to orders" ON orders
@@ -301,6 +307,7 @@ CREATE POLICY "Admin full access to reviews" ON reviews
 
 DROP POLICY IF EXISTS "Users can view own custom orders" ON custom_orders;
 DROP POLICY IF EXISTS "Users can insert custom orders" ON custom_orders;
+DROP POLICY IF EXISTS "Users can update own custom orders" ON custom_orders;
 DROP POLICY IF EXISTS "Admin full access to custom orders" ON custom_orders;
 
 -- Users can view their own custom orders
@@ -312,6 +319,11 @@ CREATE POLICY "Users can view own custom orders" ON custom_orders
 CREATE POLICY "Users can insert custom orders" ON custom_orders
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
+
+-- Users can update their own custom orders
+CREATE POLICY "Users can update own custom orders" ON custom_orders
+  FOR UPDATE
+  USING (auth.uid() = user_id);
 
 -- Admins have full access to all custom orders (check email)
 CREATE POLICY "Admin full access to custom orders" ON custom_orders
@@ -329,6 +341,7 @@ CREATE POLICY "Admin full access to custom orders" ON custom_orders
 -- =====================================================
 
 DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can view all profiles" ON profiles;
 DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 DROP POLICY IF EXISTS "Admin full access to profiles" ON profiles;
@@ -337,6 +350,11 @@ DROP POLICY IF EXISTS "Admin full access to profiles" ON profiles;
 CREATE POLICY "Users can view own profile" ON profiles
   FOR SELECT
   USING (auth.uid() = id);
+
+-- Authenticated users can view all profiles (needed for order user info)
+CREATE POLICY "Users can view all profiles" ON profiles
+  FOR SELECT
+  USING (auth.role() = 'authenticated');
 
 -- Users can update their own profile
 CREATE POLICY "Users can update own profile" ON profiles
