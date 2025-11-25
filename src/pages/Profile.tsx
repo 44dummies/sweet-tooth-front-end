@@ -300,14 +300,18 @@ const Profile = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
-                {(!profile?.phone || !profile?.address) && (
+                {(!profile?.phone || !profile?.avatar_url && !profile?.avatar) && (
                   <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 sm:p-4 mb-4">
                     <div className="flex items-start gap-2">
                       <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Complete Your Profile</p>
                         <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
-                          Phone number and address are required for placing orders
+                          {!profile?.phone && (!profile?.avatar_url && !profile?.avatar) 
+                            ? 'Phone number and avatar are required for placing orders'
+                            : !profile?.phone 
+                            ? 'Phone number is required for placing orders'
+                            : 'Avatar is required for placing orders'}
                         </p>
                       </div>
                     </div>
