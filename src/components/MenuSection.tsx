@@ -3,128 +3,128 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
-// High-quality Pexels images for bakery products
+// High-quality bakery product images from various sources
 const getCategoryImage = (category?: string, title?: string): string => {
   const normalizedCategory = (category || "").toLowerCase();
   const normalizedTitle = (title || "").toLowerCase();
   
-  // Cakes
+  // Cakes - Using high-resolution bakery images
   if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
     if (normalizedTitle.includes("chocolate")) {
-      return "https://images.pexels.com/photos/1414234/pexels-photo-1414234.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=90";
     }
     if (normalizedTitle.includes("wedding")) {
-      return "https://images.pexels.com/photos/265841/pexels-photo-265841.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=800&q=90";
     }
     if (normalizedTitle.includes("red velvet")) {
-      return "https://images.pexels.com/photos/6032875/pexels-photo-6032875.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=800&q=90";
     }
     if (normalizedTitle.includes("birthday")) {
-      return "https://images.pexels.com/photos/1702373/pexels-photo-1702373.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=800&q=90";
     }
     if (normalizedTitle.includes("vanilla")) {
-      return "https://images.pexels.com/photos/140831/pexels-photo-140831.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=90";
     }
     if (normalizedTitle.includes("carrot")) {
-      return "https://images.pexels.com/photos/3597122/pexels-photo-3597122.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&q=90";
     }
     if (normalizedTitle.includes("lemon")) {
-      return "https://images.pexels.com/photos/5938242/pexels-photo-5938242.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1519915212116-7cfef71f1d3e?w=800&q=90";
     }
     if (normalizedTitle.includes("strawberry")) {
-      return "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1565661834013-d196ca46e14e?w=800&q=90";
     }
     if (normalizedTitle.includes("black forest")) {
-      return "https://images.pexels.com/photos/2144112/pexels-photo-2144112.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1588195538326-c5b1e5b9e46b?w=800&q=90";
   }
   
   // Cupcakes
   if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
     if (normalizedTitle.includes("chocolate")) {
-      return "https://images.pexels.com/photos/1055272/pexels-photo-1055272.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1426869884541-df7117556757?w=800&q=90";
     }
     if (normalizedTitle.includes("vanilla")) {
-      return "https://images.pexels.com/photos/913136/pexels-photo-913136.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=800&q=90";
     }
     if (normalizedTitle.includes("red velvet")) {
-      return "https://images.pexels.com/photos/1998634/pexels-photo-1998634.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=800&q=90";
     }
     if (normalizedTitle.includes("strawberry")) {
-      return "https://images.pexels.com/photos/1395323/pexels-photo-1395323.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/1034876/pexels-photo-1034876.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1599785209796-786432b228bc?w=800&q=90";
   }
   
   // Cookies
   if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
     if (normalizedTitle.includes("chocolate chip")) {
-      return "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=90";
     }
     if (normalizedTitle.includes("oatmeal")) {
-      return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=800&q=90";
     }
     if (normalizedTitle.includes("sugar")) {
-      return "https://images.pexels.com/photos/1001916/pexels-photo-1001916.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1590080876876-5c16d8b5b0d5?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/890577/pexels-photo-890577.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=90";
   }
   
   // Donuts
   if (normalizedCategory === "donuts" || normalizedTitle.includes("donut") || normalizedTitle.includes("doughnut")) {
     if (normalizedTitle.includes("glazed")) {
-      return "https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=90";
     }
     if (normalizedTitle.includes("chocolate")) {
-      return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1527515545081-5db817172677?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1514517521153-1be72277b32f?w=800&q=90";
   }
   
   // Brownies
   if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
     if (normalizedTitle.includes("chocolate")) {
-      return "https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=800&q=90";
     }
     if (normalizedTitle.includes("fudge")) {
-      return "https://images.pexels.com/photos/3026810/pexels-photo-3026810.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1564355808853-1c8c4b518f10?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1612182062377-5f24102c00a9?w=800&q=90";
   }
   
   // Pastries
   if (normalizedCategory === "pastries" || normalizedTitle.includes("pastry") || normalizedTitle.includes("croissant")) {
     if (normalizedTitle.includes("croissant")) {
-      return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=90";
     }
     if (normalizedTitle.includes("danish")) {
-      return "https://images.pexels.com/photos/3776944/pexels-photo-3776944.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1525058035697-68c9f39e0216?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/2135677/pexels-photo-2135677.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=90";
   }
   
   // Muffins
   if (normalizedCategory === "muffins" || normalizedTitle.includes("muffin")) {
     if (normalizedTitle.includes("blueberry")) {
-      return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=800&q=90";
     }
     if (normalizedTitle.includes("chocolate")) {
-      return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?w=800&q=90";
   }
   
   // Bread/Loaves
   if (normalizedTitle.includes("bread") || normalizedTitle.includes("loaf")) {
     if (normalizedTitle.includes("banana")) {
-      return "https://images.pexels.com/photos/6107787/pexels-photo-6107787.jpeg?auto=compress&cs=tinysrgb&w=600";
+      return "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=800&q=90";
     }
-    return "https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600";
+    return "https://images.unsplash.com/photo-1549931319-a545dcf3bc04?w=800&q=90";
   }
   
   // Default bakery image
-  return "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&w=600";
+  return "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=800&q=90";
 };
 
 interface Product {

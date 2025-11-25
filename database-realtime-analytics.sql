@@ -41,7 +41,9 @@ CREATE PUBLICATION supabase_realtime FOR TABLE
   reviews,
   custom_orders,
   profiles,
-  admin_notifications;
+  admin_notifications,
+  conversations,
+  conversation_messages;
 
 -- Note: Tables must exist before running this migration
 -- Ensure all tables are created via Supabase dashboard or previous migrations
@@ -53,7 +55,7 @@ CREATE PUBLICATION supabase_realtime FOR TABLE
 
 -- Orders table indexes
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
+CREATE INDEX IF NOT EXISTS idx_orders_customer_email ON orders(customer_email);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
 CREATE INDEX IF NOT EXISTS idx_orders_status_created ON orders(status, created_at DESC);
 
@@ -96,7 +98,7 @@ SELECT
   COUNT(*) as order_count,
   SUM(total_amount) as total_revenue,
   AVG(total_amount) as avg_order_value,
-  COUNT(DISTINCT user_id) as unique_customers
+  COUNT(DISTINCT customer_email) as unique_customers
 FROM orders
 WHERE status != 'CANCELLED'
 GROUP BY DATE(created_at)
@@ -173,20 +175,26 @@ DROP POLICY IF EXISTS "Users can insert own orders" ON orders;
 DROP POLICY IF EXISTS "Users can update own orders" ON orders;
 DROP POLICY IF EXISTS "Admin full access to orders" ON orders;
 
--- Users can view their own orders
+-- Users can view their own orders by email
 CREATE POLICY "Users can view own orders" ON orders
   FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
 
 -- Users can insert their own orders
 CREATE POLICY "Users can insert own orders" ON orders
   FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
 
 -- Users can update their own orders (for status changes)
 CREATE POLICY "Users can update own orders" ON orders
   FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
 
 -- Admins have full access to all orders (check email without recursion)
 CREATE POLICY "Admin full access to orders" ON orders
@@ -210,7 +218,7 @@ CREATE POLICY "Users can view own order items" ON order_items
     EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = order_items.order_id
-      AND orders.user_id = auth.uid()
+      AND orders.customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
     )
   );
 
@@ -221,7 +229,7 @@ CREATE POLICY "Users can insert own order items" ON order_items
     EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = order_items.order_id
-      AND orders.user_id = auth.uid()
+      AND orders.customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
     )
   );
 
@@ -392,7 +400,7 @@ BEGIN
     'total_orders', COUNT(*),
     'total_revenue', COALESCE(SUM(total_amount), 0),
     'avg_order_value', COALESCE(AVG(total_amount), 0),
-    'unique_customers', COUNT(DISTINCT user_id),
+    'unique_customers', COUNT(DISTINCT customer_email),
     'pending_orders', COUNT(*) FILTER (WHERE status = 'PENDING'),
     'processing_orders', COUNT(*) FILTER (WHERE status = 'PROCESSING'),
     'completed_orders', COUNT(*) FILTER (WHERE status = 'COMPLETED'),
@@ -476,6 +484,142 @@ CREATE POLICY "System can insert notifications" ON admin_notifications
 
 -- Admins can update notifications (check email without recursion)
 CREATE POLICY "Admin can update notifications" ON admin_notifications
+  FOR UPDATE
+  USING (
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  );
+
+
+-- =====================================================
+-- CUSTOMER MESSAGING TABLES
+-- =====================================================
+
+-- Create conversations table
+CREATE TABLE IF NOT EXISTS conversations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  customer_name VARCHAR(255) NOT NULL,
+  customer_email VARCHAR(255) NOT NULL,
+  last_message TEXT,
+  last_message_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  unread_admin_count INTEGER DEFAULT 0,
+  unread_customer_count INTEGER DEFAULT 0,
+  status VARCHAR(50) DEFAULT 'active',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create conversation messages table
+CREATE TABLE IF NOT EXISTS conversation_messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+  customer_email VARCHAR(255) NOT NULL,
+  sender_type VARCHAR(20) NOT NULL CHECK (sender_type IN ('customer', 'admin')),
+  message TEXT NOT NULL,
+  read BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for conversations
+CREATE INDEX IF NOT EXISTS idx_conversations_customer_email ON conversations(customer_email);
+CREATE INDEX IF NOT EXISTS idx_conversations_updated_at ON conversations(updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_conversations_status ON conversations(status);
+
+-- Indexes for conversation messages
+CREATE INDEX IF NOT EXISTS idx_conversation_messages_conversation_id ON conversation_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_conversation_messages_created_at ON conversation_messages(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_conversation_messages_read ON conversation_messages(read);
+
+-- Enable RLS on conversations and messages
+ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversation_messages ENABLE ROW LEVEL SECURITY;
+
+-- Conversations RLS Policies
+DROP POLICY IF EXISTS "Users can view own conversations" ON conversations;
+DROP POLICY IF EXISTS "Users can insert own conversations" ON conversations;
+DROP POLICY IF EXISTS "Users can update own conversations" ON conversations;
+DROP POLICY IF EXISTS "Admin can view all conversations" ON conversations;
+DROP POLICY IF EXISTS "Admin can update all conversations" ON conversations;
+
+-- Users can view their own conversations by email
+CREATE POLICY "Users can view own conversations" ON conversations
+  FOR SELECT
+  USING (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
+
+-- Users can insert their own conversations
+CREATE POLICY "Users can insert own conversations" ON conversations
+  FOR INSERT
+  WITH CHECK (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
+
+-- Users can update their own conversations
+CREATE POLICY "Users can update own conversations" ON conversations
+  FOR UPDATE
+  USING (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
+
+-- Admin can view all conversations
+CREATE POLICY "Admin can view all conversations" ON conversations
+  FOR SELECT
+  USING (
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  );
+
+-- Admin can update all conversations
+CREATE POLICY "Admin can update all conversations" ON conversations
+  FOR UPDATE
+  USING (
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  );
+
+-- Conversation Messages RLS Policies
+DROP POLICY IF EXISTS "Users can view own messages" ON conversation_messages;
+DROP POLICY IF EXISTS "Users can insert own messages" ON conversation_messages;
+DROP POLICY IF EXISTS "Users can update own messages" ON conversation_messages;
+DROP POLICY IF EXISTS "Admin can view all messages" ON conversation_messages;
+DROP POLICY IF EXISTS "Admin can insert messages" ON conversation_messages;
+DROP POLICY IF EXISTS "Admin can update all messages" ON conversation_messages;
+
+-- Users can view messages in their own conversations
+CREATE POLICY "Users can view own messages" ON conversation_messages
+  FOR SELECT
+  USING (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
+
+-- Users can insert messages in their own conversations
+CREATE POLICY "Users can insert own messages" ON conversation_messages
+  FOR INSERT
+  WITH CHECK (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
+
+-- Users can update their own messages (mark as read)
+CREATE POLICY "Users can update own messages" ON conversation_messages
+  FOR UPDATE
+  USING (
+    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+  );
+
+-- Admin can view all messages
+CREATE POLICY "Admin can view all messages" ON conversation_messages
+  FOR SELECT
+  USING (
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  );
+
+-- Admin can insert messages in any conversation
+CREATE POLICY "Admin can insert messages" ON conversation_messages
+  FOR INSERT
+  WITH CHECK (
+    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  );
+
+-- Admin can update any message
+CREATE POLICY "Admin can update all messages" ON conversation_messages
   FOR UPDATE
   USING (
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
