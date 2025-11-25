@@ -70,6 +70,10 @@ UPDATE products SET image_url = '/src/assets/cupcakes.jpg'
 WHERE category = 'cupcakes' AND image_url IS NULL;
 
 -- COOKIES: Box Sizes and Types
+UPDATE products SET image_url = '/src/assets/cookie box of 24.jpeg'
+WHERE (LOWER(name) LIKE '%24%' OR LOWER(name) LIKE '%2 dozen%' OR LOWER(name) LIKE '%box of 24%') 
+AND category = 'cookies';
+
 UPDATE products SET image_url = '/src/assets/cookie box of 12.jpeg'
 WHERE (LOWER(name) LIKE '%12%' OR LOWER(name) LIKE '%dozen%' OR LOWER(name) LIKE '%box of 12%') 
 AND category = 'cookies';

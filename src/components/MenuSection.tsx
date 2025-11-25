@@ -26,7 +26,8 @@ const getImageFromPath = (imagePath: string): string => {
     'cupcakes box of 6.jpeg': new URL('../assets/cupcakes box of 6.jpeg', import.meta.url).href,
     'mini cupcakes.jpeg': new URL('../assets/mini cupcakes.jpeg', import.meta.url).href,
     'cupcakes.jpg': new URL('../assets/cupcakes.jpg', import.meta.url).href,
-    'cookie box of 12.jpeg': new URL('../assets/cookie box of 12.jpeg', import.meta.url).href,
+    'cookie box of 12.jpeg': new URL('../assets/cookie box of 24.jpeg', import.meta.url).href,
+    'cookie box of 24.jpeg': new URL('../assets/cookie box of 12.jpeg', import.meta.url).href,
     'cookie box .jpeg': new URL('../assets/cookie box .jpeg', import.meta.url).href,
     'Giant Cookie.jpeg': new URL('../assets/Giant Cookie.jpeg', import.meta.url).href,
     'cookies.jpg': new URL('../assets/cookies.jpg', import.meta.url).href,
@@ -106,10 +107,13 @@ const getCategoryImage = (category?: string, name?: string): string => {
   
   // Cookies - Match with cookie images
   if (normalizedCategory === "cookies" || normalizedName.includes("cookie")) {
-    if (normalizedName.includes("box of 12") || normalizedName.includes("12")) {
+    if (normalizedName.includes("box of 24") || normalizedName.includes("24") || normalizedName.includes("2 dozen")) {
       return new URL("../assets/cookie box of 12.jpeg", import.meta.url).href;
     }
-    if (normalizedName.includes("box") && !normalizedName.includes("12")) {
+    if (normalizedName.includes("box of 12") || normalizedName.includes("12") || normalizedName.includes("dozen")) {
+      return new URL("../assets/cookie box of 24.jpeg", import.meta.url).href;
+    }
+    if (normalizedName.includes("box") && !normalizedName.includes("12") && !normalizedName.includes("24")) {
       return new URL("../assets/cookie box .jpeg", import.meta.url).href;
     }
     if (normalizedName.includes("giant")) {
