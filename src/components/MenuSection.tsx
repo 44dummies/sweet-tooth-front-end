@@ -11,105 +11,105 @@ const getCategoryImage = (category?: string, title?: string): string => {
   // Cakes - Match with local cake images
   if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
     if (normalizedTitle.includes("2 tier") || normalizedTitle.includes("two tier")) {
-      return "/src/assets/2 tier cake.jpeg";
+      return new URL("../assets/2 tier cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("3 tier") || normalizedTitle.includes("three tier")) {
-      return "/src/assets/3 tier cake.jpeg";
+      return new URL("../assets/3 tier cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("4 tier") || normalizedTitle.includes("four tier")) {
-      return "/src/assets/4 tier cake.jpeg";
+      return new URL("../assets/4 tier cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("heart")) {
-      return "/src/assets/heart cake.jpeg";
+      return new URL("../assets/heart cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("letter")) {
-      return "/src/assets/letter cake.jpeg";
+      return new URL("../assets/letter cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("number")) {
-      return "/src/assets/number cake.jpeg";
+      return new URL("../assets/number cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("round")) {
-      return "/src/assets/round cake.jpeg";
+      return new URL("../assets/round cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("square")) {
-      return "/src/assets/square cake.jpeg";
+      return new URL("../assets/square cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("sheet")) {
-      return "/src/assets/sheet cake.jpeg";
+      return new URL("../assets/sheet cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("pound")) {
-      return "/src/assets/pound cake.jpeg";
+      return new URL("../assets/pound cake.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("birthday")) {
-      return "/src/assets/birthday-cakes.jpg";
+      return new URL("../assets/birthday-cakes.jpg", import.meta.url).href;
     }
     if (normalizedTitle.includes("fruit")) {
-      return "/src/assets/fruit-cakes.jpg";
+      return new URL("../assets/fruit-cakes.jpg", import.meta.url).href;
     }
-    return "/src/assets/delicious-cake-1.jpeg";
+    return new URL("../assets/delicious-cake-1.jpeg", import.meta.url).href;
   }
   
   // Cupcakes - Match with cupcake images
   if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
     if (normalizedTitle.includes("box of 12") || normalizedTitle.includes("12")) {
-      return "/src/assets/cupcakes box of 12.jpeg";
+      return new URL("../assets/cupcakes box of 12.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("box of 6") || normalizedTitle.includes("6")) {
-      return "/src/assets/cupcakes box of 6.jpeg";
+      return new URL("../assets/cupcakes box of 6.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("mini")) {
-      return "/src/assets/mini cupcakes.jpeg";
+      return new URL("../assets/mini cupcakes.jpeg", import.meta.url).href;
     }
-    return "/src/assets/cupcakes.jpg";
+    return new URL("../assets/cupcakes.jpg", import.meta.url).href;
   }
   
   // Cookies - Match with cookie images
   if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
     if (normalizedTitle.includes("box of 12") || normalizedTitle.includes("12")) {
-      return "/src/assets/cookie box of 12.jpeg";
+      return new URL("../assets/cookie box of 12.jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("box") && !normalizedTitle.includes("12")) {
-      return "/src/assets/cookie box .jpeg";
+      return new URL("../assets/cookie box .jpeg", import.meta.url).href;
     }
     if (normalizedTitle.includes("giant")) {
-      return "/src/assets/Giant Cookie.jpeg";
+      return new URL("../assets/Giant Cookie.jpeg", import.meta.url).href;
     }
-    return "/src/assets/cookies.jpg";
+    return new URL("../assets/cookies.jpg", import.meta.url).href;
   }
   
   // Brownies - Match with brownie images
   if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
     if (normalizedTitle.includes("box of 6") || normalizedTitle.includes("6")) {
-      return "/src/assets/browies box of 6.jpeg";
+      return new URL("../assets/browies box of 6.jpeg", import.meta.url).href;
     }
-    return "/src/assets/brownies.jpg";
+    return new URL("../assets/brownies.jpg", import.meta.url).href;
   }
   
   // Muffins
   if (normalizedCategory === "muffins" || normalizedTitle.includes("muffin")) {
-    return "/src/assets/muffins.jpg";
+    return new URL("../assets/muffins.jpg", import.meta.url).href;
   }
   
   // Bread/Loaves
   if (normalizedTitle.includes("bread") || normalizedTitle.includes("loaf")) {
     if (normalizedTitle.includes("banana")) {
-      return "/src/assets/banana-bread.jpg";
+      return new URL("../assets/banana-bread.jpg", import.meta.url).href;
     }
-    return "/src/assets/loafs.jpg";
+    return new URL("../assets/loafs.jpg", import.meta.url).href;
   }
   
   // Cake Pops
   if (normalizedTitle.includes("cake pop")) {
-    return "/src/assets/cake pops.jpeg";
+    return new URL("../assets/cake pops.jpeg", import.meta.url).href;
   }
   
   // Cinnamon Rolls
   if (normalizedTitle.includes("cinnamon")) {
-    return "/src/assets/cinnamon rolls.jpeg";
+    return new URL("../assets/cinnamon rolls.jpeg", import.meta.url).href;
   }
   
   // Default bakery image
-  return "/src/assets/delicious-cake-1.jpeg";
+  return new URL("../assets/delicious-cake-1.jpeg", import.meta.url).href;
 };
 
 interface Product {

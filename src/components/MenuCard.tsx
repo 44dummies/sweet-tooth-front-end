@@ -90,7 +90,7 @@ const MenuCard = ({
 
 
   // Local bakery fallback image
-  const fallbackImage = "/src/assets/delicious-cake-1.jpeg";
+  const fallbackImage = new URL("../assets/delicious-cake-1.jpeg", import.meta.url).href;
 
   const variantLabel = variantType === 'flavor' ? 'flavors' :
                        variantType === 'filling' ? 'fillings' :
