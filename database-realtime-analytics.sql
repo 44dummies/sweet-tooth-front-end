@@ -1,28 +1,5 @@
--- =====================================================
--- SWEET TOOTH BAKERY - DATABASE MIGRATION
--- Real-time Analytics & Complete Schema Setup
--- =====================================================
--- Version: 3.0
--- Date: November 25, 2025
--- Description: Production-ready database with real-time capabilities,
---              optimized indexes, RLS policies, and analytics functions
--- =====================================================
-
--- =====================================================
--- TABLE OF CONTENTS
--- =====================================================
--- 1. Real-time Setup
--- 2. Performance Indexes
--- 3. Materialized Views & Analytics
--- 4. Triggers & Functions
--- 5. RLS Policies
--- 6. Helper Functions
--- =====================================================
-
-
--- =====================================================
--- SECTION 1: REAL-TIME SETUP
--- =====================================================
+-- Sweet Tooth Bakery - Database Migration v3.0
+-- Production-ready database with real-time capabilities, RLS policies, and analytics
 
 -- Clean up: Remove products with price below 500
 DELETE FROM products WHERE price < 500;
@@ -45,15 +22,8 @@ CREATE PUBLICATION supabase_realtime FOR TABLE
   conversations,
   conversation_messages;
 
--- Note: Tables must exist before running this migration
--- Ensure all tables are created via Supabase dashboard or previous migrations
-
-
--- =====================================================
--- SECTION 2: PERFORMANCE INDEXES
--- =====================================================
-
--- Orders table indexes
+-- Performance Indexes
+-- Orders table
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_orders_customer_email ON orders(customer_email);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
@@ -81,14 +51,8 @@ CREATE INDEX IF NOT EXISTS idx_custom_orders_created_at ON custom_orders(created
 
 -- Profiles indexes
 CREATE INDEX IF NOT EXISTS idx_profiles_email ON profiles(email);
--- Note: Role column removed - using email-based admin check instead
 
-
--- =====================================================
--- SECTION 3: MATERIALIZED VIEWS & ANALYTICS
--- =====================================================
-
--- Drop existing materialized view if exists
+-- Materialized Views & Analytics
 DROP MATERIALIZED VIEW IF EXISTS daily_sales_summary CASCADE;
 
 -- Create materialized view for daily sales analytics
@@ -116,12 +80,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-
--- =====================================================
--- SECTION 4: TRIGGERS & FUNCTIONS
--- =====================================================
-
--- Function to update updated_at timestamp
+-- Triggers & Functions
 DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -152,12 +111,7 @@ CREATE TRIGGER update_products_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
-
--- =====================================================
--- SECTION 5: ROW LEVEL SECURITY (RLS) POLICIES
--- =====================================================
-
--- Enable RLS on all tables
+-- Row Level Security (RLS) Policies
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
@@ -165,11 +119,7 @@ ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE custom_orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
--- =====================================================
--- 5.1: ORDERS POLICIES
--- =====================================================
-
--- Drop existing policies
+-- Orders Policies
 DROP POLICY IF EXISTS "Users can view own orders" ON orders;
 DROP POLICY IF EXISTS "Users can insert own orders" ON orders;
 DROP POLICY IF EXISTS "Users can update own orders" ON orders;
@@ -203,10 +153,7 @@ CREATE POLICY "Admin full access to orders" ON orders
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- =====================================================
--- 5.2: ORDER ITEMS POLICIES
--- =====================================================
-
+-- Order Items Policies
 DROP POLICY IF EXISTS "Users can view own order items" ON order_items;
 DROP POLICY IF EXISTS "Users can insert own order items" ON order_items;
 DROP POLICY IF EXISTS "Admin full access to order items" ON order_items;
@@ -240,10 +187,7 @@ CREATE POLICY "Admin full access to order items" ON order_items
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- =====================================================
--- 5.3: PRODUCTS POLICIES
--- =====================================================
-
+-- Products Policies
 DROP POLICY IF EXISTS "Anyone can view products" ON products;
 DROP POLICY IF EXISTS "Admin can manage products" ON products;
 
@@ -259,10 +203,7 @@ CREATE POLICY "Admin can manage products" ON products
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- =====================================================
--- 5.4: REVIEWS POLICIES
--- =====================================================
-
+-- Reviews Policies
 DROP POLICY IF EXISTS "Anyone can view reviews" ON reviews;
 DROP POLICY IF EXISTS "Users can insert own reviews" ON reviews;
 DROP POLICY IF EXISTS "Users can update own reviews" ON reviews;
@@ -296,10 +237,7 @@ CREATE POLICY "Admin full access to reviews" ON reviews
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- =====================================================
--- 5.5: CUSTOM ORDERS POLICIES
--- =====================================================
-
+-- Custom Orders Policies
 DROP POLICY IF EXISTS "Users can view own custom orders" ON custom_orders;
 DROP POLICY IF EXISTS "Users can insert custom orders" ON custom_orders;
 DROP POLICY IF EXISTS "Users can update own custom orders" ON custom_orders;
@@ -327,10 +265,7 @@ CREATE POLICY "Admin full access to custom orders" ON custom_orders
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- =====================================================
--- 5.6: PROFILES POLICIES
--- =====================================================
-
+-- Profiles Policies
 DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
 DROP POLICY IF EXISTS "Users can view all profiles" ON profiles;
 DROP POLICY IF EXISTS "Authenticated users can view profiles" ON profiles;
@@ -361,12 +296,7 @@ CREATE POLICY "Admin can delete profiles" ON profiles
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
-
--- =====================================================
--- SECTION 6: HELPER FUNCTIONS
--- =====================================================
-
--- Function to get today's statistics
+-- Helper Functions
 DROP FUNCTION IF EXISTS get_today_stats();
 CREATE OR REPLACE FUNCTION get_today_stats()
 RETURNS JSON AS $$
@@ -443,12 +373,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-
--- =====================================================
--- ADMIN NOTIFICATIONS TABLE
--- =====================================================
-
--- Create admin notifications table if not exists
+-- Admin Notifications Table
 CREATE TABLE IF NOT EXISTS admin_notifications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   type VARCHAR(50) NOT NULL,
@@ -489,12 +414,7 @@ CREATE POLICY "Admin can update notifications" ON admin_notifications
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
-
--- =====================================================
--- CUSTOMER MESSAGING TABLES
--- =====================================================
-
--- Create conversations table
+-- Customer Messaging Tables
 CREATE TABLE IF NOT EXISTS conversations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   customer_name VARCHAR(255) NOT NULL,
@@ -625,12 +545,7 @@ CREATE POLICY "Admin can update all messages" ON conversation_messages
     (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
-
--- =====================================================
--- TRIGGERS FOR ADMIN NOTIFICATIONS
--- =====================================================
-
--- Function to create notification on new order
+-- Triggers for Admin Notifications
 DROP FUNCTION IF EXISTS notify_new_order() CASCADE;
 CREATE OR REPLACE FUNCTION notify_new_order()
 RETURNS TRIGGER AS $$
@@ -677,15 +592,3 @@ CREATE TRIGGER trigger_notify_new_custom_order
   AFTER INSERT ON custom_orders
   FOR EACH ROW
   EXECUTE FUNCTION notify_new_custom_order();
-
-
--- =====================================================
--- MIGRATION COMPLETE
--- =====================================================
--- Next Steps:
--- 1. Run this migration in Supabase SQL Editor
--- 2. Verify all indexes are created
--- 3. Test RLS policies with different user roles
--- 4. Refresh materialized view: SELECT refresh_daily_sales();
--- 5. Test real-time subscriptions in application
--- =====================================================
