@@ -3,128 +3,113 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
-// High-quality bakery product images from various sources
+// Local product images from assets folder
 const getCategoryImage = (category?: string, title?: string): string => {
   const normalizedCategory = (category || "").toLowerCase();
   const normalizedTitle = (title || "").toLowerCase();
   
-  // Cakes - Using high-resolution bakery images
+  // Cakes - Match with local cake images
   if (normalizedCategory === "cakes" || normalizedTitle.includes("cake")) {
-    if (normalizedTitle.includes("chocolate")) {
-      return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=90";
+    if (normalizedTitle.includes("2 tier") || normalizedTitle.includes("two tier")) {
+      return "/src/assets/2 tier cake.jpeg";
     }
-    if (normalizedTitle.includes("wedding")) {
-      return "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=800&q=90";
+    if (normalizedTitle.includes("3 tier") || normalizedTitle.includes("three tier")) {
+      return "/src/assets/3 tier cake.jpeg";
     }
-    if (normalizedTitle.includes("red velvet")) {
-      return "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=800&q=90";
+    if (normalizedTitle.includes("4 tier") || normalizedTitle.includes("four tier")) {
+      return "/src/assets/4 tier cake.jpeg";
+    }
+    if (normalizedTitle.includes("heart")) {
+      return "/src/assets/heart cake.jpeg";
+    }
+    if (normalizedTitle.includes("letter")) {
+      return "/src/assets/letter cake.jpeg";
+    }
+    if (normalizedTitle.includes("number")) {
+      return "/src/assets/number cake.jpeg";
+    }
+    if (normalizedTitle.includes("round")) {
+      return "/src/assets/round cake.jpeg";
+    }
+    if (normalizedTitle.includes("square")) {
+      return "/src/assets/square cake.jpeg";
+    }
+    if (normalizedTitle.includes("sheet")) {
+      return "/src/assets/sheet cake.jpeg";
+    }
+    if (normalizedTitle.includes("pound")) {
+      return "/src/assets/pound cake.jpeg";
     }
     if (normalizedTitle.includes("birthday")) {
-      return "https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=800&q=90";
+      return "/src/assets/birthday-cakes.jpg";
     }
-    if (normalizedTitle.includes("vanilla")) {
-      return "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=90";
+    if (normalizedTitle.includes("fruit")) {
+      return "/src/assets/fruit-cakes.jpg";
     }
-    if (normalizedTitle.includes("carrot")) {
-      return "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&q=90";
-    }
-    if (normalizedTitle.includes("lemon")) {
-      return "https://images.unsplash.com/photo-1519915212116-7cfef71f1d3e?w=800&q=90";
-    }
-    if (normalizedTitle.includes("strawberry")) {
-      return "https://images.unsplash.com/photo-1565661834013-d196ca46e14e?w=800&q=90";
-    }
-    if (normalizedTitle.includes("black forest")) {
-      return "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&q=90";
-    }
-    return "https://images.unsplash.com/photo-1588195538326-c5b1e5b9e46b?w=800&q=90";
+    return "/src/assets/delicious-cake-1.jpeg";
   }
   
-  // Cupcakes
+  // Cupcakes - Match with cupcake images
   if (normalizedCategory === "cupcakes" || normalizedTitle.includes("cupcake")) {
-    if (normalizedTitle.includes("chocolate")) {
-      return "https://images.unsplash.com/photo-1426869884541-df7117556757?w=800&q=90";
+    if (normalizedTitle.includes("box of 12") || normalizedTitle.includes("12")) {
+      return "/src/assets/cupcakes box of 12.jpeg";
     }
-    if (normalizedTitle.includes("vanilla")) {
-      return "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=800&q=90";
+    if (normalizedTitle.includes("box of 6") || normalizedTitle.includes("6")) {
+      return "/src/assets/cupcakes box of 6.jpeg";
     }
-    if (normalizedTitle.includes("red velvet")) {
-      return "https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=800&q=90";
+    if (normalizedTitle.includes("mini")) {
+      return "/src/assets/mini cupcakes.jpeg";
     }
-    if (normalizedTitle.includes("strawberry")) {
-      return "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=800&q=90";
-    }
-    return "https://images.unsplash.com/photo-1599785209796-786432b228bc?w=800&q=90";
+    return "/src/assets/cupcakes.jpg";
   }
   
-  // Cookies
+  // Cookies - Match with cookie images
   if (normalizedCategory === "cookies" || normalizedTitle.includes("cookie")) {
-    if (normalizedTitle.includes("chocolate chip")) {
-      return "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=90";
+    if (normalizedTitle.includes("box of 12") || normalizedTitle.includes("12")) {
+      return "/src/assets/cookie box of 12.jpeg";
     }
-    if (normalizedTitle.includes("oatmeal")) {
-      return "https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=800&q=90";
+    if (normalizedTitle.includes("box") && !normalizedTitle.includes("12")) {
+      return "/src/assets/cookie box .jpeg";
     }
-    if (normalizedTitle.includes("sugar")) {
-      return "https://images.unsplash.com/photo-1590080876876-5c16d8b5b0d5?w=800&q=90";
+    if (normalizedTitle.includes("giant")) {
+      return "/src/assets/Giant Cookie.jpeg";
     }
-    return "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=90";
+    return "/src/assets/cookies.jpg";
   }
   
-  // Donuts
-  if (normalizedCategory === "donuts" || normalizedTitle.includes("donut") || normalizedTitle.includes("doughnut")) {
-    if (normalizedTitle.includes("glazed")) {
-      return "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=90";
-    }
-    if (normalizedTitle.includes("chocolate")) {
-      return "https://images.unsplash.com/photo-1527515545081-5db817172677?w=800&q=90";
-    }
-    return "https://images.unsplash.com/photo-1514517521153-1be72277b32f?w=800&q=90";
-  }
-  
-  // Brownies
+  // Brownies - Match with brownie images
   if (normalizedCategory === "brownies" || normalizedTitle.includes("brownie")) {
-    if (normalizedTitle.includes("chocolate")) {
-      return "https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=800&q=90";
+    if (normalizedTitle.includes("box of 6") || normalizedTitle.includes("6")) {
+      return "/src/assets/browies box of 6.jpeg";
     }
-    if (normalizedTitle.includes("fudge")) {
-      return "https://images.unsplash.com/photo-1564355808853-1c8c4b518f10?w=800&q=90";
-    }
-    return "https://images.unsplash.com/photo-1612182062377-5f24102c00a9?w=800&q=90";
-  }
-  
-  // Pastries
-  if (normalizedCategory === "pastries" || normalizedTitle.includes("pastry") || normalizedTitle.includes("croissant")) {
-    if (normalizedTitle.includes("croissant")) {
-      return "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=90";
-    }
-    if (normalizedTitle.includes("danish")) {
-      return "https://images.unsplash.com/photo-1525058035697-68c9f39e0216?w=800&q=90";
-    }
-    return "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=90";
+    return "/src/assets/brownies.jpg";
   }
   
   // Muffins
   if (normalizedCategory === "muffins" || normalizedTitle.includes("muffin")) {
-    if (normalizedTitle.includes("blueberry")) {
-      return "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=800&q=90";
-    }
-    if (normalizedTitle.includes("chocolate")) {
-      return "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?w=800&q=90";
-    }
-    return "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?w=800&q=90";
+    return "/src/assets/muffins.jpg";
   }
   
   // Bread/Loaves
   if (normalizedTitle.includes("bread") || normalizedTitle.includes("loaf")) {
     if (normalizedTitle.includes("banana")) {
-      return "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=800&q=90";
+      return "/src/assets/banana-bread.jpg";
     }
-    return "https://images.unsplash.com/photo-1549931319-a545dcf3bc04?w=800&q=90";
+    return "/src/assets/loafs.jpg";
+  }
+  
+  // Cake Pops
+  if (normalizedTitle.includes("cake pop")) {
+    return "/src/assets/cake pops.jpeg";
+  }
+  
+  // Cinnamon Rolls
+  if (normalizedTitle.includes("cinnamon")) {
+    return "/src/assets/cinnamon rolls.jpeg";
   }
   
   // Default bakery image
-  return "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=800&q=90";
+  return "/src/assets/delicious-cake-1.jpeg";
 };
 
 interface Product {

@@ -89,8 +89,8 @@ const MenuCard = ({
     : "from-emerald-500 to-teal-500";
 
 
-  // High-quality bakery fallback image
-  const fallbackImage = "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=800&q=90";
+  // Local bakery fallback image
+  const fallbackImage = "/src/assets/delicious-cake-1.jpeg";
 
   const variantLabel = variantType === 'flavor' ? 'flavors' :
                        variantType === 'filling' ? 'fillings' :
