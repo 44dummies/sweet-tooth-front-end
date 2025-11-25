@@ -73,7 +73,7 @@ CREATE INDEX IF NOT EXISTS idx_custom_orders_created_at ON custom_orders(created
 
 -- Profiles indexes
 CREATE INDEX IF NOT EXISTS idx_profiles_email ON profiles(email);
-CREATE INDEX IF NOT EXISTS idx_profiles_role ON profiles(role);
+-- Note: Role column removed - using email-based admin check instead
 
 
 -- =====================================================
@@ -100,6 +100,7 @@ ORDER BY sale_date DESC;
 CREATE INDEX IF NOT EXISTS idx_daily_sales_date ON daily_sales_summary(sale_date DESC);
 
 -- Function to refresh materialized view
+DROP FUNCTION IF EXISTS refresh_daily_sales();
 CREATE OR REPLACE FUNCTION refresh_daily_sales()
 RETURNS void AS $$
 BEGIN
@@ -113,6 +114,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- =====================================================
 
 -- Function to update updated_at timestamp
+DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -174,14 +176,14 @@ CREATE POLICY "Users can insert own orders" ON orders
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Admins have full access to all orders
+-- Admins have full access to all orders (check email)
 CREATE POLICY "Admin full access to orders" ON orders
   FOR ALL
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -215,14 +217,14 @@ CREATE POLICY "Users can insert own order items" ON order_items
     )
   );
 
--- Admins have full access to all order items
+-- Admins have full access to all order items (check email)
 CREATE POLICY "Admin full access to order items" ON order_items
   FOR ALL
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -238,14 +240,14 @@ CREATE POLICY "Anyone can view products" ON products
   FOR SELECT
   USING (true);
 
--- Only admins can manage products
+-- Only admins can manage products (check email)
 CREATE POLICY "Admin can manage products" ON products
   FOR ALL
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -279,14 +281,14 @@ CREATE POLICY "Users can delete own reviews" ON reviews
   FOR DELETE
   USING (auth.uid() = user_id);
 
--- Admins have full access to all reviews
+-- Admins have full access to all reviews (check email)
 CREATE POLICY "Admin full access to reviews" ON reviews
   FOR ALL
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -308,14 +310,14 @@ CREATE POLICY "Users can insert custom orders" ON custom_orders
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Admins have full access to all custom orders
+-- Admins have full access to all custom orders (check email)
 CREATE POLICY "Admin full access to custom orders" ON custom_orders
   FOR ALL
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -343,14 +345,14 @@ CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT
   WITH CHECK (auth.uid() = id);
 
--- Admins have full access to all profiles
+-- Admins have full access to all profiles (check email)
 CREATE POLICY "Admin full access to profiles" ON profiles
   FOR ALL
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -360,6 +362,7 @@ CREATE POLICY "Admin full access to profiles" ON profiles
 -- =====================================================
 
 -- Function to get today's statistics
+DROP FUNCTION IF EXISTS get_today_stats();
 CREATE OR REPLACE FUNCTION get_today_stats()
 RETURNS JSON AS $$
 DECLARE
@@ -382,6 +385,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Function to get statistics for a specific period
+DROP FUNCTION IF EXISTS get_period_stats(INTEGER);
 CREATE OR REPLACE FUNCTION get_period_stats(days_ago INTEGER DEFAULT 7)
 RETURNS JSON AS $$
 DECLARE
@@ -407,6 +411,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Function to get product performance
+DROP FUNCTION IF EXISTS get_product_performance(INTEGER);
 CREATE OR REPLACE FUNCTION get_product_performance(days_ago INTEGER DEFAULT 30)
 RETURNS TABLE(
   product_id UUID,
@@ -463,14 +468,14 @@ DROP POLICY IF EXISTS "Admin can view notifications" ON admin_notifications;
 DROP POLICY IF EXISTS "System can insert notifications" ON admin_notifications;
 DROP POLICY IF EXISTS "Admin can update notifications" ON admin_notifications;
 
--- Only admins can view notifications
+-- Only admins can view notifications (check email)
 CREATE POLICY "Admin can view notifications" ON admin_notifications
   FOR SELECT
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -479,14 +484,14 @@ CREATE POLICY "System can insert notifications" ON admin_notifications
   FOR INSERT
   WITH CHECK (true);
 
--- Admins can update notifications (mark as read)
+-- Admins can update notifications (mark as read, check email)
 CREATE POLICY "Admin can update notifications" ON admin_notifications
   FOR UPDATE
   USING (
     EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
-      AND profiles.role = 'admin'
+      AND profiles.email = 'muindidamian@gmail.com'
     )
   );
 
@@ -496,6 +501,7 @@ CREATE POLICY "Admin can update notifications" ON admin_notifications
 -- =====================================================
 
 -- Function to create notification on new order
+DROP FUNCTION IF EXISTS notify_new_order() CASCADE;
 CREATE OR REPLACE FUNCTION notify_new_order()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -519,6 +525,7 @@ CREATE TRIGGER trigger_notify_new_order
   EXECUTE FUNCTION notify_new_order();
 
 -- Function to create notification on new custom order
+DROP FUNCTION IF EXISTS notify_new_custom_order() CASCADE;
 CREATE OR REPLACE FUNCTION notify_new_custom_order()
 RETURNS TRIGGER AS $$
 BEGIN
