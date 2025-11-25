@@ -125,32 +125,32 @@ DROP POLICY IF EXISTS "Users can insert own orders" ON orders;
 DROP POLICY IF EXISTS "Users can update own orders" ON orders;
 DROP POLICY IF EXISTS "Admin full access to orders" ON orders;
 
--- Users can view their own orders by email
+-- Users can view their own orders by email (using auth.email() instead of profiles lookup)
 CREATE POLICY "Users can view own orders" ON orders
   FOR SELECT
   USING (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
 -- Users can insert their own orders
 CREATE POLICY "Users can insert own orders" ON orders
   FOR INSERT
   WITH CHECK (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
 -- Users can update their own orders (for status changes)
 CREATE POLICY "Users can update own orders" ON orders
   FOR UPDATE
   USING (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Admins have full access to all orders (check email without recursion)
+-- Admins have full access to all orders (using auth.users instead of profiles)
 CREATE POLICY "Admin full access to orders" ON orders
   FOR ALL
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Order Items Policies
@@ -165,7 +165,7 @@ CREATE POLICY "Users can view own order items" ON order_items
     EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = order_items.order_id
-      AND orders.customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+      AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
     )
   );
 
@@ -176,15 +176,15 @@ CREATE POLICY "Users can insert own order items" ON order_items
     EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = order_items.order_id
-      AND orders.customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+      AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
     )
   );
 
--- Admins have full access to all order items (check email without recursion)
+-- Admins have full access to all order items (using auth.users)
 CREATE POLICY "Admin full access to order items" ON order_items
   FOR ALL
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Products Policies
@@ -196,11 +196,11 @@ CREATE POLICY "Anyone can view products" ON products
   FOR SELECT
   USING (true);
 
--- Only admins can manage products (check email without recursion)
+-- Only admins can manage products (using auth.users)
 CREATE POLICY "Admin can manage products" ON products
   FOR ALL
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Reviews Policies
@@ -230,11 +230,11 @@ CREATE POLICY "Users can delete own reviews" ON reviews
   FOR DELETE
   USING (auth.uid() = user_id);
 
--- Admins have full access to all reviews (check email without recursion)
+-- Admins have full access to all reviews (using auth.users)
 CREATE POLICY "Admin full access to reviews" ON reviews
   FOR ALL
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Custom Orders Policies
@@ -258,11 +258,11 @@ CREATE POLICY "Users can update own custom orders" ON custom_orders
   FOR UPDATE
   USING (auth.uid() = user_id);
 
--- Admins have full access to all custom orders (check email without recursion)
+-- Admins have full access to all custom orders (using auth.users)
 CREATE POLICY "Admin full access to custom orders" ON custom_orders
   FOR ALL
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Profiles Policies
@@ -274,7 +274,7 @@ DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 DROP POLICY IF EXISTS "Admin full access to profiles" ON profiles;
 DROP POLICY IF EXISTS "Admin can delete profiles" ON profiles;
 
--- All authenticated users can view all profiles (simplified to avoid recursion)
+-- All authenticated users can view all profiles
 CREATE POLICY "Authenticated users can view profiles" ON profiles
   FOR SELECT
   USING (auth.role() = 'authenticated');
@@ -289,11 +289,11 @@ CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT
   WITH CHECK (auth.uid() = id);
 
--- Admin can delete profiles (email check without recursion)
+-- Admin can delete profiles (using auth.users to avoid recursion)
 CREATE POLICY "Admin can delete profiles" ON profiles
   FOR DELETE
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Helper Functions
@@ -395,11 +395,11 @@ DROP POLICY IF EXISTS "Admin can view notifications" ON admin_notifications;
 DROP POLICY IF EXISTS "System can insert notifications" ON admin_notifications;
 DROP POLICY IF EXISTS "Admin can update notifications" ON admin_notifications;
 
--- Only admins can view notifications (check email without recursion)
+-- Only admins can view notifications (using auth.users)
 CREATE POLICY "Admin can view notifications" ON admin_notifications
   FOR SELECT
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- System can insert notifications (service role)
@@ -407,11 +407,11 @@ CREATE POLICY "System can insert notifications" ON admin_notifications
   FOR INSERT
   WITH CHECK (true);
 
--- Admins can update notifications (check email without recursion)
+-- Admins can update notifications (using auth.users)
 CREATE POLICY "Admin can update notifications" ON admin_notifications
   FOR UPDATE
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Customer Messaging Tables
@@ -460,39 +460,39 @@ DROP POLICY IF EXISTS "Users can update own conversations" ON conversations;
 DROP POLICY IF EXISTS "Admin can view all conversations" ON conversations;
 DROP POLICY IF EXISTS "Admin can update all conversations" ON conversations;
 
--- Users can view their own conversations by email
+-- Users can view their own conversations by email (using auth.users)
 CREATE POLICY "Users can view own conversations" ON conversations
   FOR SELECT
   USING (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Users can insert their own conversations
+-- Users can insert their own conversations (using auth.users)
 CREATE POLICY "Users can insert own conversations" ON conversations
   FOR INSERT
   WITH CHECK (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Users can update their own conversations
+-- Users can update their own conversations (using auth.users)
 CREATE POLICY "Users can update own conversations" ON conversations
   FOR UPDATE
   USING (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Admin can view all conversations
+-- Admin can view all conversations (using auth.users)
 CREATE POLICY "Admin can view all conversations" ON conversations
   FOR SELECT
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- Admin can update all conversations
+-- Admin can update all conversations (using auth.users)
 CREATE POLICY "Admin can update all conversations" ON conversations
   FOR UPDATE
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Conversation Messages RLS Policies
@@ -503,46 +503,46 @@ DROP POLICY IF EXISTS "Admin can view all messages" ON conversation_messages;
 DROP POLICY IF EXISTS "Admin can insert messages" ON conversation_messages;
 DROP POLICY IF EXISTS "Admin can update all messages" ON conversation_messages;
 
--- Users can view messages in their own conversations
+-- Users can view messages in their own conversations (using auth.users)
 CREATE POLICY "Users can view own messages" ON conversation_messages
   FOR SELECT
   USING (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Users can insert messages in their own conversations
+-- Users can insert messages in their own conversations (using auth.users)
 CREATE POLICY "Users can insert own messages" ON conversation_messages
   FOR INSERT
   WITH CHECK (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Users can update their own messages (mark as read)
+-- Users can update their own messages (using auth.users - mark as read)
 CREATE POLICY "Users can update own messages" ON conversation_messages
   FOR UPDATE
   USING (
-    customer_email = (SELECT email FROM profiles WHERE id = auth.uid())
+    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
   );
 
--- Admin can view all messages
+-- Admin can view all messages (using auth.users)
 CREATE POLICY "Admin can view all messages" ON conversation_messages
   FOR SELECT
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- Admin can insert messages in any conversation
+-- Admin can insert messages in any conversation (using auth.users)
 CREATE POLICY "Admin can insert messages" ON conversation_messages
   FOR INSERT
   WITH CHECK (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
--- Admin can update any message
+-- Admin can update any message (using auth.users)
 CREATE POLICY "Admin can update all messages" ON conversation_messages
   FOR UPDATE
   USING (
-    (SELECT email FROM profiles WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
   );
 
 -- Triggers for Admin Notifications
