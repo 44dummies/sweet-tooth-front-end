@@ -6,17 +6,81 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 
+// Import all gallery images statically for production builds
+import tier2Cake from '@/assets/2 tier cake.jpeg';
+import tier3Cake from '@/assets/3 tier cake.jpeg';
+import tier4Cake from '@/assets/4 tier cake.jpeg';
+import poundCake from '@/assets/pound cake.jpeg';
+import heartCake from '@/assets/heart cake.jpeg';
+import letterCake from '@/assets/letter cake.jpeg';
+import numberCake from '@/assets/number cake.jpeg';
+import roundCake from '@/assets/round cake.jpeg';
+import squareCake from '@/assets/square cake.jpeg';
+import sheetCake from '@/assets/sheet cake.jpeg';
+import birthdayCakes from '@/assets/birthday-cakes.jpg';
+import fruitCakes from '@/assets/fruit-cakes.jpg';
+import cupcakesBox6 from '@/assets/cupcakes box of 6.jpeg';
+import cupcakesBox12 from '@/assets/cupcakes box of 12.jpeg';
+import cupcakesBox24 from '@/assets/cupcakes box of 24.jpeg';
+import miniCupcakes from '@/assets/mini cupcakes.jpeg';
+import cookieBox12 from '@/assets/cookie box of 12.jpeg';
+import cookieBox24 from '@/assets/cookie box of 24.jpeg';
+import giantCookie from '@/assets/Giant Cookie.jpeg';
+import browniesBox6 from '@/assets/browies box of 6.jpeg';
+import cakePops from '@/assets/cake pops.jpeg';
+import cinnamonRolls from '@/assets/cinnamon rolls.jpeg';
+import bananaBread from '@/assets/banana-bread.jpg';
+import deliciousCake1 from '@/assets/delicious-cake-1.jpeg';
+import deliciousCake2 from '@/assets/delicious-cake-2.jpeg';
+import deliciousCake3 from '@/assets/deliciouus-cake-3.jpeg';
+import deliciousCake4 from '@/assets/delicious-cake-4.jpeg';
+import deliciousCake5 from '@/assets/delious cake-5.jpeg';
+import deliciousCake6 from '@/assets/delicous-cake-6.jpeg';
+import deliciousCake7 from '@/assets/delicous-cake-7.jpeg';
+import deliciousCake8 from '@/assets/delicous-cake-8.jpeg';
+import deliciousCake9 from '@/assets/delicous-cake-9.jpeg';
+
 const Gallery = () => {
   const galleryImages = [
-    { id: 1, name: "delicious-cake-1.jpeg", alt: "Beautiful layered chocolate cake" },
-    { id: 2, name: "delicious-cake-2.jpeg", alt: "Vanilla birthday cake with flowers" },
-    { id: 3, name: "deliciouus-cake-3.jpeg", alt: "Red velvet cake slice" },
-    { id: 4, name: "delicious-cake-4.jpeg", alt: "Strawberry shortcake" },
-    { id: 5, name: "delious cake-5.jpeg", alt: "Custom wedding cake" },
-    { id: 6, name: "delicous-cake-6.jpeg", alt: "Chocolate truffle cake" },
-    { id: 7, name: "delicous-cake-7.jpeg", alt: "Fruit tart assortment" },
-    { id: 8, name: "delicous-cake-8.jpeg", alt: "Cupcake collection" },
-    { id: 9, name: "delicous-cake-9.jpeg", alt: "Tiramisu cake" },
+    // Tier Cakes
+    { id: 1, src: tier2Cake, alt: "Elegant 2-Tier Wedding Cake" },
+    { id: 2, src: tier3Cake, alt: "Beautiful 3-Tier Celebration Cake" },
+    { id: 3, src: tier4Cake, alt: "Grand 4-Tier Wedding Cake" },
+    // Special Shape Cakes
+    { id: 4, src: poundCake, alt: "Classic Pound Cake" },
+    { id: 5, src: heartCake, alt: "Romantic Heart-Shaped Cake" },
+    { id: 6, src: letterCake, alt: "Custom Letter Cake" },
+    { id: 7, src: numberCake, alt: "Birthday Number Cake" },
+    { id: 8, src: roundCake, alt: "Classic Round Cake" },
+    { id: 9, src: squareCake, alt: "Modern Square Cake" },
+    { id: 10, src: sheetCake, alt: "Party Sheet Cake" },
+    // Occasion Cakes
+    { id: 11, src: birthdayCakes, alt: "Colorful Birthday Cakes" },
+    { id: 12, src: fruitCakes, alt: "Fresh Fruit-Topped Cakes" },
+    // Cupcakes
+    { id: 13, src: cupcakesBox6, alt: "Box of 6 Cupcakes" },
+    { id: 14, src: cupcakesBox12, alt: "Box of 12 Cupcakes" },
+    { id: 15, src: cupcakesBox24, alt: "Box of 24 Cupcakes" },
+    { id: 16, src: miniCupcakes, alt: "Adorable Mini Cupcakes" },
+    // Cookies
+    { id: 17, src: cookieBox12, alt: "Box of 12 Cookies" },
+    { id: 18, src: cookieBox24, alt: "Box of 24 Cookies" },
+    { id: 19, src: giantCookie, alt: "Giant Cookie" },
+    // Other Treats
+    { id: 20, src: browniesBox6, alt: "Box of 6 Brownies" },
+    { id: 21, src: cakePops, alt: "Colorful Cake Pops" },
+    { id: 22, src: cinnamonRolls, alt: "Fresh Cinnamon Rolls" },
+    { id: 23, src: bananaBread, alt: "Homemade Banana Bread" },
+    // Showcase Cakes
+    { id: 24, src: deliciousCake1, alt: "Artisan Chocolate Cake" },
+    { id: 25, src: deliciousCake2, alt: "Elegant Vanilla Cake" },
+    { id: 26, src: deliciousCake3, alt: "Red Velvet Masterpiece" },
+    { id: 27, src: deliciousCake4, alt: "Strawberry Delight" },
+    { id: 28, src: deliciousCake5, alt: "Custom Wedding Cake" },
+    { id: 29, src: deliciousCake6, alt: "Chocolate Truffle Cake" },
+    { id: 30, src: deliciousCake7, alt: "Gourmet Cake Creation" },
+    { id: 31, src: deliciousCake8, alt: "Premium Celebration Cake" },
+    { id: 32, src: deliciousCake9, alt: "Luxury Tiered Cake" },
   ];
 
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
@@ -109,13 +173,9 @@ const Gallery = () => {
                 >
                   <div className="aspect-square bg-muted relative overflow-hidden">
                     <img
-                      src={new URL(`../assets/${image.name}`, import.meta.url).href}
+                      src={image.src}
                       alt={image.alt}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e7eb' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' font-size='18' fill='%236b7280' text-anchor='middle' dominant-baseline='middle'%3EImage not found%3C/text%3E%3C/svg%3E";
-                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -148,13 +208,9 @@ const Gallery = () => {
             {selectedImage && (
               <>
                 <img
-                  src={new URL(`../assets/${selectedImage.name}`, import.meta.url).href}
+                  src={selectedImage.src}
                   alt={selectedImage.alt}
                   className="max-w-full max-h-full object-contain"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect fill='%23374151' width='600' height='600'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23d1d5db' text-anchor='middle' dominant-baseline='middle'%3EImage not found%3C/text%3E%3C/svg%3E";
-                  }}
                 />
 
                 {}

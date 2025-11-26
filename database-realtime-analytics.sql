@@ -53,14 +53,18 @@ WHERE LOWER(name) LIKE '%birthday%' AND category = 'cakes';
 UPDATE products SET image_url = '/src/assets/fruit-cakes.jpg'
 WHERE LOWER(name) LIKE '%fruit%' AND category = 'cakes';
 
--- CUPCAKES: Box Sizes
+-- CUPCAKES: Box Sizes (check 24 BEFORE 12 to avoid false matches)
+UPDATE products SET image_url = '/src/assets/cupcakes box of 24.jpeg'
+WHERE (LOWER(name) LIKE '%24%' OR LOWER(name) LIKE '%2 dozen%' OR LOWER(name) LIKE '%box of 24%') 
+AND category = 'cupcakes';
+
 UPDATE products SET image_url = '/src/assets/cupcakes box of 12.jpeg'
 WHERE (LOWER(name) LIKE '%12%' OR LOWER(name) LIKE '%dozen%' OR LOWER(name) LIKE '%box of 12%') 
-AND category = 'cupcakes';
+AND category = 'cupcakes' AND image_url IS NULL;
 
 UPDATE products SET image_url = '/src/assets/cupcakes box of 6.jpeg'
 WHERE (LOWER(name) LIKE '%6%' OR LOWER(name) LIKE '%box of 6%' OR LOWER(name) LIKE '%half dozen%') 
-AND category = 'cupcakes';
+AND category = 'cupcakes' AND image_url IS NULL;
 
 UPDATE products SET image_url = '/src/assets/mini cupcakes.jpeg'
 WHERE LOWER(name) LIKE '%mini%' AND category = 'cupcakes';

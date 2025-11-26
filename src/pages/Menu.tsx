@@ -26,6 +26,7 @@ import cookieBox24 from '@/assets/cookie box of 24.jpeg';
 import cookiesJpg from '@/assets/cookies.jpg';
 import cupcakesBox12 from '@/assets/cupcakes box of 12.jpeg';
 import cupcakesBox6 from '@/assets/cupcakes box of 6.jpeg';
+import cupcakesBox24 from '@/assets/cupcakes box of 24.jpeg';
 import cupcakesJpg from '@/assets/cupcakes.jpg';
 import deliciousCake1 from '@/assets/delicious-cake-1.jpeg';
 import deliciousCake2 from '@/assets/delicious-cake-2.jpeg';
@@ -68,8 +69,9 @@ const IMAGE_MAP: Record<string, string> = {
   'fruit-cakes.jpg': fruitCakes,
   // Cupcakes
   'mini cupcakes.jpeg': miniCupcakes,
-  'cupcakes box of 12.jpeg': cupcakesBox12,
   'cupcakes box of 6.jpeg': cupcakesBox6,
+  'cupcakes box of 12.jpeg': cupcakesBox12,
+  'cupcakes box of 24.jpeg': cupcakesBox24,
   'cupcakes.jpg': cupcakesJpg,
   // Cookies
   'Giant Cookie.jpeg': giantCookie,
@@ -137,6 +139,7 @@ const getProductImage = (imageUrl: string | null | undefined, productName: strin
   // Cupcakes
   if (cat === 'cupcakes' || name.includes('cupcake')) {
     if (name.includes('mini')) return miniCupcakes;
+    if (name.includes('24') || name.includes('2 dozen')) return cupcakesBox24;
     if (name.includes('12') || name.includes('dozen')) return cupcakesBox12;
     if (name.includes('6') || name.includes('half')) return cupcakesBox6;
     return cupcakesJpg;
