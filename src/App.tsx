@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { FloatingChatProvider } from "@/contexts/FloatingChatContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
@@ -57,13 +56,12 @@ const App = () => {
           <TooltipProvider>
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <AuthProvider>
-                <FloatingChatProvider>
-                  <CartProvider>
-                    <ScrollToTop />
-                    <Toaster />
-                    <Sonner />
-                    {showLoading && <LoadingOverlay />}
-                    <Routes>
+                <CartProvider>
+                  <ScrollToTop />
+                  <Toaster />
+                  <Sonner />
+                  {showLoading && <LoadingOverlay />}
+                  <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/menu" element={<Menu />} />
                   <Route path="/gallery" element={<Gallery />} />
@@ -86,9 +84,8 @@ const App = () => {
                   <Route path="*" element={<NotFound />} />
                   </Routes>
                 </CartProvider>
-              </FloatingChatProvider>
-            </AuthProvider>
-          </BrowserRouter>
+              </AuthProvider>
+            </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
