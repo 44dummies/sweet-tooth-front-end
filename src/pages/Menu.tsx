@@ -6,28 +6,178 @@ import MenuCard from "@/components/MenuCard";
 import FloatingChat from "@/components/FloatingChat";
 import { Sparkles, CalendarClock, Truck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import cinnamonRollsImg from "@/assets/cinnamon-rolls.jpg";
-import browniesImg from "@/assets/brownies.jpg";
-import cookiesImg from "@/assets/cookies.jpg";
-import cakePopsImg from "@/assets/cake-pops.jpg";
-import cupcakesImg from "@/assets/cupcakes.jpg";
-import bananaBreadImg from "@/assets/banana-bread.jpg";
-import fruitcakeImg from "@/assets/fruit-cakes.jpg";
-import birthdayCakesImg from "@/assets/birthday-cakes.jpg";
 
-const imageMap: Record<string, string> = {
-  "cinnamon-rolls": cinnamonRollsImg,
-  "cinnamon rolls": cinnamonRollsImg,
-  "brownies": browniesImg,
-  "cookies": cookiesImg,
-  "cake-pops": cakePopsImg,
-  "cake pops": cakePopsImg,
-  "cupcakes": cupcakesImg,
-  "banana-bread": bananaBreadImg,
-  "banana bread": bananaBreadImg,
-  "fruitcake": fruitcakeImg,
-  "birthday-cakes": birthdayCakesImg,
-  "birthday cakes": birthdayCakesImg,
+// Import all images statically for production builds
+import tier2Cake from '@/assets/2 tier cake.jpeg';
+import tier3Cake from '@/assets/3 tier cake.jpeg';
+import tier4Cake from '@/assets/4 tier cake.jpeg';
+import bananaBread from '@/assets/banana-bread.jpg';
+import birthdayCakes from '@/assets/birthday-cakes.jpg';
+import browniesBox6 from '@/assets/browies box of 6.jpeg';
+import browniesJpeg from '@/assets/brownies.jpeg';
+import browniesJpg from '@/assets/brownies.jpg';
+import cakePopsJpeg from '@/assets/cake pops.jpeg';
+import cakePopsJpg from '@/assets/cake-pops.jpg';
+import cinnamonRollsJpeg from '@/assets/cinnamon rolls.jpeg';
+import cinnamonRollsJpg from '@/assets/cinnamon-rolls.jpg';
+import cookieBox from '@/assets/cookie box .jpeg';
+import cookieBox12 from '@/assets/cookie box of 12.jpeg';
+import cookieBox24 from '@/assets/cookie box of 24.jpeg';
+import cookiesJpg from '@/assets/cookies.jpg';
+import cupcakesBox12 from '@/assets/cupcakes box of 12.jpeg';
+import cupcakesBox6 from '@/assets/cupcakes box of 6.jpeg';
+import cupcakesJpg from '@/assets/cupcakes.jpg';
+import deliciousCake1 from '@/assets/delicious-cake-1.jpeg';
+import deliciousCake2 from '@/assets/delicious-cake-2.jpeg';
+import deliciousCake4 from '@/assets/delicious-cake-4.jpeg';
+import deliciousCake3 from '@/assets/deliciouus-cake-3.jpeg';
+import deliciousCake6 from '@/assets/delicous-cake-6.jpeg';
+import deliciousCake7 from '@/assets/delicous-cake-7.jpeg';
+import deliciousCake8 from '@/assets/delicous-cake-8.jpeg';
+import deliciousCake9 from '@/assets/delicous-cake-9.jpeg';
+import deliciousCake5 from '@/assets/delious cake-5.jpeg';
+import fruitCakes from '@/assets/fruit-cakes.jpg';
+import giantCookie from '@/assets/Giant Cookie.jpeg';
+import heartCake from '@/assets/heart cake.jpeg';
+import letterCake from '@/assets/letter cake.jpeg';
+import loafsJpg from '@/assets/loafs.jpg';
+import miniCupcakes from '@/assets/mini cupcakes.jpeg';
+import muffinsJpg from '@/assets/muffins.jpg';
+import numberCake from '@/assets/number cake.jpeg';
+import poundCake from '@/assets/pound cake.jpeg';
+import roundCake from '@/assets/round cake.jpeg';
+import sheetCake from '@/assets/sheet cake.jpeg';
+import squareCake from '@/assets/square cake.jpeg';
+
+// Static image map for database image_url lookup
+const IMAGE_MAP: Record<string, string> = {
+  // Tier cakes
+  '2 tier cake.jpeg': tier2Cake,
+  '3 tier cake.jpeg': tier3Cake,
+  '4 tier cake.jpeg': tier4Cake,
+  // Shape cakes
+  'heart cake.jpeg': heartCake,
+  'letter cake.jpeg': letterCake,
+  'number cake.jpeg': numberCake,
+  'round cake.jpeg': roundCake,
+  'square cake.jpeg': squareCake,
+  'sheet cake.jpeg': sheetCake,
+  'pound cake.jpeg': poundCake,
+  // Occasion cakes
+  'birthday-cakes.jpg': birthdayCakes,
+  'fruit-cakes.jpg': fruitCakes,
+  // Cupcakes
+  'mini cupcakes.jpeg': miniCupcakes,
+  'cupcakes box of 12.jpeg': cupcakesBox12,
+  'cupcakes box of 6.jpeg': cupcakesBox6,
+  'cupcakes.jpg': cupcakesJpg,
+  // Cookies
+  'Giant Cookie.jpeg': giantCookie,
+  'cookie box of 24.jpeg': cookieBox24,
+  'cookie box of 12.jpeg': cookieBox12,
+  'cookie box .jpeg': cookieBox,
+  'cookies.jpg': cookiesJpg,
+  // Brownies
+  'browies box of 6.jpeg': browniesBox6,
+  'brownies.jpeg': browniesJpeg,
+  'brownies.jpg': browniesJpg,
+  // Other
+  'muffins.jpg': muffinsJpg,
+  'banana-bread.jpg': bananaBread,
+  'loafs.jpg': loafsJpg,
+  'cake pops.jpeg': cakePopsJpeg,
+  'cake-pops.jpg': cakePopsJpg,
+  'cinnamon rolls.jpeg': cinnamonRollsJpeg,
+  'cinnamon-rolls.jpg': cinnamonRollsJpg,
+  // Delicious cakes
+  'delicious-cake-1.jpeg': deliciousCake1,
+  'delicious-cake-2.jpeg': deliciousCake2,
+  'deliciouus-cake-3.jpeg': deliciousCake3,
+  'delicious-cake-4.jpeg': deliciousCake4,
+  'delious cake-5.jpeg': deliciousCake5,
+  'delicous-cake-6.jpeg': deliciousCake6,
+  'delicous-cake-7.jpeg': deliciousCake7,
+  'delicous-cake-8.jpeg': deliciousCake8,
+  'delicous-cake-9.jpeg': deliciousCake9,
+};
+
+// Get image from database path or use smart matching
+const getProductImage = (imageUrl: string | null | undefined, productName: string, category?: string): string => {
+  // Try to use database image_url first
+  if (imageUrl) {
+    // Extract filename from path like "/src/assets/heart cake.jpeg"
+    const fileName = imageUrl.replace(/^.*[\\\/]/, '');
+    if (IMAGE_MAP[fileName]) {
+      return IMAGE_MAP[fileName];
+    }
+  }
+  
+  // Fall back to smart matching based on product name
+  const name = (productName || '').toLowerCase().trim();
+  const cat = (category || '').toLowerCase();
+  
+  // Tier cakes
+  if (name.includes('2 tier') || name.includes('2-tier') || name.includes('two tier')) return tier2Cake;
+  if (name.includes('3 tier') || name.includes('3-tier') || name.includes('three tier')) return tier3Cake;
+  if (name.includes('4 tier') || name.includes('4-tier') || name.includes('four tier')) return tier4Cake;
+  
+  // Shape cakes
+  if (name.includes('heart')) return heartCake;
+  if (name.includes('letter')) return letterCake;
+  if (name.includes('number') || name.includes('digit')) return numberCake;
+  if (name.includes('round')) return roundCake;
+  if (name.includes('square')) return squareCake;
+  if (name.includes('sheet')) return sheetCake;
+  if (name.includes('pound')) return poundCake;
+  
+  // Occasion cakes
+  if (name.includes('birthday')) return birthdayCakes;
+  if (name.includes('fruit')) return fruitCakes;
+  
+  // Cupcakes
+  if (cat === 'cupcakes' || name.includes('cupcake')) {
+    if (name.includes('mini')) return miniCupcakes;
+    if (name.includes('12') || name.includes('dozen')) return cupcakesBox12;
+    if (name.includes('6') || name.includes('half')) return cupcakesBox6;
+    return cupcakesJpg;
+  }
+  
+  // Cookies
+  if (cat === 'cookies' || name.includes('cookie')) {
+    if (name.includes('giant') || name.includes('large') || name.includes('jumbo')) return giantCookie;
+    if (name.includes('24') || name.includes('2 dozen')) return cookieBox24;
+    if (name.includes('12') || name.includes('dozen')) return cookieBox12;
+    if (name.includes('box')) return cookieBox;
+    return cookiesJpg;
+  }
+  
+  // Brownies
+  if (cat === 'brownies' || name.includes('brownie')) {
+    if (name.includes('6') || name.includes('box')) return browniesBox6;
+    return browniesJpg;
+  }
+  
+  // Muffins
+  if (cat === 'muffins' || name.includes('muffin')) return muffinsJpg;
+  
+  // Bread
+  if (name.includes('banana') && (name.includes('bread') || name.includes('loaf'))) return bananaBread;
+  if (name.includes('bread') || name.includes('loaf')) return loafsJpg;
+  
+  // Cake pops
+  if (name.includes('cake pop') || name.includes('cakepop')) return cakePopsJpeg;
+  
+  // Cinnamon rolls
+  if (name.includes('cinnamon')) return cinnamonRollsJpeg;
+  
+  // Default for cakes
+  if (cat === 'cakes' || name.includes('cake')) {
+    const hash = name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    const cakeImages = [deliciousCake1, deliciousCake2, deliciousCake3, deliciousCake4, deliciousCake5, deliciousCake6, deliciousCake7, deliciousCake8, deliciousCake9];
+    return cakeImages[hash % cakeImages.length];
+  }
+  
+  return deliciousCake1;
 };
 
 const LARGE_CAKE_KEYWORDS = ["wedding", "tier", "custom", "anniversary", "birthday", "per kg"];
@@ -94,8 +244,6 @@ interface Product {
 const Menu = () => {
   const [menuItems, setMenuItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [categories, setCategories] = useState<string[]>([]);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -110,58 +258,35 @@ const Menu = () => {
 
   const fetchProducts = async () => {
     console.log('🔍 Fetching products from Supabase...');
-    console.log('🔗 Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
 
     try {
-
-      const { data, error, status, statusText } = await supabase
+      const { data, error } = await supabase
         .from('products')
         .select('*')
-        .order('created_at', { ascending: false });
-
-      console.log('📦 Supabase response:', { data, error, status, statusText });
+        .order('name');
 
       if (error) {
-        console.error('❌ Error fetching products:', error.message, error.details, error.hint, error.code);
-
+        console.error('❌ Error fetching products:', error.message);
         setMenuItems([]);
-        setCategories([]);
       } else if (data && data.length > 0) {
         console.log(`✅ Found ${data.length} products in database`);
-        console.log('📦 Raw first product:', data[0]);
 
         const products: Product[] = data
           .map((item) => normalizeProduct(item))
           .filter((product) => product.available);
 
-        console.log('📋 Mapped products count:', products.length);
-        console.log('📋 First mapped product:', products[0]);
         setMenuItems(products);
-
-
-        const uniqueCategories = Array.from(
-          new Set(products.map(item => item.category).filter(Boolean))
-        ) as string[];
-        console.log('🏷️ Categories found:', uniqueCategories);
-        setCategories(uniqueCategories);
       } else {
-        console.log('⚠️ No products in database. Status:', status);
+        console.log('⚠️ No products in database');
         setMenuItems([]);
-        setCategories([]);
       }
     } catch (err) {
       console.error('💥 Failed to fetch products:', err);
       setMenuItems([]);
-      setCategories([]);
     } finally {
       setLoading(false);
     }
   };
-
-  const filteredItems = selectedCategory === "all"
-    ? menuItems
-    : menuItems.filter(item => item.category === selectedCategory);
-
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -327,52 +452,6 @@ const Menu = () => {
         </motion.section>
 
         {}
-        <motion.section
-          className="py-8 bg-background border-b sticky top-20 z-40 backdrop-blur-lg bg-background/80"
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap gap-3 justify-center">
-              <motion.button
-                onClick={() => setSelectedCategory("all")}
-                className={`px-6 py-2 rounded-full font-semibold transition-all ${
-                  selectedCategory === "all"
-                    ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
-                    : "bg-secondary text-foreground hover:bg-secondary/80"
-                }`}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-              >
-                All Items
-              </motion.button>
-              {categories.map((category, index) => (
-                <motion.button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-2 rounded-full font-semibold transition-all capitalize ${
-                    selectedCategory === category
-                      ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
-                      : "bg-secondary text-foreground hover:bg-secondary/80"
-                  }`}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 + (index * 0.05) }}
-                >
-                  {category}
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        </motion.section>
-
-        {}
         <section className="py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {loading ? (
@@ -388,33 +467,30 @@ const Menu = () => {
                 />
                 <p className="mt-4 text-lg text-muted-foreground">Loading delicious items...</p>
               </motion.div>
-            ) : filteredItems.length === 0 ? (
+            ) : menuItems.length === 0 ? (
               <motion.div
                 className="text-center py-20"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
                 <p className="text-xl text-muted-foreground mb-4">
-                  {menuItems.length === 0
-                    ? "No products found. Check browser console (F12) for debug info."
-                    : "No items match this category just yet."}
+                  No products found. Check browser console (F12) for debug info.
                 </p>
-                {menuItems.length === 0 && (
-                  <div className="text-sm text-muted-foreground space-y-2 max-w-md mx-auto text-left bg-muted/50 p-4 rounded-lg">
-                    <p><strong>Troubleshooting:</strong></p>
-                    <ol className="list-decimal list-inside space-y-1">
-                      <li>Open browser console (F12 → Console tab)</li>
-                      <li>Look for error messages starting with ❌ or 💥</li>
-                      <li>If you see "No products in database", run the SQL seed in Supabase</li>
-                      <li>If you see RLS or permission errors, check your Supabase policies</li>
-                    </ol>
-                  </div>
-                )}
+                <div className="text-sm text-muted-foreground space-y-2 max-w-md mx-auto text-left bg-muted/50 p-4 rounded-lg">
+                  <p><strong>Troubleshooting:</strong></p>
+                  <ol className="list-decimal list-inside space-y-1">
+                    <li>Open browser console (F12 → Console tab)</li>
+                    <li>Look for error messages starting with ❌ or 💥</li>
+                    <li>If you see "No products in database", run the SQL seed in Supabase</li>
+                    <li>If you see RLS or permission errors, check your Supabase policies</li>
+                  </ol>
+                </div>
               </motion.div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filteredItems.map((item) => {
-                  const image = item.image_url || "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80";
+                {menuItems.map((item) => {
+                  // Use database image_url with smart fallback matching
+                  const image = getProductImage(item.image_url, item.title, item.category);
                   return (
                     <div key={item.id}>
                       <MenuCard
