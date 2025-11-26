@@ -3,7 +3,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import MenuCard from "@/components/MenuCard";
-import FloatingChat from "@/components/FloatingChat";
+import FloatingContact from "@/components/FloatingContact";
 import { Sparkles, CalendarClock, Truck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -517,7 +517,7 @@ const Menu = () => {
         </section>
 
         <Footer />
-        <FloatingChat />
+        <FloatingContact />
       </div>
     </>
   );

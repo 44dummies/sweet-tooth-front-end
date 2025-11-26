@@ -4,7 +4,6 @@ import { Bell, ChevronDown, User, LogOut, X, Mail } from "lucide-react";
 import CustomOrderModal from "@/components/CustomOrderModal";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useFloatingChat } from "@/contexts/FloatingChatContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import CartDrawer from "@/components/CartDrawer";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -22,7 +21,6 @@ const Navbar = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
   const { user, profile, signOut, loading: authLoading } = useAuth();
-  const { openChat } = useFloatingChat();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -178,7 +176,7 @@ const Navbar = () => {
                       key={link.id}
                       onClick={() => {
                         if (link.id === "contact") {
-                          openChat();
+                          window.open("https://wa.me/254795436192?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20your%20cakes.", "_blank");
                         } else if (link.isRoute) {
                           navigate(`/${link.id}`);
                         } else {

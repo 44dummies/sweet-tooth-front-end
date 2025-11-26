@@ -8,7 +8,7 @@ import CustomOrderSection from "@/components/CustomOrderSection";
 import ReviewsSection from "@/components/ReviewSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import FloatingChat from "@/components/FloatingChat";
+import FloatingContact from "@/components/FloatingContact";
 
 const Index = () => {
   const { scrollYProgress } = useScroll();
@@ -96,7 +96,7 @@ const Index = () => {
         </motion.div>
 
         <Footer />
-        <FloatingChat />
+        <FloatingContact />
       </motion.div>
     </>
   );

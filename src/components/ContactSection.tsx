@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, MessageCircle, Send, ArrowRight } from "lucide-react";
-import { useFloatingChat } from "@/contexts/FloatingChatContext";
+import { Mail, Phone, ArrowRight } from "lucide-react";
 import { useReducedAnimations } from "@/hooks/use-mobile";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -10,31 +9,30 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 );
 
 const ContactSection = () => {
-  const { openChat } = useFloatingChat();
   const reduceAnimations = useReducedAnimations();
 
   const contactOptions = [
     {
       icon: WhatsAppIcon,
       title: "WhatsApp",
-      subtitle: "Chat with us",
-      action: () => window.open("https://wa.me/254795436192", "_blank"),
+      subtitle: "+254 795 436 192",
+      action: () => window.open("https://wa.me/254795436192?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20your%20cakes%20and%20pastries.", "_blank"),
       color: "from-green-500 to-emerald-600",
       hoverColor: "hover:shadow-green-500/25",
     },
     {
       icon: Mail,
       title: "Email",
-      subtitle: "Send a message",
-      action: () => window.location.href = "mailto:muindidamian@gmail.com",
+      subtitle: "sweettoothpastries@gmail.com",
+      action: () => window.location.href = "mailto:sweettoothpastries@gmail.com?subject=Inquiry%20from%20Website",
       color: "from-blue-500 to-indigo-600",
       hoverColor: "hover:shadow-blue-500/25",
     },
     {
-      icon: MessageCircle,
-      title: "Live Chat",
-      subtitle: "We're online",
-      action: openChat,
+      icon: Phone,
+      title: "Call Us",
+      subtitle: "+254 795 436 192",
+      action: () => window.location.href = "tel:+254795436192",
       color: "from-purple-500 to-pink-600",
       hoverColor: "hover:shadow-purple-500/25",
     },
