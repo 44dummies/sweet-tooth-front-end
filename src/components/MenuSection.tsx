@@ -3,160 +3,134 @@ import MenuCard from "./MenuCard";
 import { supabase } from "@/lib/supabase";
 import { Package } from "lucide-react";
 
-// Local product images from assets folder - Direct mapping for Vite
+// Complete list of available images in assets folder
+const AVAILABLE_IMAGES: Record<string, string> = {
+  '2 tier cake.jpeg': new URL('../assets/2 tier cake.jpeg', import.meta.url).href,
+  '3 tier cake.jpeg': new URL('../assets/3 tier cake.jpeg', import.meta.url).href,
+  '4 tier cake.jpeg': new URL('../assets/4 tier cake.jpeg', import.meta.url).href,
+  'banana-bread.jpg': new URL('../assets/banana-bread.jpg', import.meta.url).href,
+  'birthday-cakes.jpg': new URL('../assets/birthday-cakes.jpg', import.meta.url).href,
+  'browies box of 6.jpeg': new URL('../assets/browies box of 6.jpeg', import.meta.url).href,
+  'brownies.jpeg': new URL('../assets/brownies.jpeg', import.meta.url).href,
+  'brownies.jpg': new URL('../assets/brownies.jpg', import.meta.url).href,
+  'cake pops.jpeg': new URL('../assets/cake pops.jpeg', import.meta.url).href,
+  'cake-pops.jpg': new URL('../assets/cake-pops.jpg', import.meta.url).href,
+  'cinnamon rolls.jpeg': new URL('../assets/cinnamon rolls.jpeg', import.meta.url).href,
+  'cinnamon-rolls.jpg': new URL('../assets/cinnamon-rolls.jpg', import.meta.url).href,
+  'cookie box .jpeg': new URL('../assets/cookie box .jpeg', import.meta.url).href,
+  'cookie box of 12.jpeg': new URL('../assets/cookie box of 12.jpeg', import.meta.url).href,
+  'cookie box of 24.jpeg': new URL('../assets/cookie box of 24.jpeg', import.meta.url).href,
+  'cookies.jpg': new URL('../assets/cookies.jpg', import.meta.url).href,
+  'cupcakes box of 12.jpeg': new URL('../assets/cupcakes box of 12.jpeg', import.meta.url).href,
+  'cupcakes box of 6.jpeg': new URL('../assets/cupcakes box of 6.jpeg', import.meta.url).href,
+  'cupcakes.jpg': new URL('../assets/cupcakes.jpg', import.meta.url).href,
+  'delicious-cake-1.jpeg': new URL('../assets/delicious-cake-1.jpeg', import.meta.url).href,
+  'delicious-cake-2.jpeg': new URL('../assets/delicious-cake-2.jpeg', import.meta.url).href,
+  'delicious-cake-4.jpeg': new URL('../assets/delicious-cake-4.jpeg', import.meta.url).href,
+  'deliciouus-cake-3.jpeg': new URL('../assets/deliciouus-cake-3.jpeg', import.meta.url).href,
+  'delicous-cake-6.jpeg': new URL('../assets/delicous-cake-6.jpeg', import.meta.url).href,
+  'delicous-cake-7.jpeg': new URL('../assets/delicous-cake-7.jpeg', import.meta.url).href,
+  'delicous-cake-8.jpeg': new URL('../assets/delicous-cake-8.jpeg', import.meta.url).href,
+  'delicous-cake-9.jpeg': new URL('../assets/delicous-cake-9.jpeg', import.meta.url).href,
+  'delious cake-5.jpeg': new URL('../assets/delious cake-5.jpeg', import.meta.url).href,
+  'fruit-cakes.jpg': new URL('../assets/fruit-cakes.jpg', import.meta.url).href,
+  'Giant Cookie.jpeg': new URL('../assets/Giant Cookie.jpeg', import.meta.url).href,
+  'heart cake.jpeg': new URL('../assets/heart cake.jpeg', import.meta.url).href,
+  'hero-cake-1.jpg': new URL('../assets/hero-cake-1.jpg', import.meta.url).href,
+  'hero-cake-2.jpg': new URL('../assets/hero-cake-2.jpg', import.meta.url).href,
+  'hero-cake-3.jpg': new URL('../assets/hero-cake-3.jpg', import.meta.url).href,
+  'letter cake.jpeg': new URL('../assets/letter cake.jpeg', import.meta.url).href,
+  'loafs.jpg': new URL('../assets/loafs.jpg', import.meta.url).href,
+  'mini cupcakes.jpeg': new URL('../assets/mini cupcakes.jpeg', import.meta.url).href,
+  'muffins.jpg': new URL('../assets/muffins.jpg', import.meta.url).href,
+  'number cake.jpeg': new URL('../assets/number cake.jpeg', import.meta.url).href,
+  'pound cake.jpeg': new URL('../assets/pound cake.jpeg', import.meta.url).href,
+  'round cake.jpeg': new URL('../assets/round cake.jpeg', import.meta.url).href,
+  'sheet cake.jpeg': new URL('../assets/sheet cake.jpeg', import.meta.url).href,
+  'square cake.jpeg': new URL('../assets/square cake.jpeg', import.meta.url).href,
+};
+
+// Intelligent image matching based on product name and category
+const findBestImageMatch = (productName: string, category: string): string => {
+  const normalized = productName.toLowerCase().trim();
+  const normalizedCategory = category?.toLowerCase() || '';
+  
+  // Extract key terms from product name
+  const extractKeywords = (text: string): string[] => {
+    return text.split(/[\s-_]+/).filter(word => 
+      word.length > 2 && !['the', 'and', 'for', 'with'].includes(word)
+    );
+  };
+  
+  const productKeywords = extractKeywords(normalized);
+  
+  // Score each image based on keyword matches
+  let bestMatch = 'delicious-cake-1.jpeg';
+  let highestScore = 0;
+  
+  Object.keys(AVAILABLE_IMAGES).forEach(imageName => {
+    let score = 0;
+    const imageKeywords = extractKeywords(imageName.replace(/\.(jpg|jpeg|png)$/i, ''));
+    
+    // Exact phrase match (highest priority)
+    if (imageName.toLowerCase().includes(normalized.slice(0, 15))) {
+      score += 100;
+    }
+    
+    // Keyword matching
+    productKeywords.forEach(keyword => {
+      imageKeywords.forEach(imgKeyword => {
+        if (keyword === imgKeyword) score += 20;
+        if (keyword.includes(imgKeyword) || imgKeyword.includes(keyword)) score += 10;
+      });
+      
+      // Direct keyword in image name
+      if (imageName.toLowerCase().includes(keyword)) score += 15;
+    });
+    
+    // Category bonus
+    if (imageName.toLowerCase().includes(normalizedCategory.slice(0, -1))) score += 5;
+    
+    // Specific pattern matching
+    if (normalized.includes('tier') && imageName.includes('tier')) score += 25;
+    if (normalized.includes('box of') && imageName.includes('box of')) score += 25;
+    if (normalized.match(/\d+/) && imageName.includes(normalized.match(/\d+/)?.[0] || '')) score += 20;
+    if (normalized.includes('mini') && imageName.includes('mini')) score += 20;
+    if (normalized.includes('giant') && imageName.includes('giant')) score += 20;
+    if (normalized.includes('heart') && imageName.includes('heart')) score += 25;
+    if (normalized.includes('square') && imageName.includes('square')) score += 25;
+    if (normalized.includes('round') && imageName.includes('round')) score += 25;
+    if (normalized.includes('letter') && imageName.includes('letter')) score += 25;
+    if (normalized.includes('number') && imageName.includes('number')) score += 25;
+    if (normalized.includes('sheet') && imageName.includes('sheet')) score += 25;
+    if (normalized.includes('pound') && imageName.includes('pound')) score += 25;
+    if (normalized.includes('birthday') && imageName.includes('birthday')) score += 25;
+    if (normalized.includes('fruit') && imageName.includes('fruit')) score += 25;
+    if (normalized.includes('banana') && imageName.includes('banana')) score += 25;
+    if (normalized.includes('cinnamon') && imageName.includes('cinnamon')) score += 25;
+    if (normalized.includes('muffin') && imageName.includes('muffin')) score += 25;
+    if (normalized.includes('brownie') && imageName.includes('brownie')) score += 20;
+    if (normalized.includes('cupcake') && imageName.includes('cupcake')) score += 20;
+    if (normalized.includes('cookie') && imageName.includes('cookie')) score += 20;
+    
+    // Update best match
+    if (score > highestScore) {
+      highestScore = score;
+      bestMatch = imageName;
+    }
+  });
+  
+  return AVAILABLE_IMAGES[bestMatch];
+};
+
+// Local product images from assets folder - Direct mapping for database paths
 const getImageFromPath = (imagePath: string): string => {
   // Remove /src/assets/ prefix if present
   const fileName = imagePath.replace('/src/assets/', '').replace('../assets/', '');
-  
-  // Map database paths to actual imported images
-  const imageMap: Record<string, string> = {
-    '2 tier cake.jpeg': new URL('../assets/2 tier cake.jpeg', import.meta.url).href,
-    '3 tier cake.jpeg': new URL('../assets/3 tier cake.jpeg', import.meta.url).href,
-    '4 tier cake.jpeg': new URL('../assets/4 tier cake.jpeg', import.meta.url).href,
-    'heart cake.jpeg': new URL('../assets/heart cake.jpeg', import.meta.url).href,
-    'letter cake.jpeg': new URL('../assets/letter cake.jpeg', import.meta.url).href,
-    'number cake.jpeg': new URL('../assets/number cake.jpeg', import.meta.url).href,
-    'round cake.jpeg': new URL('../assets/round cake.jpeg', import.meta.url).href,
-    'square cake.jpeg': new URL('../assets/square cake.jpeg', import.meta.url).href,
-    'sheet cake.jpeg': new URL('../assets/sheet cake.jpeg', import.meta.url).href,
-    'pound cake.jpeg': new URL('../assets/pound cake.jpeg', import.meta.url).href,
-    'birthday-cakes.jpg': new URL('../assets/birthday-cakes.jpg', import.meta.url).href,
-    'fruit-cakes.jpg': new URL('../assets/fruit-cakes.jpg', import.meta.url).href,
-    'cupcakes box of 12.jpeg': new URL('../assets/cupcakes box of 12.jpeg', import.meta.url).href,
-    'cupcakes box of 6.jpeg': new URL('../assets/cupcakes box of 6.jpeg', import.meta.url).href,
-    'mini cupcakes.jpeg': new URL('../assets/mini cupcakes.jpeg', import.meta.url).href,
-    'cupcakes.jpg': new URL('../assets/cupcakes.jpg', import.meta.url).href,
-    'cookie box of 12.jpeg': new URL('../assets/cookie box of 24.jpeg', import.meta.url).href,
-    'cookie box of 24.jpeg': new URL('../assets/cookie box of 12.jpeg', import.meta.url).href,
-    'cookie box .jpeg': new URL('../assets/cookie box .jpeg', import.meta.url).href,
-    'Giant Cookie.jpeg': new URL('../assets/Giant Cookie.jpeg', import.meta.url).href,
-    'cookies.jpg': new URL('../assets/cookies.jpg', import.meta.url).href,
-    'browies box of 6.jpeg': new URL('../assets/browies box of 6.jpeg', import.meta.url).href,
-    'brownies.jpg': new URL('../assets/brownies.jpg', import.meta.url).href,
-    'muffins.jpg': new URL('../assets/muffins.jpg', import.meta.url).href,
-    'banana-bread.jpg': new URL('../assets/banana-bread.jpg', import.meta.url).href,
-    'loafs.jpg': new URL('../assets/loafs.jpg', import.meta.url).href,
-    'cake pops.jpeg': new URL('../assets/cake pops.jpeg', import.meta.url).href,
-    'cinnamon-rolls.jpg': new URL('../assets/cinnamon-rolls.jpg', import.meta.url).href,
-    'delicious-cake-1.jpeg': new URL('../assets/delicious-cake-1.jpeg', import.meta.url).href,
-    'delicious-cake-2.jpeg': new URL('../assets/delicious-cake-2.jpeg', import.meta.url).href,
-  };
-  
-  return imageMap[fileName] || new URL('../assets/delicious-cake-1.jpeg', import.meta.url).href;
+  return AVAILABLE_IMAGES[fileName] || AVAILABLE_IMAGES['delicious-cake-1.jpeg'];
 };
 
 // Local product images from assets folder
-const getCategoryImage = (category?: string, name?: string): string => {
-  const normalizedCategory = (category || "").toLowerCase();
-  const normalizedName = (name || "").toLowerCase();
-  
-  // Cakes - Match with local cake images
-  if (normalizedCategory === "cakes" || normalizedName.includes("cake")) {
-    if (normalizedName.includes("2 tier") || normalizedName.includes("two tier")) {
-      return new URL("../assets/2 tier cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("3 tier") || normalizedName.includes("three tier")) {
-      return new URL("../assets/3 tier cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("4 tier") || normalizedName.includes("four tier")) {
-      return new URL("../assets/4 tier cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("heart")) {
-      return new URL("../assets/heart cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("letter")) {
-      return new URL("../assets/letter cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("number")) {
-      return new URL("../assets/number cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("round")) {
-      return new URL("../assets/round cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("square")) {
-      return new URL("../assets/square cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("sheet")) {
-      return new URL("../assets/sheet cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("pound")) {
-      return new URL("../assets/pound cake.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("birthday")) {
-      return new URL("../assets/birthday-cakes.jpg", import.meta.url).href;
-    }
-    if (normalizedName.includes("fruit")) {
-      return new URL("../assets/fruit-cakes.jpg", import.meta.url).href;
-    }
-    return new URL("../assets/delicious-cake-1.jpeg", import.meta.url).href;
-  }
-  
-  // Cupcakes - Match with cupcake images
-  if (normalizedCategory === "cupcakes" || normalizedName.includes("cupcake")) {
-    if (normalizedName.includes("box of 12") || normalizedName.includes("12")) {
-      return new URL("../assets/cupcakes box of 12.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("box of 6") || normalizedName.includes("6")) {
-      return new URL("../assets/cupcakes box of 6.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("mini")) {
-      return new URL("../assets/mini cupcakes.jpeg", import.meta.url).href;
-    }
-    return new URL("../assets/cupcakes.jpg", import.meta.url).href;
-  }
-  
-  // Cookies - Match with cookie images
-  if (normalizedCategory === "cookies" || normalizedName.includes("cookie")) {
-    if (normalizedName.includes("box of 24") || normalizedName.includes("24") || normalizedName.includes("2 dozen")) {
-      return new URL("../assets/cookie box of 12.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("box of 12") || normalizedName.includes("12") || normalizedName.includes("dozen")) {
-      return new URL("../assets/cookie box of 24.jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("box") && !normalizedName.includes("12") && !normalizedName.includes("24")) {
-      return new URL("../assets/cookie box .jpeg", import.meta.url).href;
-    }
-    if (normalizedName.includes("giant")) {
-      return new URL("../assets/Giant Cookie.jpeg", import.meta.url).href;
-    }
-    return new URL("../assets/cookies.jpg", import.meta.url).href;
-  }
-  
-  // Brownies - Match with brownie images
-  if (normalizedCategory === "brownies" || normalizedName.includes("brownie")) {
-    if (normalizedName.includes("box of 6") || normalizedName.includes("6")) {
-      return new URL("../assets/browies box of 6.jpeg", import.meta.url).href;
-    }
-    return new URL("../assets/brownies.jpg", import.meta.url).href;
-  }
-  
-  // Muffins
-  if (normalizedCategory === "muffins" || normalizedName.includes("muffin")) {
-    return new URL("../assets/muffins.jpg", import.meta.url).href;
-  }
-  
-  // Bread/Loaves
-  if (normalizedName.includes("bread") || normalizedName.includes("loaf")) {
-    if (normalizedName.includes("banana")) {
-      return new URL("../assets/banana-bread.jpg", import.meta.url).href;
-    }
-    return new URL("../assets/loafs.jpg", import.meta.url).href;
-  }
-  
-  // Cake Pops
-  if (normalizedName.includes("cake pop")) {
-    return new URL("../assets/cake pops.jpeg", import.meta.url).href;
-  }
-  
-  // Cinnamon Rolls
-  if (normalizedName.includes("cinnamon")) {
-    return new URL("../assets/cinnamon rolls.jpeg", import.meta.url).href;
-  }
-  
-  // Default bakery image
-  return new URL("../assets/delicious-cake-1.jpeg", import.meta.url).href;
-};
-
 interface Product {
   id: string;
   name: string;
@@ -334,14 +308,14 @@ const MenuSection = () => {
               const name = item.name;
               const category = item.category;
               
-              // Use database image_url if available, otherwise use intelligent local matching
+              // Use database image_url if available, otherwise use intelligent matching
               let image: string;
               if (item.image_url) {
-                // Convert database path to actual Vite URL using static mapping
+                // Convert database path to actual Vite URL
                 image = getImageFromPath(item.image_url);
               } else {
-                // Fallback to intelligent matching if no database image
-                image = getCategoryImage(category, name);
+                // Use intelligent matching algorithm based on product name and category
+                image = findBestImageMatch(name, category || '');
               }
               
               // Debug: Log product-to-image mapping
