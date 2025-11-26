@@ -55,6 +55,17 @@ const findBestImageMatch = (productName: string, category: string): string => {
   const normalized = productName.toLowerCase().trim();
   const normalizedCategory = category?.toLowerCase() || '';
   
+  // CRITICAL: Tier cakes MUST match exactly - highest priority
+  if (normalized.includes('2 tier') || normalized.includes('two tier')) {
+    return AVAILABLE_IMAGES['2 tier cake.jpeg'];
+  }
+  if (normalized.includes('3 tier') || normalized.includes('three tier')) {
+    return AVAILABLE_IMAGES['3 tier cake.jpeg'];
+  }
+  if (normalized.includes('4 tier') || normalized.includes('four tier')) {
+    return AVAILABLE_IMAGES['4 tier cake.jpeg'];
+  }
+  
   // Extract key terms from product name
   const extractKeywords = (text: string): string[] => {
     return text.split(/[\s-_]+/).filter(word => 
@@ -71,6 +82,11 @@ const findBestImageMatch = (productName: string, category: string): string => {
   Object.keys(AVAILABLE_IMAGES).forEach(imageName => {
     let score = 0;
     const imageKeywords = extractKeywords(imageName.replace(/\.(jpg|jpeg|png)$/i, ''));
+    
+    // Skip tier cakes in general matching (already handled above)
+    if (imageName.includes('tier')) {
+      return;
+    }
     
     // Exact phrase match (highest priority)
     if (imageName.toLowerCase().includes(normalized.slice(0, 15))) {
@@ -92,7 +108,6 @@ const findBestImageMatch = (productName: string, category: string): string => {
     if (imageName.toLowerCase().includes(normalizedCategory.slice(0, -1))) score += 5;
     
     // Specific pattern matching
-    if (normalized.includes('tier') && imageName.includes('tier')) score += 25;
     if (normalized.includes('box of') && imageName.includes('box of')) score += 25;
     if (normalized.match(/\d+/) && imageName.includes(normalized.match(/\d+/)?.[0] || '')) score += 20;
     if (normalized.includes('mini') && imageName.includes('mini')) score += 20;
