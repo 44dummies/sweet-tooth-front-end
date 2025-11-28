@@ -251,28 +251,28 @@ DROP POLICY IF EXISTS "Admin full access to orders" ON orders;
 CREATE POLICY "Users can view own orders" ON orders
   FOR SELECT
   USING (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Users can insert their own orders
 CREATE POLICY "Users can insert own orders" ON orders
   FOR INSERT
   WITH CHECK (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Users can update their own orders (for status changes)
 CREATE POLICY "Users can update own orders" ON orders
   FOR UPDATE
   USING (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Admins have full access to all orders (using auth.users instead of profiles)
 CREATE POLICY "Admin full access to orders" ON orders
   FOR ALL
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Order Items Policies
@@ -287,7 +287,7 @@ CREATE POLICY "Users can view own order items" ON order_items
     EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = order_items.order_id
-      AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+      AND orders.customer_email = auth.jwt() ->> 'email'
     )
   );
 
@@ -298,7 +298,7 @@ CREATE POLICY "Users can insert own order items" ON order_items
     EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = order_items.order_id
-      AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+      AND orders.customer_email = auth.jwt() ->> 'email'
     )
   );
 
@@ -306,7 +306,7 @@ CREATE POLICY "Users can insert own order items" ON order_items
 CREATE POLICY "Admin full access to order items" ON order_items
   FOR ALL
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Products Policies
@@ -322,7 +322,7 @@ CREATE POLICY "Anyone can view products" ON products
 CREATE POLICY "Admin can manage products" ON products
   FOR ALL
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Reviews Policies
@@ -356,7 +356,7 @@ CREATE POLICY "Users can delete own reviews" ON reviews
 CREATE POLICY "Admin full access to reviews" ON reviews
   FOR ALL
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Custom Orders Policies
@@ -384,7 +384,7 @@ CREATE POLICY "Users can update own custom orders" ON custom_orders
 CREATE POLICY "Admin full access to custom orders" ON custom_orders
   FOR ALL
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Profiles Policies
@@ -415,7 +415,7 @@ CREATE POLICY "Users can insert own profile" ON profiles
 CREATE POLICY "Admin can delete profiles" ON profiles
   FOR DELETE
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Helper Functions
@@ -521,7 +521,7 @@ DROP POLICY IF EXISTS "Admin can update notifications" ON admin_notifications;
 CREATE POLICY "Admin can view notifications" ON admin_notifications
   FOR SELECT
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- System can insert notifications (service role)
@@ -533,7 +533,7 @@ CREATE POLICY "System can insert notifications" ON admin_notifications
 CREATE POLICY "Admin can update notifications" ON admin_notifications
   FOR UPDATE
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Customer Messaging Tables
@@ -586,35 +586,35 @@ DROP POLICY IF EXISTS "Admin can update all conversations" ON conversations;
 CREATE POLICY "Users can view own conversations" ON conversations
   FOR SELECT
   USING (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Users can insert their own conversations (using auth.users)
 CREATE POLICY "Users can insert own conversations" ON conversations
   FOR INSERT
   WITH CHECK (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Users can update their own conversations (using auth.users)
 CREATE POLICY "Users can update own conversations" ON conversations
   FOR UPDATE
   USING (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Admin can view all conversations (using auth.users)
 CREATE POLICY "Admin can view all conversations" ON conversations
   FOR SELECT
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Admin can update all conversations (using auth.users)
 CREATE POLICY "Admin can update all conversations" ON conversations
   FOR UPDATE
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Conversation Messages RLS Policies
@@ -629,42 +629,42 @@ DROP POLICY IF EXISTS "Admin can update all messages" ON conversation_messages;
 CREATE POLICY "Users can view own messages" ON conversation_messages
   FOR SELECT
   USING (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Users can insert messages in their own conversations (using auth.users)
 CREATE POLICY "Users can insert own messages" ON conversation_messages
   FOR INSERT
   WITH CHECK (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Users can update their own messages (using auth.users - mark as read)
 CREATE POLICY "Users can update own messages" ON conversation_messages
   FOR UPDATE
   USING (
-    customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    customer_email = auth.jwt() ->> 'email'
   );
 
 -- Admin can view all messages (using auth.users)
 CREATE POLICY "Admin can view all messages" ON conversation_messages
   FOR SELECT
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Admin can insert messages in any conversation (using auth.users)
 CREATE POLICY "Admin can insert messages" ON conversation_messages
   FOR INSERT
   WITH CHECK (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Admin can update any message (using auth.users)
 CREATE POLICY "Admin can update all messages" ON conversation_messages
   FOR UPDATE
   USING (
-    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+    auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
   );
 
 -- Triggers for Admin Notifications
@@ -1447,35 +1447,35 @@ ALTER TABLE store_settings ENABLE ROW LEVEL SECURITY;
 
 -- Admin-only policies (using auth.users email check)
 CREATE POLICY "Admin full access" ON admin_roles FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON staff_members FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON admin_activity_logs FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON inventory_items FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON inventory_transactions FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON suppliers FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON customer_segments FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON customer_profiles FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users view own profile" ON customer_profiles FOR SELECT USING (
@@ -1487,137 +1487,137 @@ CREATE POLICY "Users update own profile" ON customer_profiles FOR UPDATE USING (
 );
 
 CREATE POLICY "Admin full access" ON customer_segment_assignments FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON customer_notes FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON discount_codes FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON discount_usage FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON gift_cards FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users view own gift cards" ON gift_cards FOR SELECT USING (
-  recipient_email = (SELECT email FROM auth.users WHERE id = auth.uid()) OR
-  purchaser_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+  recipient_email = auth.jwt() ->> 'email' OR
+  purchaser_email = auth.jwt() ->> 'email'
 );
 
 CREATE POLICY "Admin full access" ON gift_card_transactions FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read delivery zones" ON delivery_zones FOR SELECT USING (true);
 
 CREATE POLICY "Admin manage delivery zones" ON delivery_zones FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read time slots" ON delivery_time_slots FOR SELECT USING (true);
 
 CREATE POLICY "Admin manage time slots" ON delivery_time_slots FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read blackout dates" ON delivery_blackout_dates FOR SELECT USING (true);
 
 CREATE POLICY "Admin manage blackout dates" ON delivery_blackout_dates FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON delivery_drivers FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON order_deliveries FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users view own deliveries" ON order_deliveries FOR SELECT USING (
   EXISTS (
     SELECT 1 FROM orders WHERE orders.id = order_deliveries.order_id
-    AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    AND orders.customer_email = auth.jwt() ->> 'email'
   )
 );
 
 CREATE POLICY "Public read gallery" ON gallery_images FOR SELECT USING (is_active = true);
 
 CREATE POLICY "Admin manage gallery" ON gallery_images FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read hero slides" ON hero_slides FOR SELECT USING (is_active = true);
 
 CREATE POLICY "Admin manage hero slides" ON hero_slides FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read announcements" ON announcements FOR SELECT USING (is_active = true);
 
 CREATE POLICY "Admin manage announcements" ON announcements FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read FAQ" ON faq_items FOR SELECT USING (is_active = true);
 
 CREATE POLICY "Admin manage FAQ" ON faq_items FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON order_status_history FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users view own order history" ON order_status_history FOR SELECT USING (
   EXISTS (
     SELECT 1 FROM orders WHERE orders.id = order_status_history.order_id
-    AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    AND orders.customer_email = auth.jwt() ->> 'email'
   )
 );
 
 CREATE POLICY "Admin full access" ON order_notes FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON order_refunds FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users view own refunds" ON order_refunds FOR SELECT USING (
   EXISTS (
     SELECT 1 FROM orders WHERE orders.id = order_refunds.order_id
-    AND orders.customer_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    AND orders.customer_email = auth.jwt() ->> 'email'
   )
 );
 
 CREATE POLICY "Public read categories" ON product_categories FOR SELECT USING (is_active = true);
 
 CREATE POLICY "Admin manage categories" ON product_categories FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read variants" ON product_variants FOR SELECT USING (true);
 
 CREATE POLICY "Admin manage variants" ON product_variants FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read nutritional info" ON product_nutritional_info FOR SELECT USING (true);
 
 CREATE POLICY "Admin manage nutritional info" ON product_nutritional_info FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON custom_order_quotes FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users view own quotes" ON custom_order_quotes FOR SELECT USING (
@@ -1628,7 +1628,7 @@ CREATE POLICY "Users view own quotes" ON custom_order_quotes FOR SELECT USING (
 );
 
 CREATE POLICY "Admin full access" ON custom_order_messages FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Users access own messages" ON custom_order_messages FOR ALL USING (
@@ -1643,23 +1643,23 @@ CREATE POLICY "Users manage own wishlist" ON wishlists FOR ALL USING (
 );
 
 CREATE POLICY "Admin view wishlists" ON wishlists FOR SELECT USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Insert page views" ON page_views FOR INSERT WITH CHECK (true);
 
 CREATE POLICY "Admin view page views" ON page_views FOR SELECT USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Admin full access" ON daily_analytics FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 CREATE POLICY "Public read settings" ON store_settings FOR SELECT USING (true);
 
 CREATE POLICY "Admin manage settings" ON store_settings FOR ALL USING (
-  (SELECT email FROM auth.users WHERE id = auth.uid()) = 'muindidamian@gmail.com'
+  auth.jwt() ->> 'email' = 'muindidamian@gmail.com'
 );
 
 -- ============================================================================
@@ -1803,7 +1803,7 @@ RETURNS TRIGGER AS $$
 BEGIN
   IF OLD.status IS DISTINCT FROM NEW.status THEN
     INSERT INTO order_status_history (order_id, previous_status, new_status, changed_by_email)
-    VALUES (NEW.id, OLD.status, NEW.status, (SELECT email FROM auth.users WHERE id = auth.uid()));
+    VALUES (NEW.id, OLD.status, NEW.status, auth.jwt() ->> 'email');
   END IF;
   RETURN NEW;
 END;
